@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arqueologia Tech: Monitorització de Jaciment</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="splash-screen" class="splash-screen">
+        <img src="foto1.jpg" alt="Imatge de Portada del Jaciment Arqueològic" class="portada-imatge">
+        <p class="carregant-text">Preparant l'App de Monitorització...</p>
+    </div>
+
+    <div id="main-content" class="main-content hidden">
+        <header>
+            <h1>Monitorització de Jaciment Arqueològic</h1>
+            <div id="alert-box" class="alert-box hidden">
+                <span id="alert-message"></span>
+                <audio id="alert-sound" src="alert.mp3" preload="auto"></audio> 
+            </div>
+        </header>
+
+        <main class="menu-grid">
+            <h2 class="section-title">Selecciona un Mòdul</h2>
+            
+            <a href="temperatura.html" class="menu-card" id="card-sensors">
+                <img src="foto2.jpg" alt="Mòdul de Sensors Ambientals" class="card-image">
+                <div class="card-content">
+                    <h3>Mòdul de Sensors Ambientals</h3>
+                    <p>Temperatura, Humitat, Pluja i Inclinació.</p>
+                </div>
+            </a>
+
+            <a href="persones.html" class="menu-card" id="card-vigilancia">
+                 <img src="foto3.jpg" alt="Sistema de Vigilància Perimetral" class="card-image">
+                <div class="card-content">
+                    <h3>Sistema de Vigilància Perimetral</h3>
+                    <p>Detecció d'intrusions (persones i senglars).</p>
+                </div>
+            </a>
+
+            <a href="grafiques.html" class="menu-card" id="card-grafiques">
+                 <img src="foto4.jpg" alt="Gràfiques Històriques" class="card-image">
+                <div class="card-content">
+                    <h3>Gràfiques</h3>
+                    <p>Anàlisi històrica de les dades.</p>
+                </div>
+            </a>
+            
+        </main>
+        
+        <footer>
+            <p>&copy; Projecte de Recerca Arqueològica</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
