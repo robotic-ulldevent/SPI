@@ -1,0 +1,100 @@
+/* Estils Generals */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+header.portada {
+    background-color: #2c3e50; /* Blau Fosc Arqueològic */
+    color: white;
+    padding: 50px 20px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Estils del Menú Principal i les Seccions */
+main, section {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.seccio {
+    padding-top: 50px; /* Espai per amagar/mostrar */
+}
+
+.oculta {
+    display: none;
+}
+
+/* Contenidor dels Quadres (Flexbox per a l'alineació) */
+.quadre-container {
+    display: flex;
+    flex-wrap: wrap; /* Permet que els elements saltin de línia en pantalles petites */
+    gap: 20px;
+    justify-content: center;
+}
+
+/* Estil general del Quadre */
+.quadre {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    text-decoration: none; /* Per si és un enllaç (<a>) */
+    color: #333;
+    transition: transform 0.3s, box-shadow 0.3s;
+    flex-grow: 1; /* Permet que s'expandeixi */
+    min-width: 250px; /* Mida mínima per als quadres individuals */
+}
+
+.quadre:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Estils Específics dels Quadres Grans (3 a la fila) */
+.menu-principal .quadre {
+    flex-basis: calc(33.33% - 20px); /* 3 quadres per fila en pantalles grans */
+    max-width: calc(33.33% - 20px);
+}
+
+/* Estils Específics dels Quadres de Paràmetres (4 a la fila a Casa 1) */
+.casa1-detall-container .quadre {
+    background-color: #ecf0f1; /* Gris clar per a les dades */
+    flex-basis: calc(25% - 20px); /* 4 quadres per fila */
+    max-width: calc(25% - 20px);
+}
+
+/* Estils Específics dels Quadres de les Cases (4 a la fila en el Mòdul de Sensors) */
+.sensors-container .quadre {
+    background-color: #3498db; /* Blau per als mòduls */
+    color: white;
+    flex-basis: calc(25% - 20px); /* 4 quadres per fila */
+    max-width: calc(25% - 20px);
+}
+
+/* Estil Responsivitat: Mòbils (menys de 768px) */
+@media (max-width: 768px) {
+    .menu-principal .quadre,
+    .sensors-container .quadre,
+    .casa1-detall-container .quadre {
+        flex-basis: 100%; /* Un quadre per fila a mòbils */
+        max-width: 100%;
+    }
+}
+
+/* Boto de Tornar */
+.boto-tornar {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 10px 15px;
+    background-color: #95a5a6;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
