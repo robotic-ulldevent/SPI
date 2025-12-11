@@ -1,144 +1,39 @@
-/* Paleta de Colors: Marró Terra (#a0522d), Cel (#87ceeb), Verd Arbre (#38761d), Blanc */
-:root {
-    --color-primary: #a0522d; /* Sienna (Marró fort) */
-    --color-secondary: #87ceeb; /* Blau cel */
-    --color-accent: #38761d; /* Verd fosc */
-    --color-background: #f4f4f9; 
-    --color-text: #333;
-}
+/* ... (Mantingues tots els estils anteriors) ... */
 
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: var(--color-background);
-    color: var(--color-text);
-    line-height: 1.6;
-}
+/* --- NOUS ESTILS: INDICADOR D'ESTAT A HEADER --- */
 
-header {
-    background-color: var(--color-primary);
-    color: white;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    position: relative;
-}
-
-header h1 {
-    margin-top: 0;
-    font-size: 1.8em;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-}
-
-main {
-    padding: 20px;
-    max-width: 1200px;
-    margin: auto;
-    padding-bottom: 70px;
-}
-
-footer {
-    text-align: center;
-    padding: 10px;
-    background-color: #ddd;
-    color: var(--color-text);
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-}
-
-/* --- Menú Principal (Grid) --- */
-.menu-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-    margin-top: 30px;
-}
-
-.menu-card {
-    text-decoration: none;
-    color: var(--color-text);
-    background-color: white;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.menu-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 20px rgba(0,0,0,0.2);
-}
-
-.card-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-bottom: 3px solid var(--color-accent);
-}
-
-.card-content {
-    padding: 20px;
-}
-
-.card-content h3 {
-    color: var(--color-primary);
-    margin-top: 0;
-    margin-bottom: 10px;
-}
-
-/* --- Splash Screen --- */
-.splash-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #1a1a1a; 
+.connection-status {
+    padding: 10px 0;
+    margin-top: 5px;
+    font-size: 1.1em;
+    font-weight: bold;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 1000; 
-    transition: opacity 0.5s ease-out; 
 }
 
-.portada-imatge {
-    max-width: 90%; 
-    max-height: 80vh;
-    object-fit: contain;
-    border-radius: 10px;
+#status-icon {
+    font-size: 1.5em;
+    margin-right: 10px;
 }
 
-/* --- Alertes --- */
-.alert-box {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: #ff3333; /* Vermell Alerta */
-    color: white;
-    padding: 15px;
-    text-align: center;
-    font-weight: bold;
-    font-size: 1.2em;
-    z-index: 1001;
-    box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
-    animation: pulse 1s infinite alternate;
+/* Colors dels símbols */
+.icon-success {
+    color: #4CAF50; /* Verd */
 }
 
-@keyframes pulse {
-    from { background-color: #ff3333; }
-    to { background-color: #cc0000; }
+.icon-error {
+    color: #f44336; /* Vermell */
 }
 
-/* --- Generals i Responsivitat --- */
-.hidden { display: none !important; }
-.fade-out { opacity: 0; }
-
-@media (max-width: 768px) {
-    .menu-grid {
-        grid-template-columns: 1fr;
-    }
+.icon-loading {
+    color: #ff9800; /* Taronja */
+    animation: spin 1s infinite linear;
 }
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* ... (Mantingues la resta d'estils anteriors) ... */
