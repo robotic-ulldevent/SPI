@@ -16,14 +16,14 @@
 
     <div id="app-container" class="oculta">
 
-        <header class="portada">
+        <header class="portada menu-roig">
             <h1>Jaciment Arqueològic [Nom del Jaciment]</h1>
             <p>Aplicació Interactiva per a l'Anàlisi de Dades Ambientals</p>
         </header>
 
         <main class="menu-principal">
             
-            <div class="quadre-container menu-roig">
+            <div id="menu-principal-botons" class="quadre-container">
                 <a href="#modul-sensors" class="quadre modul-sensors" onclick="mostrarSeccio('sensors')">
                     <h3>Mòdul de Sensors</h3>
                     <p>Visualització de dades ambientals (Tª, Humitat, Pluja, Inclinació)</p>
@@ -83,7 +83,9 @@
             <canvas id="grafic-temperatura"></canvas> 
         </section>
         
-    </div> <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    </div> 
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
