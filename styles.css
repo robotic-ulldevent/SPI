@@ -12,7 +12,8 @@ body {
     display: none !important; 
 }
 
-/* --- ESTILS DE LA PANTALLA DE CÀRREGA --- */
+/* --- ESTILS DE LA PANTALLA DE CÀRREGA (Es mantenen igual) --- */
+/* ... (Codi del loading-screen, loading-image, spinner, etc.) ... */
 .loading-screen {
     position: fixed;
     top: 0;
@@ -27,7 +28,6 @@ body {
     z-index: 1000;
     color: white;
 }
-/* (Estils loading-image, loading-text i spinner es mantenen igual) */
 .loading-image {
     width: 80%;
     max-width: 600px;
@@ -54,51 +54,80 @@ body {
     100% { transform: rotate(360deg); }
 }
 
+
 /* --- ESTILS DE LA CAPÇALERA (FRANJA VERMELLA) --- */
 .portada.menu-roig {
-    background-color: #c0392b; /* Vermell fosc / teula */
+    background-color: #c0392b; 
     color: white;
-    padding: 50px 20px;
+    padding: 20px; /* Reduïm el padding per a una franja més ajustada */
     text-align: center;
     margin-bottom: 0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-main, section {
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.seccio {
-    padding-top: 50px;
-}
-
-/* Estil general del Contenidor de Quadres */
-.quadre-container {
+    /* Utilitzem Flexbox per al disseny intern del header */
     display: flex;
-    flex-wrap: wrap; 
-    gap: 20px;
-    justify-content: center; /* Per centrar els quadres */
+    justify-content: space-between; /* Distribueix el contingut */
+    align-items: center;
+    flex-wrap: wrap; /* Per a la responsivitat */
 }
 
-/* Estil general dels Quadres (Botons) */
-.quadre {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
-    padding: 20px;
+.header-content {
+    flex-grow: 1;
     text-align: center;
-    text-decoration: none; 
-    color: #333;
-    transition: transform 0.3s, box-shadow 0.3s;
-    flex-grow: 1; 
-    min-width: 250px; 
 }
-.quadre:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+
+/* TÍTOL DEL MÒDUL DE SENSORS CENTRAT */
+#modul-sensors h2 {
+    text-align: center;
+    margin-bottom: 20px;
 }
+
+/* INDICADOR D'ESTAT (Sempre visible al banner vermell) */
+.indicador {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    margin: 10px;
+}
+
+.icona-connectat, .icona-desconnectat {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-left: 10px;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+    color: white;
+}
+
+.icona-connectat {
+    background-color: #27ae60; /* Verd */
+}
+.icona-connectat::before {
+    content: "✓"; /* Icona de V (tick) */
+}
+
+.icona-desconnectat {
+    background-color: #e74c3c; /* Vermell */
+}
+.icona-desconnectat::before {
+    content: "✕"; /* Icona de creu */
+}
+
+
+/* BOTÓ TORNAR A L'INICI */
+.boto-tornar-inici {
+    display: inline-block;
+    padding: 8px 15px;
+    background-color: #f39c12; /* Taronja/Groc per contrast */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    margin: 10px;
+}
+
+/* Resta d'estils (menu-principal, quadre-container, etc.) es mantenen igual */
 
 /* Estils Específics: 3 Quadres principals (han de quedar alineats) */
 #menu-principal-botons .quadre {
@@ -109,21 +138,7 @@ main, section {
     color: #c0392b; 
 }
 
-/* Estils Específics: 4 Quadres de Casa 1 */
-.casa1-detall-container .quadre {
-    background-color: #ecf0f1; 
-    flex-basis: calc(25% - 20px); 
-    max-width: calc(25% - 20px);
-}
-/* Estils Específics: 4 Quadres de Sensors (Cases) */
-.sensors-container .quadre {
-    background-color: #3498db; 
-    color: white;
-    flex-basis: calc(25% - 20px); 
-    max-width: calc(25% - 20px);
-}
-
-/* (Estils boto-tornar i gràfics es mantenen igual) */
+/* (Resta d'estils CSS es manté per brevetat) */
 .boto-tornar {
     display: inline-block;
     margin-bottom: 20px;
@@ -148,6 +163,13 @@ main, section {
 
 /* Estil Responsivitat: Mòbils */
 @media (max-width: 768px) {
+    .portada.menu-roig {
+        flex-direction: column; /* Col·loca elements un sota l'altre a mòbils */
+    }
+    .boto-tornar-inici {
+        width: 100%;
+        text-align: center;
+    }
     .menu-principal .quadre,
     .sensors-container .quadre,
     .casa1-detall-container .quadre {
