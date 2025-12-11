@@ -2,7 +2,7 @@
 const CHANNEL_ID = '3200447';
 const READ_API_KEY = '85WNYIM35DMXK9Z7'; // LA VOSTRA CLAU REAL
 const BASE_URL = `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds.json?api_key=${READ_API_KEY}`;
-const STATUS_URL = `https://api.thingspeak.com/channels/${CHANNEL_ID}.json?api_key=${READ_API_KEY}`; // URL per l'estat del canal
+const STATUS_URL = `https://api.thingspeak.com/channels/${CHANNEL_ID}.json?api_key=${READ_API_KEY}`; 
 
 // Mapeig dels camps
 const FIELDS = {
@@ -15,21 +15,28 @@ const FIELDS = {
 let graficTemperatura = null;
 
 
-// --- GESTIÓ DE LA CÀRREGA I ESTAT DE CONNEXIÓ ---
+// --- GESTIÓ DE LA CÀRREGA INICIAL I ESTAT DE CONNEXIÓ ---
 
 function inicialitzarAplicacio() {
-    // 1. Comprova l'estat de la connexió just després de carregar
-    comprovarEstatConnexio();
     
-    // 2. Fes la transició de la pantalla de càrrega després de 10 segons
+    // 1. Fes la transició de la pantalla de càrrega després de 10 segons (GARANTIT)
     setTimeout(() => {
+        // AMAGA LA PANTALLA DE CÀRREGA
         document.getElementById('loading-screen').classList.add('oculta');
+        
+        // MOSTRA EL CONTINGUT PRINCIPAL
         document.getElementById('app-container').classList.remove('oculta');
+        
+        // MOSTRA EL MENÚ PRINCIPAL
         mostrarSeccio('principal'); 
-    }, 10000); 
+
+        // 2. Comprova l'estat de connexió i actualitza l'indicador (S'executa DESPRÉS de la transició)
+        comprovarEstatConnexio();
+        
+    }, 10000); // 10 segons
 }
 
-// 🌟 NOVA FUNCIÓ: COMPROVAR L'ESTAT DE CONNEXIÓ A THINGSPEAK 🌟
+// FUNCIÓ: COMPROVAR L'ESTAT DE CONNEXIÓ A THINGSPEAK 
 async function comprovarEstatConnexio() {
     try {
         const response = await fetch(STATUS_URL);
@@ -40,19 +47,18 @@ async function comprovarEstatConnexio() {
         const estatIcona = document.getElementById('estat-icona');
         const estatText = document.getElementById('estat-text');
 
-        // Considerem la connexió OK si hi ha dades rebudes recentment.
-        // ThingSpeak no dóna l'últim timestamp directament a l'endpoint principal, 
-        // així que ens basem en l'ID de l'última entrada.
-        if (lastEntryId > 0) {
+        if (lastEntryId && lastEntryId > 0) {
+            // Connexió OK 
             estatIcona.classList.remove('icona-desconnectat');
             estatIcona.classList.add('icona-connectat');
             estatText.textContent = `Estat: Connectat (ID: ${lastEntryId})`;
         } else {
-            throw new Error("No s'han trobat entrades.");
+            // Dades no trobades o canal buit
+            throw new Error("No s'han trobat entrades o dades de connexió.");
         }
 
     } catch (error) {
-        // En cas d'error de xarxa o de dades no vàlides
+        // Error de xarxa o de ThingSpeak
         const estatIcona = document.getElementById('estat-icona');
         const estatText = document.getElementById('estat-text');
         
@@ -66,38 +72,49 @@ async function comprovarEstatConnexio() {
 
 // Funció per a la navegació (Mostra/Oculta seccions)
 function mostrarSeccio(seccio) {
-    // Oculta totes les seccions i el contenidor de botons principal
+    // Oculta totes les seccions (casa1, sensors, vigilancia, mapa)
     document.querySelectorAll('.seccio').forEach(sec => sec.classList.add('oculta'));
-    document.getElementById('menu-principal-botons').classList.add('oculta');
+    
+    // Oculta/Mostra el contenidor de botons principal segons la secció
+    const menuBotons = document.getElementById('menu-principal-botons');
+    
+    menuBotons.classList.add('oculta');
+
 
     if (seccio === 'principal') {
-        document.getElementById('menu-principal-botons').classList.remove('oculta');
+        // Mostra els 3 botons principals 
+        menuBotons.classList.remove('oculta');
+        
     } else if (seccio === 'sensors') {
+        // Mostra la secció amb els 4 botons de les Cases (Casa 1-4)
         document.getElementById('modul-sensors').classList.remove('oculta');
-        // El menú principal es manté ocult per mostrar només els 4 botons de casa
+        
     } else if (seccio === 'casa1') {
+        // Mostra el detall de Casa 1 i carrega les dades
         document.getElementById('casa1-detall').classList.remove('oculta');
         obtenirDadesThingSpeak(); 
+        
     } else if (seccio === 'vigilancia') {
         document.getElementById('vigilancia').classList.remove('oculta');
+        
     } else if (seccio === 'mapa') {
         document.getElementById('mapa').classList.remove('oculta');
     }
 }
 
-// Inicialitza la vista i la càrrega
+// Inicialitza la vista i la càrrega quan l'HTML està completament carregat
 document.addEventListener('DOMContentLoaded', () => {
     inicialitzarAplicacio();
-    // Opcional: Refrescar l'estat cada 60 segons per mantenir-lo actualitzat
+    // Refrescar l'estat de connexió cada 60 segons 
     setInterval(comprovarEstatConnexio, 60000); 
 });
 
 
-// --- FUNCIONS DE THINGSPEAK I CÀLCUL (Es mantenen igual) ---
+// --- FUNCIONS DE THINGSPEAK I CÀLCUL (Mantingudes) ---
 
 async function obtenirDadesThingSpeak() {
     const url = `${BASE_URL}&results=48`; 
-    // ... (resta del codi obtenirDadesThingSpeak es manté)
+
     try {
         const response = await fetch(url);
         const data = await response.json();
@@ -127,7 +144,7 @@ function actualitzarDadesActuals(feeds) {
 function calcularIPresentarMitjanes(feeds) {
     const dadesMati = { temp: [], hum: [], pluja: [], incl: [] };
     const dadesVespre = { temp: [], hum: [], pluja: [], incl: [] };
-    
+
     const calcularMitjana = (arr) => arr.filter(v => !isNaN(v)).reduce((a, b) => a + b, 0) / arr.length;
     
     feeds.forEach(feed => {
@@ -159,7 +176,6 @@ function calcularIPresentarMitjanes(feeds) {
     document.querySelector('#pluja-quadre .mitjana-vespre').textContent = `Mitjana Vespre (20h): ${calcularMitjana(dadesVespre.pluja).toFixed(1)} mm`;
     document.querySelector('#inclinacio-quadre .mitjana-vespre').textContent = `Mitjana Vespre (20h): ${calcularMitjana(dadesVespre.incl).toFixed(2)} graus`;
 }
-
 
 function dibuixarGraficTemperatura(feeds) {
     const ctx = document.getElementById('grafic-temperatura').getContext('2d');
