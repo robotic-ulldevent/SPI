@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mòdul 1.1: Temperatura</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="main-content">
+        <header>
+            <h1>Monitorització de Jaciment Arqueològic</h1>
+            <div id="alert-box" class="alert-box hidden"><span id="alert-message"></span></div>
+        </header>
+
+        <main>
+            <nav class="sub-nav">
+                <img src="foto_temp.jpg" alt="Temperatura" class="card-image-small">
+                <h2>🌡️ Temperatura</h2>
+                <a href="index.html" class="nav-button">Tornar al Menú Principal</a>
+            </nav>
+
+            <section class="data-view">
+                <h3>Lectura Actual</h3>
+                <div id="current-reading" class="current-card">Carregant...</div>
+
+                <h3>Mitjanes (8h Matí / 8h Tarda)</h3>
+                <div id="mean-readings" class="mean-container">
+                    <div id="mean-am" class="mean-card">Mitjana Matí: --</div>
+                    <div id="mean-pm" class="mean-card">Mitjana Tarda: --</div>
+                </div>
+
+                <h3>Històric Horari (Últimes 24h)</h3>
+                <ul id="hourly-list" class="hourly-list">
+                    <li>Carregant dades horàries...</li>
+                </ul>
+            </section>
+        </main>
+        
+        <footer>
+            <p>&copy; Projecte de Recerca Arqueològica</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // === LÒGICA DEDICADA A TEMPERATURA (1.1) ===
+
+        const CHANNEL_ID = window.CHANNEL_ID;
+        const READ_API_KEY = window.READ_API_KEY;
+        const FIELD_INFO = window.FIELD_MAP.temperatura;
+        const FIELD = FIELD_INFO.field;
+        const API_URL_HOURLY = `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds.json?api_key=${READ_API_KEY}&results=24`;
+
+        async function updateTemperaturePage() {
+            // 1. Càrrega de l'última lectura
+            const lastData = await window.fetchLastData();
+            if (lastData) {
+                const currentValue = parseFloat(lastData[FIELD]).toFixed(2);
+                document.getElementById('current-reading').innerHTML = `
+                    <span class="value">${currentValue} ${FIELD_INFO.unit}</span>
+                    <span class="label">Actualitzat a les: ${new Date(lastData.created_at).toLocaleTimeString()}</span>
+                `;
+            }
+
+            // 2. Càlcul d'horaris i mitjanes
+            try {
+                const response = await fetch(API_URL_HOURLY);
+                if (!response.ok) throw new Error('Error al historial de dades');
+                const historicData = await response.json();
+                const feeds = historicData.feeds;
+
+                let sumAM = 0, countAM = 0;
+                let sumPM = 0, countPM = 0;
+                let listHTML = '';
+
+                feeds.reverse().forEach(feed => {
+                    const value = parseFloat(feed[FIELD]);
+                    const date = new Date(feed.created_at);
+                    const hour = date.getHours();
+                    const formattedTime = date.toLocaleTimeString('ca-ES');
+
+                    if (!isNaN(value)) {
+                        // Càlcul Mitjana (8h AM a 8h PM)
+                        if (hour >= 8 && hour < 20) {
+                            sumPM += value;
+                            countPM++;
+                        } else {
+                            sumAM += value;
+                            countAM++;
+                        }
+                    }
+
+                    // Llista Horària
+                    const displayValue = !isNaN(value) ? `${value.toFixed(2)} ${FIELD_INFO.unit}` : 'Sense dada';
+                    listHTML += `<li>${formattedTime}: <strong>${displayValue}</strong></li>`;
+                });
+
+                // Renderització de Mitjanes
+                const meanAM = countAM > 0 ? (sumAM / countAM).toFixed(2) : '--';
+                const meanPM = countPM > 0 ? (sumPM / countPM).toFixed(2) : '--';
+
+                document.getElementById('mean-am').innerHTML = `Mitjana Matí (8h-20h): <strong>${meanAM} ${FIELD_INFO.unit}</strong>`;
+                document.getElementById('mean-pm').innerHTML = `Mitjana Tarda (20h-8h): <strong>${meanPM} ${FIELD_INFO.unit}</strong>`;
+                document.getElementById('hourly-list').innerHTML = listHTML;
+
+            } catch (error) {
+                console.error('Error processant dades de temperatura:', error);
+                document.getElementById('hourly-list').innerHTML = '<li>Error en la càrrega de dades històriques.</li>';
+            }
+        }
+        
+        // Actualitza la pàgina al carregar i cada hora (o amb un interval més curt per a proves)
+        updateTemperaturePage();
+        setInterval(updateTemperaturePage, 3600000); // 1 hora
+    </script>
+</body>
+</html>
