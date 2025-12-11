@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investigació Arqueològica - Jaciment</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div id="loading-screen" class="loading-screen">
+        <img src="foto1.jpg" alt="Imatge del Jaciment" class="loading-image">
+        <div class="loading-text">Carregant dades...</div>
+        <div class="spinner"></div> 
+    </div>
+
+    <div id="app-container" class="oculta">
+
+        <header class="portada">
+            <h1>Jaciment Arqueològic [Nom del Jaciment]</h1>
+            <p>Aplicació Interactiva per a l'Anàlisi de Dades Ambientals</p>
+        </header>
+
+        <main class="menu-principal">
+            
+            <div class="quadre-container menu-roig">
+                <a href="#modul-sensors" class="quadre modul-sensors" onclick="mostrarSeccio('sensors')">
+                    <h3>Mòdul de Sensors</h3>
+                    <p>Visualització de dades ambientals (Tª, Humitat, Pluja, Inclinació)</p>
+                </a>
+                
+                <a href="#" class="quadre vigilancia-perimetral">
+                    <h3>Sistema de Vigilància Perimetral</h3>
+                    <p>Accés a càmeres o registres de seguretat.</p>
+                </a>
+                
+                <a href="#" class="quadre mapa">
+                    <h3>Mapa del Jaciment</h3>
+                    <p>Ubicació dels elements i els sensors.</p>
+                </a>
+            </div>
+        </main>
+        
+        <section id="modul-sensors" class="seccio oculta">
+            <h2>Mòdul de Sensors</h2>
+            <div class="quadre-container sensors-container">
+                <a href="#casa-1" class="quadre casa" onclick="mostrarSeccio('casa1')"><h3>Casa 1</h3></a>
+                <a href="#" class="quadre casa"><h3>Casa 2</h3></a>
+                <a href="#" class="quadre casa"><h3>Casa 3</h3></a>
+                <a href="#" class="quadre casa"><h3>Casa 4</h3></a>
+            </div>
+        </section>
+
+        <section id="casa1-detall" class="seccio oculta">
+            <a href="#" class="boto-tornar" onclick="mostrarSeccio('sensors')">&larr; Tornar als Sensors</a>
+            <h2>Casa 1 - Dades Ambientals</h2>
+            <div class="quadre-container casa1-detall-container">
+                <div id="temp-quadre" class="quadre parametre">
+                    <h3>Temperatura (Field 2)</h3>
+                    <p class="dada-actual">Càrrega...</p>
+                    <p class="mitjana-mati">Mitjana Matí (8h): --</p>
+                    <p class="mitjana-vespre">Mitjana Vespre (20h): --</p>
+                </div>
+                <div id="humitat-quadre" class="quadre parametre">
+                    <h3>Humitat (Field 1)</h3>
+                    <p class="dada-actual">Càrrega...</p>
+                    <p class="mitjana-mati">Mitjana Matí (8h): --</p>
+                    <p class="mitjana-vespre">Mitjana Vespre (20h): --</p>
+                </div>
+                <div id="pluja-quadre" class="quadre parametre">
+                    <h3>Pluja (Field 4)</h3>
+                    <p class="dada-actual">Càrrega...</p>
+                    <p class="mitjana-mati">Mitjana Matí (8h): --</p>
+                    <p class="mitjana-vespre">Mitjana Vespre (20h): --</p>
+                </div>
+                <div id="inclinacio-quadre" class="quadre parametre">
+                    <h3>Inclinació (Field 3)</h3>
+                    <p class="dada-actual">Càrrega...</p>
+                    <p class="mitjana-mati">Mitjana Matí (8h): --</p>
+                    <p class="mitjana-vespre">Mitjana Vespre (20h): --</p>
+                </div>
+            </div>
+            <canvas id="grafic-temperatura"></canvas> 
+        </section>
+        
+    </div> <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
