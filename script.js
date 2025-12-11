@@ -1,16 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // === 1. CONFIGURACIÓ GLOBAL ===
+    // === 1. CONFIGURACIÓ GLOBAL (Sense Canvis) ===
     const CHANNEL_ID = '3200447';
     const READ_API_KEY = '85WNYIM35DMXK9Z7';
     const API_URL_LAST = `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds/last.json?api_key=${READ_API_KEY}`;
     
-    // Mapeig de camps i Alertes
+    // ... FIELD_MAP (sense canvis) ...
     const FIELD_MAP = {
         temperatura: { field: 'field2', label: 'Temperatura', unit: '°C', threshold: 35, condition: '>' },
         humitat: { field: 'field1', label: 'Humitat', unit: '%', threshold: 75, condition: '>' },
         pluja: { field: 'field4', label: 'Pluja (1h)', unit: 'mm/h', threshold: 60, condition: '>' },
         inclinacio: { field: 'field3', label: 'Inclinació', unit: '°', threshold: 0, condition: '!=' },
-        // Camps assumits per a Vigilància (ajustar si ThingSpeak utilitza altres camps)
         persona: { field: 'field5', label: 'Intrusió Persona', threshold_value: 1 }, 
         senglar: { field: 'field6', label: 'Intrusió Senglar', threshold_value: 1 } 
     };
@@ -20,9 +19,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const alertBox = document.getElementById('alert-box');
     const alertMessage = document.getElementById('alert-message');
     const alertSound = document.getElementById('alert-sound');
+    
+    // NOUS ELEMENTS D'ESTAT
+    const statusIcon = document.getElementById('status-icon');
+    const statusLabel = document.getElementById('status-label');
 
-    // === 2. LÒGICA DE LA PORTADA (SPLASH SCREEN) ===
+    // === 2. LÒGICA DE LA PORTADA (SPLASH SCREEN) (Sense Canvis) ===
     if (splashScreen) {
+        // ... (el codi existent de 5 segons) ...
         setTimeout(() => {
             splashScreen.classList.add('fade-out');
             setTimeout(() => {
@@ -32,10 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 5000); // 5 segons
     }
 
-    // === 3. LÒGICA D'ALERTES ===
-
-    /** Comprova les alertes i mostra el quadre si cal */
+    // === 3. LÒGICA D'ALERTES (Sense Canvis) ===
     function checkAlerts(data) {
+        // ... (el codi existent de checkAlerts) ...
         let alerts = [];
         let needsAlert = false;
         
@@ -93,17 +96,50 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // === 4. LÒGICA DE RECOLLIDA DE DADES I CÀLCULS ===
+    // === 4. LÒGICA DE RECOLLIDA DE DADES I ESTAT ===
 
-    /**
-     * Recupera l'última lectura i crida a la comprovació d'alertes.
-     */
+    /** Actualitza l'indicador visual de connexió */
+    function updateConnectionStatus(success) {
+        if (!statusIcon || !statusLabel) return;
+
+        // Reset classes
+        statusIcon.classList.remove('icon-success', 'icon-error', 'icon-loading');
+        statusIcon.style.animation = 'none';
+
+        if (success) {
+            statusIcon.innerHTML = '✔'; // Tick verd
+            statusIcon.classList.add('icon-success');
+            statusLabel.textContent = 'Rebent dades de ThingSpeak';
+        } else {
+            statusIcon.innerHTML = '✕'; // Creu vermella
+            statusIcon.classList.add('icon-error');
+            statusLabel.textContent = 'Sense connexió a ThingSpeak (ERROR)';
+        }
+    }
+    
+    /** Recupera l'última lectura i crida a la comprovació d'alertes. */
     async function fetchLastData() {
+        // Estat de càrrega
+        if (statusIcon) {
+            statusIcon.innerHTML = '...';
+            statusIcon.classList.add('icon-loading');
+            statusIcon.style.animation = 'spin 1s infinite linear';
+        }
+        if (statusLabel) statusLabel.textContent = 'Connectant...';
+        
         try {
             const response = await fetch(API_URL_LAST);
-            if (!response.ok) throw new Error('Error de xarxa amb ThingSpeak');
+            
+            if (!response.ok) {
+                updateConnectionStatus(false);
+                throw new Error('Error de xarxa amb ThingSpeak');
+            }
             
             const data = await response.json();
+            
+            // Si la resposta és OK, però les dades són antigues o buides... podríem afinar més.
+            // Però, per defecte, si l'API respon OK, considerem la connexió exitosa.
+            updateConnectionStatus(true);
             
             // Comprova Alertes amb la darrera lectura
             checkAlerts(data);
@@ -111,18 +147,20 @@ document.addEventListener('DOMContentLoaded', () => {
             return data;
         } catch (error) {
             console.error('Error al obtenir l\'última lectura:', error);
+            updateConnectionStatus(false);
             return null;
         }
     }
 
-    // Exportem funcions per a ús a les subpàgines (p. ex., temperatura.html)
+    // Exportem funcions per a ús a les subpàgines (sense canvis)
     window.FIELD_MAP = FIELD_MAP;
     window.CHANNEL_ID = CHANNEL_ID;
     window.READ_API_KEY = READ_API_KEY;
     window.fetchLastData = fetchLastData;
-    window.checkAlerts = checkAlerts; // L'exportem per mantenir l'alerta activa en totes les pàgines
+    window.checkAlerts = checkAlerts;
 
-    // Cridem la funció al carregar la pàgina i cada 30 segons per mantenir l'estat de l'alerta
+    // Cridem la funció al carregar la pàgina i cada 30 segons per mantenir l'estat
     fetchLastData();
+    // Continuem actualitzant l'estat cada 30 segons per comprovar la connexió
     setInterval(fetchLastData, 30000); 
 });
