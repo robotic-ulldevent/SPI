@@ -17,8 +17,19 @@
     <div id="app-container" class="oculta">
 
         <header class="portada menu-roig">
-            <h1>SISTEMA INTEGRAL de PROTECCIÓ</h1>
-            <p>Ciutadella Ibèrica de Calafell</p>
+            <div class="header-content">
+                <h1>Jaciment Arqueològic [Nom del Jaciment]</h1>
+                <p>Aplicació Interactiva per a l'Anàlisi de Dades Ambientals</p>
+            </div>
+            
+            <div id="indicador-estat" class="indicador">
+                <span id="estat-text">Estat: Desconnectat</span>
+                <div id="estat-icona" class="icona-desconnectat"></div>
+            </div>
+            
+            <a href="#" class="boto-tornar-inici" onclick="mostrarSeccio('principal'); return false;">
+                🏠 Menú Principal
+            </a>
         </header>
 
         <main class="menu-principal">
@@ -26,20 +37,20 @@
             <div id="menu-principal-botons" class="quadre-container">
                 <a href="#modul-sensors" class="quadre modul-sensors" onclick="mostrarSeccio('sensors')">
                     <h3>Mòdul de Sensors</h3>
-                    
                 </a>
                 
-                <a href="#" class="quadre vigilancia-perimetral">
-                    <h3>Sistema de Vigilància Perimetral</h3>  
+                <a href="#vigilancia" class="quadre vigilancia-perimetral" onclick="mostrarSeccio('vigilancia')">
+                    <h3>Sistema de Vigilància Perimetral</h3>
                 </a>
-                <a href="#" class="quadre mapa">
+                
+                <a href="#mapa" class="quadre mapa" onclick="mostrarSeccio('mapa')">
                     <h3>Mapa del Jaciment</h3>
                 </a>
             </div>
         </main>
         
         <section id="modul-sensors" class="seccio oculta">
-            <h2>Mòdul de Sensors</h2>
+            <h2>Mòdul de Sensors</h2> 
             <div class="quadre-container sensors-container">
                 <a href="#casa-1" class="quadre casa" onclick="mostrarSeccio('casa1')"><h3>Casa 1</h3></a>
                 <a href="#" class="quadre casa"><h3>Casa 2</h3></a>
@@ -79,10 +90,5 @@
             </div>
             <canvas id="grafic-temperatura"></canvas> 
         </section>
-        
-    </div> 
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <script src="script.js"></script>
-</body>
-</html>
+        <section id="vigilancia" class="seccio oculta">
