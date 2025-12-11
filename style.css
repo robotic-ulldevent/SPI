@@ -1,7 +1,177 @@
-/* ... (Mantingues tots els estils anteriors) ... */
+/* --- style.css COMPLERT I UNIFICAT --- */
 
-/* --- NOUS ESTILS: INDICADOR D'ESTAT A HEADER --- */
+/* Paleta de Colors: Marró Terra (#a0522d), Cel (#87ceeb), Verd Arbre (#38761d), Blanc */
+:root {
+    --color-primary: #a0522d; /* Sienna (Marró fort) */
+    --color-secondary: #87ceeb; /* Blau cel */
+    --color-accent: #38761d; /* Verd fosc */
+    --color-background: #f4f4f9; 
+    --color-text: #333;
+    --color-button: #5d4037; /* Marró Més Fosc per Botons */
+}
 
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    line-height: 1.6;
+}
+
+header {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+header h1 {
+    margin-top: 0;
+    font-size: 1.8em;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+}
+
+main {
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+    padding-bottom: 70px;
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #ddd;
+    color: var(--color-text);
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+/* --- Menú Principal (Grid) --- */
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.menu-card {
+    text-decoration: none;
+    color: var(--color-text);
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.menu-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 20px rgba(0,0,0,0.2);
+}
+
+.card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 3px solid var(--color-accent);
+}
+
+/* Imatge petita de portada a les subpàgines (p. ex., Casa 1) */
+.card-image-small {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border: 2px solid var(--color-accent);
+}
+
+.card-content {
+    padding: 20px;
+}
+
+.card-content h3 {
+    color: var(--color-primary);
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+/* --- Splash Screen --- */
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #1a1a1a; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; 
+    transition: opacity 0.5s ease-out; 
+}
+
+.portada-imatge {
+    max-width: 90%; 
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.carregant-text {
+    color: white;
+    margin-top: 20px;
+    font-size: 1.2em;
+}
+
+/* --- Alertes --- */
+.alert-box {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #ff3333; /* Vermell Alerta */
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2em;
+    z-index: 1001;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+    animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+    from { background-color: #ff3333; }
+    to { background-color: #cc0000; }
+}
+
+/* --- Botó de Tornada (Back Button) --- */
+.back-button {
+    grid-column: 1 / -1; /* Ocupa tota l'amplada de la graella */
+    margin-top: 20px;
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--color-button); 
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    text-align: center;
+}
+
+.back-button:hover {
+    background-color: var(--color-primary); 
+}
+
+/* --- Indicador de Connexió (Tick/Creu) --- */
 .connection-status {
     padding: 10px 0;
     margin-top: 5px;
@@ -10,14 +180,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    color: white; /* El text de l'estat és blanc dins del header marró */
 }
 
 #status-icon {
     font-size: 1.5em;
     margin-right: 10px;
+    color: #ff9800; /* Taronja per defecte/Loading */
 }
 
-/* Colors dels símbols */
 .icon-success {
     color: #4CAF50; /* Verd */
 }
@@ -27,7 +198,7 @@
 }
 
 .icon-loading {
-    color: #ff9800; /* Taronja */
+    color: #ff9800; 
     animation: spin 1s infinite linear;
 }
 
@@ -36,4 +207,49 @@
     to { transform: rotate(360deg); }
 }
 
-/* ... (Mantingues la resta d'estils anteriors) ... */
+/* --- Estils per a la Llista de Dades Horàries (Subpàgines) --- */
+.data-view {
+    margin-top: 30px;
+}
+
+.current-card, .mean-card {
+    background-color: white;
+    padding: 15px;
+    border-left: 5px solid var(--color-secondary);
+    margin-bottom: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.mean-container {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.mean-card {
+    flex: 1;
+    text-align: center;
+    border-left: 5px solid var(--color-accent);
+}
+
+.mean-card strong {
+    font-size: 1.2em;
+    color: var(--color-primary);
+}
+
+.hourly-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.hourly-list li {
+    background: white;
+    border-bottom: 1px solid #eee;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 3px;
+}
+
+.hourly-list li:nth-child(even) {
+    background:
