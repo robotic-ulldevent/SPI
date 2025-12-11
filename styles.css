@@ -7,13 +7,12 @@ body {
     color: #333;
 }
 
-/* Classe per ocultar elements de manera forçada */
+/* CLASSE CRUCIAL PER OCULTAR ELEMENTS */
 .oculta {
     display: none !important; 
 }
 
-/* --- ESTILS DE LA PANTALLA DE CÀRREGA (Es mantenen igual) --- */
-/* ... (Codi del loading-screen, loading-image, spinner, etc.) ... */
+/* --- ESTILS DE LA PANTALLA DE CÀRREGA --- */
 .loading-screen {
     position: fixed;
     top: 0;
@@ -59,15 +58,14 @@ body {
 .portada.menu-roig {
     background-color: #c0392b; 
     color: white;
-    padding: 20px; /* Reduïm el padding per a una franja més ajustada */
+    padding: 20px; 
     text-align: center;
     margin-bottom: 0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /* Utilitzem Flexbox per al disseny intern del header */
     display: flex;
-    justify-content: space-between; /* Distribueix el contingut */
+    justify-content: space-between; 
     align-items: center;
-    flex-wrap: wrap; /* Per a la responsivitat */
+    flex-wrap: wrap; 
 }
 
 .header-content {
@@ -75,13 +73,7 @@ body {
     text-align: center;
 }
 
-/* TÍTOL DEL MÒDUL DE SENSORS CENTRAT */
-#modul-sensors h2 {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-/* INDICADOR D'ESTAT (Sempre visible al banner vermell) */
+/* INDICADOR D'ESTAT */
 .indicador {
     display: flex;
     align-items: center;
@@ -104,14 +96,14 @@ body {
     background-color: #27ae60; /* Verd */
 }
 .icona-connectat::before {
-    content: "✓"; /* Icona de V (tick) */
+    content: "✓"; 
 }
 
 .icona-desconnectat {
     background-color: #e74c3c; /* Vermell */
 }
 .icona-desconnectat::before {
-    content: "✕"; /* Icona de creu */
+    content: "✕"; 
 }
 
 
@@ -119,7 +111,7 @@ body {
 .boto-tornar-inici {
     display: inline-block;
     padding: 8px 15px;
-    background-color: #f39c12; /* Taronja/Groc per contrast */
+    background-color: #f39c12; 
     color: white;
     text-decoration: none;
     border-radius: 5px;
@@ -127,9 +119,45 @@ body {
     margin: 10px;
 }
 
-/* Resta d'estils (menu-principal, quadre-container, etc.) es mantenen igual */
+main, section {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
 
-/* Estils Específics: 3 Quadres principals (han de quedar alineats) */
+.seccio {
+    padding-top: 50px;
+}
+
+/* TÍTOL DEL MÒDUL DE SENSORS CENTRAT */
+#modul-sensors h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Quadres i Contenidors (resta d'estils mantinguts) */
+.quadre-container {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 20px;
+    justify-content: center; 
+}
+.quadre {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
+    padding: 20px;
+    text-align: center;
+    text-decoration: none; 
+    color: #333;
+    transition: transform 0.3s, box-shadow 0.3s;
+    flex-grow: 1; 
+    min-width: 250px; 
+}
+.quadre:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
 #menu-principal-botons .quadre {
     flex-basis: calc(33.33% - 20px); 
     max-width: calc(33.33% - 20px);
@@ -138,7 +166,17 @@ body {
     color: #c0392b; 
 }
 
-/* (Resta d'estils CSS es manté per brevetat) */
+.casa1-detall-container .quadre {
+    background-color: #ecf0f1; 
+    flex-basis: calc(25% - 20px); 
+    max-width: calc(25% - 20px);
+}
+.sensors-container .quadre {
+    background-color: #3498db; 
+    color: white;
+    flex-basis: calc(25% - 20px); 
+    max-width: calc(25% - 20px);
+}
 .boto-tornar {
     display: inline-block;
     margin-bottom: 20px;
@@ -164,7 +202,7 @@ body {
 /* Estil Responsivitat: Mòbils */
 @media (max-width: 768px) {
     .portada.menu-roig {
-        flex-direction: column; /* Col·loca elements un sota l'altre a mòbils */
+        flex-direction: column; 
     }
     .boto-tornar-inici {
         width: 100%;
