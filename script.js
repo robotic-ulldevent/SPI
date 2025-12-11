@@ -1,9 +1,8 @@
-// --- Configuració de ThingSpeak ---
+// --- Configuració de ThingSpeak (Mateix que abans) ---
 const CHANNEL_ID = '3200447';
-const READ_API_KEY = '85WNYIM35DMXK9Z7'; // <-- LA VOSTRA CLAU REAL
+const READ_API_KEY = '85WNYIM35DMXK9Z7'; 
 const BASE_URL = `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds.json?api_key=${READ_API_KEY}`;
 
-// Mapeig dels camps (tal com ho heu demanat)
 const FIELDS = {
     HUMIDITAT: 'field1',
     TEMPERATURA: 'field2',
@@ -11,31 +10,45 @@ const FIELDS = {
     PLUJA: 'field4'
 };
 
+// --- NOVA FUNCIÓ: GESTIÓ DE LA CÀRREGA INICIAL ---
+function inicialitzarAplicacio() {
+    // 1. Amaga la pantalla de càrrega i mostra el contenidor principal després de 10 segons (10000ms)
+    setTimeout(() => {
+        document.getElementById('loading-screen').classList.add('oculta');
+        document.getElementById('app-container').classList.remove('oculta');
+    }, 10000); 
+}
+
+
 // Funció per a la navegació (Mostra/Oculta seccions)
 function mostrarSeccio(seccio) {
-    // Oculta totes les seccions (excepte el main, que es pot deixar)
+    // Oculta totes les seccions i el main
     document.querySelectorAll('.seccio').forEach(sec => sec.classList.add('oculta'));
+    document.querySelector('.menu-principal').classList.add('oculta');
 
     // Mostra la secció demanada
-    if (seccio === 'sensors') {
+    if (seccio === 'principal') {
+         // Quan tornem a la principal, només mostrem el contenidor del menú
+        document.querySelector('.menu-principal').classList.remove('oculta');
+    } else if (seccio === 'sensors') {
         document.getElementById('modul-sensors').classList.remove('oculta');
-        document.querySelector('.menu-principal').classList.add('oculta'); // Oculta el menú principal
+        document.querySelector('.menu-principal').classList.remove('oculta'); // Mantenim la franja vermella superior visible
     } else if (seccio === 'casa1') {
         document.getElementById('casa1-detall').classList.remove('oculta');
-        document.getElementById('modul-sensors').classList.add('oculta'); // Oculta el menú de sensors
-        obtenirDadesThingSpeak(); // Quan entrem a Casa 1, carreguem les dades
+        document.querySelector('.menu-principal').classList.add('oculta'); // Amaguem la franja vermella quan entrem al detall
+        obtenirDadesThingSpeak(); 
     }
 }
 
-// Inicialitza la vista (oculta les seccions de detall al carregar)
+// Inicialitza la vista i la càrrega
 document.addEventListener('DOMContentLoaded', () => {
-    // Per defecte, només mostra el menú principal
-    mostrarSeccio('principal');
+    inicialitzarAplicacio();
 });
+
+// (La resta de funcions per a ThingSpeak es mantenen igual)
 
 // Funció principal per obtenir dades de ThingSpeak
 async function obtenirDadesThingSpeak() {
-    // Demanem 24 hores de dades per calcular les mitjanes (aproximadament 24 lectures)
     const url = `${BASE_URL}&results=24`; 
 
     try {
@@ -75,7 +88,6 @@ function actualitzarDadesActuals(feeds) {
 
 // 2. Calcular i mostrar les mitjanes (8h matí i 20h vespre)
 function calcularIPresentarMitjanes(feeds) {
-    // Array per guardar els valors de cada camp a les hores clau
     const dadesMati = { temp: [], hum: [], pluja: [], incl: [] };
     const dadesVespre = { temp: [], hum: [], pluja: [], incl: [] };
 
@@ -83,7 +95,6 @@ function calcularIPresentarMitjanes(feeds) {
         const dataLectura = new Date(feed.created_at);
         const hora = dataLectura.getHours();
 
-        // Si l'hora és a prop de les 8 del matí (e.g., entre 7h i 9h)
         if (hora >= 7 && hora <= 9) {
             dadesMati.temp.push(parseFloat(feed[FIELDS.TEMPERATURA]));
             dadesMati.hum.push(parseFloat(feed[FIELDS.HUMIDITAT]));
@@ -91,7 +102,6 @@ function calcularIPresentarMitjanes(feeds) {
             dadesMati.incl.push(parseFloat(feed[FIELDS.INCLINACIO]));
         }
 
-        // Si l'hora és a prop de les 8 del vespre (e.g., entre 19h i 21h)
         if (hora >= 19 && hora <= 21) {
             dadesVespre.temp.push(parseFloat(feed[FIELDS.TEMPERATURA]));
             dadesVespre.hum.push(parseFloat(feed[FIELDS.HUMIDITAT]));
@@ -100,16 +110,15 @@ function calcularIPresentarMitjanes(feeds) {
         }
     });
 
-    // Funció auxiliar per calcular la mitjana
     const calcularMitjana = (arr) => arr.filter(v => !isNaN(v)).reduce((a, b) => a + b, 0) / arr.length;
     
-    // --- Presentar Dades de MATÍ ---
+    // Presentar Dades de MATÍ
     document.querySelector('#temp-quadre .mitjana-mati').textContent = `Mitjana Matí (8h): ${calcularMitjana(dadesMati.temp).toFixed(1)} °C`;
     document.querySelector('#humitat-quadre .mitjana-mati').textContent = `Mitjana Matí (8h): ${calcularMitjana(dadesMati.hum).toFixed(1)} %`;
     document.querySelector('#pluja-quadre .mitjana-mati').textContent = `Mitjana Matí (8h): ${calcularMitjana(dadesMati.pluja).toFixed(1)} mm`;
     document.querySelector('#inclinacio-quadre .mitjana-mati').textContent = `Mitjana Matí (8h): ${calcularMitjana(dadesMati.incl).toFixed(2)} graus`;
 
-    // --- Presentar Dades de VESPRE ---
+    // Presentar Dades de VESPRE
     document.querySelector('#temp-quadre .mitjana-vespre').textContent = `Mitjana Vespre (20h): ${calcularMitjana(dadesVespre.temp).toFixed(1)} °C`;
     document.querySelector('#humitat-quadre .mitjana-vespre').textContent = `Mitjana Vespre (20h): ${calcularMitjana(dadesVespre.hum).toFixed(1)} %`;
     document.querySelector('#pluja-quadre .mitjana-vespre').textContent = `Mitjana Vespre (20h): ${calcularMitjana(dadesVespre.pluja).toFixed(1)} mm`;
