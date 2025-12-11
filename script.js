@@ -2,6 +2,7 @@
 const CHANNEL_ID = '3200447';
 const READ_API_KEY = '85WNYIM35DMXK9Z7'; // LA VOSTRA CLAU REAL
 const BASE_URL = `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds.json?api_key=${READ_API_KEY}`;
+const STATUS_URL = `https://api.thingspeak.com/channels/${CHANNEL_ID}.json?api_key=${READ_API_KEY}`; // URL per l'estat del canal
 
 // Mapeig dels camps
 const FIELDS = {
@@ -14,14 +15,54 @@ const FIELDS = {
 let graficTemperatura = null;
 
 
-// --- GESTIÓ DE LA CÀRREGA INICIAL (10 segons) ---
+// --- GESTIÓ DE LA CÀRREGA I ESTAT DE CONNEXIÓ ---
+
 function inicialitzarAplicacio() {
+    // 1. Comprova l'estat de la connexió just després de carregar
+    comprovarEstatConnexio();
+    
+    // 2. Fes la transició de la pantalla de càrrega després de 10 segons
     setTimeout(() => {
         document.getElementById('loading-screen').classList.add('oculta');
         document.getElementById('app-container').classList.remove('oculta');
         mostrarSeccio('principal'); 
     }, 10000); 
 }
+
+// 🌟 NOVA FUNCIÓ: COMPROVAR L'ESTAT DE CONNEXIÓ A THINGSPEAK 🌟
+async function comprovarEstatConnexio() {
+    try {
+        const response = await fetch(STATUS_URL);
+        const data = await response.json();
+        
+        const lastEntryId = data.last_entry_id;
+        
+        const estatIcona = document.getElementById('estat-icona');
+        const estatText = document.getElementById('estat-text');
+
+        // Considerem la connexió OK si hi ha dades rebudes recentment.
+        // ThingSpeak no dóna l'últim timestamp directament a l'endpoint principal, 
+        // així que ens basem en l'ID de l'última entrada.
+        if (lastEntryId > 0) {
+            estatIcona.classList.remove('icona-desconnectat');
+            estatIcona.classList.add('icona-connectat');
+            estatText.textContent = `Estat: Connectat (ID: ${lastEntryId})`;
+        } else {
+            throw new Error("No s'han trobat entrades.");
+        }
+
+    } catch (error) {
+        // En cas d'error de xarxa o de dades no vàlides
+        const estatIcona = document.getElementById('estat-icona');
+        const estatText = document.getElementById('estat-text');
+        
+        estatIcona.classList.remove('icona-connectat');
+        estatIcona.classList.add('icona-desconnectat');
+        estatText.textContent = "Estat: Desconnectat / Sense dades";
+        console.error("Error en comprovar l'estat de connexió:", error);
+    }
+}
+
 
 // Funció per a la navegació (Mostra/Oculta seccions)
 function mostrarSeccio(seccio) {
@@ -30,23 +71,25 @@ function mostrarSeccio(seccio) {
     document.getElementById('menu-principal-botons').classList.add('oculta');
 
     if (seccio === 'principal') {
-        // Mostra els 3 botons principals (sense cap secció de detall)
         document.getElementById('menu-principal-botons').classList.remove('oculta');
     } else if (seccio === 'sensors') {
-        // Mostra els 4 botons de les Cases
         document.getElementById('modul-sensors').classList.remove('oculta');
-        // Mantenim ocults els 3 botons principals si estem veient el menú de sensors
-        
+        // El menú principal es manté ocult per mostrar només els 4 botons de casa
     } else if (seccio === 'casa1') {
-        // Mostra el detall dels sensors de Casa 1 i carrega les dades
         document.getElementById('casa1-detall').classList.remove('oculta');
         obtenirDadesThingSpeak(); 
+    } else if (seccio === 'vigilancia') {
+        document.getElementById('vigilancia').classList.remove('oculta');
+    } else if (seccio === 'mapa') {
+        document.getElementById('mapa').classList.remove('oculta');
     }
 }
 
 // Inicialitza la vista i la càrrega
 document.addEventListener('DOMContentLoaded', () => {
     inicialitzarAplicacio();
+    // Opcional: Refrescar l'estat cada 60 segons per mantenir-lo actualitzat
+    setInterval(comprovarEstatConnexio, 60000); 
 });
 
 
@@ -54,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function obtenirDadesThingSpeak() {
     const url = `${BASE_URL}&results=48`; 
-
+    // ... (resta del codi obtenirDadesThingSpeak es manté)
     try {
         const response = await fetch(url);
         const data = await response.json();
@@ -81,11 +124,12 @@ function actualitzarDadesActuals(feeds) {
     document.querySelector('#inclinacio-quadre .dada-actual').textContent = `${parseFloat(ultimaLectura[FIELDS.INCLINACIO]).toFixed(2)} graus`;
 }
 
-
 function calcularIPresentarMitjanes(feeds) {
     const dadesMati = { temp: [], hum: [], pluja: [], incl: [] };
     const dadesVespre = { temp: [], hum: [], pluja: [], incl: [] };
-
+    
+    const calcularMitjana = (arr) => arr.filter(v => !isNaN(v)).reduce((a, b) => a + b, 0) / arr.length;
+    
     feeds.forEach(feed => {
         const dataLectura = new Date(feed.created_at);
         const hora = dataLectura.getHours();
@@ -104,8 +148,6 @@ function calcularIPresentarMitjanes(feeds) {
             dadesVespre.incl.push(parseFloat(feed[FIELDS.INCLINACIO]));
         }
     });
-
-    const calcularMitjana = (arr) => arr.filter(v => !isNaN(v)).reduce((a, b) => a + b, 0) / arr.length;
     
     document.querySelector('#temp-quadre .mitjana-mati').textContent = `Mitjana Matí (8h): ${calcularMitjana(dadesMati.temp).toFixed(1)} °C`;
     document.querySelector('#humitat-quadre .mitjana-mati').textContent = `Mitjana Matí (8h): ${calcularMitjana(dadesMati.hum).toFixed(1)} %`;
