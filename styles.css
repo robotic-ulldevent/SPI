@@ -7,7 +7,7 @@ body {
     color: #333;
 }
 
-/* CLASSE CRUCIAL PER OCULTAR ELEMENTS */
+/* CLASSE CRUCIAL PER OCULTAR ELEMENTS (Solució a l'error de càrrega) */
 .oculta {
     display: none !important; 
 }
@@ -107,11 +107,11 @@ body {
 }
 
 
-/* BOTÓ TORNAR A L'INICI */
+/* BOTÓ TORNAR A L'INICI (SENSE PASSAR PER LA PORTADA) */
 .boto-tornar-inici {
     display: inline-block;
     padding: 8px 15px;
-    background-color: #f39c12; 
+    background-color: #f39c12; /* Taronja/Groc per contrast */
     color: white;
     text-decoration: none;
     border-radius: 5px;
@@ -119,6 +119,7 @@ body {
     margin: 10px;
 }
 
+/* --- SECCIONS I CONTINGUT GENERAL --- */
 main, section {
     padding: 20px;
     max-width: 1200px;
@@ -129,13 +130,27 @@ main, section {
     padding-top: 50px;
 }
 
-/* TÍTOL DEL MÒDUL DE SENSORS CENTRAT */
+/* TÍTOLS CENTRATS */
 #modul-sensors h2 {
     text-align: center;
     margin-bottom: 20px;
 }
+#vigilancia h2, #mapa h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-/* Quadres i Contenidors (resta d'estils mantinguts) */
+/* ESTIL PER A LES IMATGES DINS DE LES SECCIONS (foto2, foto3, foto4) */
+.seccio-image {
+    max-width: 100%; 
+    height: auto;    
+    display: block;  
+    margin: 20px auto; /* Centrat i amb marge */
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+
+/* --- QUADRES (Botons i Dades) --- */
 .quadre-container {
     display: flex;
     flex-wrap: wrap; 
@@ -158,6 +173,8 @@ main, section {
     transform: translateY(-5px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
+
+/* Quadres del Menú Principal */
 #menu-principal-botons .quadre {
     flex-basis: calc(33.33% - 20px); 
     max-width: calc(33.33% - 20px);
@@ -166,17 +183,22 @@ main, section {
     color: #c0392b; 
 }
 
-.casa1-detall-container .quadre {
-    background-color: #ecf0f1; 
-    flex-basis: calc(25% - 20px); 
-    max-width: calc(25% - 20px);
-}
+/* Quadres de les Cases (Mòdul Sensors) */
 .sensors-container .quadre {
-    background-color: #3498db; 
+    background-color: #3498db; /* Blau */
     color: white;
     flex-basis: calc(25% - 20px); 
     max-width: calc(25% - 20px);
 }
+
+/* Quadres de les Dades (Detall Casa 1) */
+.casa1-detall-container .quadre {
+    background-color: #ecf0f1; /* Gris clar */
+    flex-basis: calc(25% - 20px); 
+    max-width: calc(25% - 20px);
+}
+
+/* Botó Tornar (dins de les seccions) */
 .boto-tornar {
     display: inline-block;
     margin-bottom: 20px;
@@ -186,6 +208,8 @@ main, section {
     text-decoration: none;
     border-radius: 5px;
 }
+
+/* Estils del Gràfic */
 #grafic-temperatura {
     margin-top: 40px;
     padding: 20px;
@@ -199,10 +223,10 @@ main, section {
     max-width: 90%; 
 }
 
-/* Estil Responsivitat: Mòbils */
+/* --- ESTILS RESPONSIVITAT: Mòbils --- */
 @media (max-width: 768px) {
     .portada.menu-roig {
-        flex-direction: column; 
+        flex-direction: column; /* Col·loca elements un sota l'altre */
     }
     .boto-tornar-inici {
         width: 100%;
