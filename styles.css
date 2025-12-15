@@ -54,10 +54,10 @@ body {
 }
 
 
-/* --- ESTILS DE LA CAPÇALERA (FRANJA VERMELLA) --- */
+/* --- ESTILS DE LA CAPÇALERA (FRANJA SORRA) --- */
 .portada.menu-roig {
-    background-color: #c0392b; 
-    color: white;
+    background-color: #D2B48C; /* NOU COLOR: Marró Sorra (Tan) */
+    color: #333; /* Canviem el text a negre fosc per contrast */
     padding: 20px; 
     text-align: center;
     margin-bottom: 0;
@@ -71,6 +71,9 @@ body {
 .header-content {
     flex-grow: 1;
     text-align: center;
+}
+.header-content h1, .header-content p {
+    color: #333; /* Assegurem que el text del header sigui fosc */
 }
 
 /* INDICADOR D'ESTAT */
@@ -93,25 +96,25 @@ body {
 }
 
 .icona-connectat {
-    background-color: #27ae60; /* Verd */
+    background-color: #27ae60; /* Verd mantingut */
 }
 .icona-connectat::before {
     content: "✓"; 
 }
 
 .icona-desconnectat {
-    background-color: #e74c3c; /* Vermell */
+    background-color: #e74c3c; /* Vermell mantingut (per a la Creu) */
 }
 .icona-desconnectat::before {
     content: "✕"; 
 }
 
 
-/* BOTÓ TORNAR A L'INICI (SENSE PASSAR PER LA PORTADA) */
+/* BOTÓ TORNAR A L'INICI (Manté el taronja per contrast fort) */
 .boto-tornar-inici {
     display: inline-block;
     padding: 8px 15px;
-    background-color: #f39c12; /* Taronja/Groc per contrast */
+    background-color: #f39c12; 
     color: white;
     text-decoration: none;
     border-radius: 5px;
@@ -176,12 +179,12 @@ main, section {
     max-width: calc(33.33% - 20px);
 }
 #menu-principal-botons .quadre h3 {
-    color: #c0392b; 
+    color: #D2B48C; /* NOU COLOR APLICAT AQUÍ TAMBÉ */
 }
 
 /* Quadres de les Cases (Mòdul Sensors) */
 .sensors-container .quadre {
-    background-color: #3498db; /* Blau */
+    background-color: #3498db; /* Blau mantingut */
     color: white;
     flex-basis: calc(25% - 20px); 
     max-width: calc(25% - 20px);
@@ -189,7 +192,7 @@ main, section {
 
 /* Quadres de les Dades (Detall Casa 1) */
 .casa1-detall-container .quadre {
-    background-color: #ecf0f1; /* Gris clar */
+    background-color: #ecf0f1; 
     flex-basis: calc(25% - 20px); 
     max-width: calc(25% - 20px);
 }
@@ -199,4 +202,39 @@ main, section {
     display: inline-block;
     margin-bottom: 20px;
     padding: 10px 15px;
-    background-color
+    background-color: #95a5a6;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+/* Estils del Gràfic */
+#grafic-temperatura {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: 400px; 
+    max-width: 100%;
+}
+#casa1-detall {
+    max-width: 90%; 
+}
+
+/* --- ESTILS RESPONSIVITAT: Mòbils --- */
+@media (max-width: 768px) {
+    .portada.menu-roig {
+        flex-direction: column; 
+    }
+    .boto-tornar-inici {
+        width: 100%;
+        text-align: center;
+    }
+    .menu-principal .quadre,
+    .sensors-container .quadre,
+    .casa1-detall-container .quadre {
+        flex-basis: 100%; 
+        max-width: 100%;
+    }
+}
