@@ -54,10 +54,10 @@ body {
 }
 
 
-/* --- ESTILS DE LA CAPÇALERA (FRANJA SORRA) --- */
+/* --- ESTILS DE LA CAPÇALERA (FRANJA SORRA PLATJA) --- */
 .portada.menu-roig {
-    background-color: #D2B48C; /* NOU COLOR: Marró Sorra (Tan) */
-    color: #333; /* Canviem el text a negre fosc per contrast */
+    background-color: #EBC89C; /* NOU COLOR: Sorrenc Clar (tipus sorra de platja) */
+    color: #5A453A; /* Marró fosc per un bon contrast del text */
     padding: 20px; 
     text-align: center;
     margin-bottom: 0;
@@ -73,7 +73,7 @@ body {
     text-align: center;
 }
 .header-content h1, .header-content p {
-    color: #333; /* Assegurem que el text del header sigui fosc */
+    color: #5A453A; /* Assegurem que el text del header sigui marró fosc */
 }
 
 /* INDICADOR D'ESTAT */
@@ -82,6 +82,7 @@ body {
     align-items: center;
     font-weight: bold;
     margin: 10px;
+    color: #5A453A; /* Text d'estat marró fosc */
 }
 
 .icona-connectat, .icona-desconnectat {
@@ -96,14 +97,14 @@ body {
 }
 
 .icona-connectat {
-    background-color: #27ae60; /* Verd mantingut */
+    background-color: #27ae60; /* Verd */
 }
 .icona-connectat::before {
     content: "✓"; 
 }
 
 .icona-desconnectat {
-    background-color: #e74c3c; /* Vermell mantingut (per a la Creu) */
+    background-color: #e74c3c; /* Vermell (mantenim la X vermella) */
 }
 .icona-desconnectat::before {
     content: "✕"; 
@@ -179,7 +180,7 @@ main, section {
     max-width: calc(33.33% - 20px);
 }
 #menu-principal-botons .quadre h3 {
-    color: #D2B48C; /* NOU COLOR APLICAT AQUÍ TAMBÉ */
+    color: #EBC89C; /* NOU COLOR APLICAT AQUÍ TAMBÉ (Sorrenc Clar) */
 }
 
 /* Quadres de les Cases (Mòdul Sensors) */
