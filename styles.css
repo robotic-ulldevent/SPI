@@ -7,7 +7,7 @@ body {
     color: #333;
 }
 
-/* CLASSE CRUCIAL PER OCULTAR ELEMENTS (Solució a l'error de càrrega) */
+/* CLASSE CRUCIAL PER OCULTAR ELEMENTS */
 .oculta {
     display: none !important; 
 }
@@ -131,23 +131,19 @@ main, section {
 }
 
 /* TÍTOLS CENTRATS */
-#modul-sensors h2 {
-    text-align: center;
-    margin-bottom: 20px;
-}
-#vigilancia h2, #mapa h2 {
+#modul-sensors h2, #vigilancia h2, #mapa h2 {
     text-align: center;
     margin-bottom: 20px;
 }
 
-/* ESTIL PER A LES IMATGES DINS DE LES SECCIONS (foto2, foto3, foto4) */
-.seccio-image {
+/* ESTIL PER A LES IMATGES DINS DELS 3 QUADRES DEL MENÚ PRINCIPAL */
+.menu-quadre-image {
     max-width: 100%; 
-    height: auto;    
-    display: block;  
-    margin: 20px auto; /* Centrat i amb marge */
-    border-radius: 8px; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    height: auto;
+    margin-top: 15px; 
+    margin-bottom: 5px; 
+    border-radius: 5px; 
+    object-fit: cover; 
 }
 
 /* --- QUADRES (Botons i Dades) --- */
@@ -203,39 +199,4 @@ main, section {
     display: inline-block;
     margin-bottom: 20px;
     padding: 10px 15px;
-    background-color: #95a5a6;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-}
-
-/* Estils del Gràfic */
-#grafic-temperatura {
-    margin-top: 40px;
-    padding: 20px;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    height: 400px; 
-    max-width: 100%;
-}
-#casa1-detall {
-    max-width: 90%; 
-}
-
-/* --- ESTILS RESPONSIVITAT: Mòbils --- */
-@media (max-width: 768px) {
-    .portada.menu-roig {
-        flex-direction: column; /* Col·loca elements un sota l'altre */
-    }
-    .boto-tornar-inici {
-        width: 100%;
-        text-align: center;
-    }
-    .menu-principal .quadre,
-    .sensors-container .quadre,
-    .casa1-detall-container .quadre {
-        flex-basis: 100%; 
-        max-width: 100%;
-    }
-}
+    background-color
