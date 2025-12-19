@@ -33,21 +33,20 @@
         </header>
 
         <main class="menu-principal">
-            
             <div id="menu-principal-botons" class="quadre-container">
-                <a href="#modul-sensors" class="quadre modul-sensors" onclick="mostrarSeccio('sensors')">
+                <a href="#modul-sensors" class="quadre" onclick="mostrarSeccio('sensors')">
                     <h3>Mòdul de Sensors</h3>
-                    <img src="foto2.jpg" alt="Il·lustració de sensors" class="menu-quadre-image">
+                    <img src="foto2.jpg" alt="Sensors" class="menu-quadre-image">
                 </a>
                 
-                <a href="#vigilancia" class="quadre vigilancia-perimetral" onclick="mostrarSeccio('vigilancia')">
+                <a href="#vigilancia" class="quadre" onclick="mostrarSeccio('vigilancia')">
                     <h3>Sistema de Vigilància Perimetral</h3>
-                    <img src="foto3.jpg" alt="Il·lustració de vigilància" class="menu-quadre-image">
+                    <img src="foto3.jpg" alt="Vigilància" class="menu-quadre-image">
                 </a>
                 
-                <a href="#mapa" class="quadre mapa" onclick="mostrarSeccio('mapa')">
+                <a href="#mapa" class="quadre" onclick="mostrarSeccio('mapa')">
                     <h3>Mapa del Jaciment</h3>
-                    <img src="foto4.jpg" alt="Il·lustració de mapa" class="menu-quadre-image">
+                    <img src="foto4.jpg" alt="Mapa" class="menu-quadre-image">
                 </a>
             </div>
         </main>
@@ -63,49 +62,42 @@
         </section>
 
         <section id="casa1-detall" class="seccio oculta">
-            <a href="#" class="boto-tornar" onclick="mostrarSeccio('sensors')">&larr; Tornar als Sensors</a>
+            <a href="#" class="boto-tornar" onclick="mostrarSeccio('sensors')">&larr; Tornar</a>
             <h2>Casa 1 - Dades Ambientals</h2>
             <div class="quadre-container casa1-detall-container">
                 <div id="temp-quadre" class="quadre parametre">
-                    <h3>Temperatura (Field 2)</h3>
+                    <h3>Temperatura</h3>
                     <p class="dada-actual">Càrrega...</p>
-                    <p class="mitjana-mati">Mitjana Matí (8h): --</p>
-                    <p class="mitjana-vespre">Mitjana Vespre (20h): --</p>
+                    <p class="mitjana-mati">--</p>
+                    <p class="mitjana-vespre">--</p>
                 </div>
                 <div id="humitat-quadre" class="quadre parametre">
-                    <h3>Humitat (Field 1)</h3>
+                    <h3>Humitat</h3>
                     <p class="dada-actual">Càrrega...</p>
-                    <p class="mitjana-mati">Mitjana Matí (8h): --</p>
-                    <p class="mitjana-vespre">Mitjana Vespre (20h): --</p>
                 </div>
                 <div id="pluja-quadre" class="quadre parametre">
-                    <h3>Pluja (Field 4)</h3>
+                    <h3>Pluja</h3>
                     <p class="dada-actual">Càrrega...</p>
-                    <p class="mitjana-mati">Mitjana Matí (8h): --</p>
-                    <p class="mitjana-vespre">Mitjana Vespre (20h): --</p>
                 </div>
                 <div id="inclinacio-quadre" class="quadre parametre">
-                    <h3>Inclinació (Field 3)</h3>
+                    <h3>Inclinació</h3>
                     <p class="dada-actual">Càrrega...</p>
-                    <p class="mitjana-mati">Mitjana Matí (8h): --</p>
-                    <p class="mitjana-vespre">Mitjana Vespre (20h): --</p>
                 </div>
             </div>
             <canvas id="grafic-temperatura"></canvas> 
         </section>
 
         <section id="vigilancia" class="seccio oculta">
-            <a href="#" class="boto-tornar" onclick="mostrarSeccio('principal')">&larr; Tornar al Menú</a>
+            <a href="#" class="boto-tornar" onclick="mostrarSeccio('principal')">&larr; Tornar</a>
             <h2>Sistema de Vigilància Perimetral</h2>
-            <p>Contingut del sistema de vigilància en desenvolupament.</p>
+            <p>Contingut en desenvolupament.</p>
         </section>
 
         <section id="mapa" class="seccio oculta">
-            <a href="#" class="boto-tornar" onclick="mostrarSeccio('principal')">&larr; Tornar al Menú</a>
+            <a href="#" class="boto-tornar" onclick="mostrarSeccio('principal')">&larr; Tornar</a>
             <h2>Mapa del Jaciment</h2>
-            <p>Mapa interactiu en desenvolupament.</p>
+            <p>Contingut en desenvolupament.</p>
         </section>
-        
     </div> 
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
