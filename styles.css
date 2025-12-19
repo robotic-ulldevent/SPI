@@ -1,17 +1,16 @@
 /* --- CAPÇALERA (BANNER) --- */
 .portada.menu-roig {
-    background-color: #EBC89C;
+    background-color: #EBC89C; /* Color sorra */
     color: #5A453A;
-    padding: 20px 5%;
+    padding: 30px 20px;
     display: flex;
-    /* Per defecte (mòbil): tot centrat i vertical */
-    flex-direction: column;
+    flex-direction: column; /* Mòbil: Elements un sota l'altre */
     align-items: center;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-/* --- ELEMENTS INTERNS DEL BANNER --- */
+/* Contingut del text */
 .header-content {
     margin-bottom: 20px;
 }
@@ -19,16 +18,31 @@
 .header-content h1 {
     font-size: 1.8rem;
     margin: 0;
+    line-height: 1.2;
 }
 
+.header-content p {
+    font-size: 1rem;
+    margin: 10px 0 0 0;
+}
+
+/* Indicador d'estat */
 .indicador {
     font-weight: bold;
     margin-bottom: 20px;
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
-/* --- BOTÓ MENÚ PRINCIPAL --- */
+.icona-connectat, .icona-desconnectat {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    margin-left: 10px;
+}
+
+/* Botó Menú Principal */
 .boto-tornar-inici {
     background-color: #f39c12;
     color: white;
@@ -36,36 +50,38 @@
     text-decoration: none;
     border-radius: 8px;
     font-weight: bold;
-    display: inline-block;
+    display: block;
+    width: fit-content;
 }
 
-/* --- CONFIGURACIÓ PER A ORDINADOR (Pantalles més grans de 768px) --- 
-*/
-@media (min-width: 768px) {
+/* --- ADAPTACIÓ PER A ORDINADOR (Pantalles grans) --- */
+@media (min-width: 900px) {
     .portada.menu-roig {
-        /* Torna a ser una barra horitzontal */
-        flex-direction: row;
-        justify-content: space-between; 
+        flex-direction: row; /* Horitzontal */
+        justify-content: space-between;
         text-align: left;
-        padding: 15px 50px;
+        padding: 20px 50px;
     }
 
     .header-content {
-        margin-bottom: 0; /* Elimina l'espai vertical */
-        flex: 1;
+        margin-bottom: 0;
+        text-align: left;
     }
 
+    /* Agrupem ID i Botó a la dreta */
     .indicador {
         margin-bottom: 0;
-        margin-right: 30px; /* Separa l'ID del botó */
+        margin-right: 25px;
     }
 
-    .boto-tornar-inici {
-        width: auto; /* El botó no ocupa tota l'amplada */
+    /* Forcem que l'indicador i el botó estiguin al mateix costat */
+    .header-right {
+        display: flex;
+        align-items: center;
     }
 }
 
-/* --- RESTA DELS QUADRES (GRID PER A ORDINADOR) --- */
+/* --- ESTRUCTURA DE QUADRES (Sense canvis) --- */
 .quadre-container {
     display: flex;
     flex-wrap: wrap;
@@ -76,12 +92,12 @@
 
 .quadre {
     background-color: white;
-    padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    padding: 20px;
+    text-align: center;
     text-decoration: none;
     color: #333;
-    /* Al mòbil ocupen quasi tot, a l'ordinador es posen de costat */
-    flex: 1 1 300px; 
+    flex: 1 1 300px;
     max-width: 400px;
 }
