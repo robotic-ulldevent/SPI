@@ -1,11 +1,22 @@
-body { font-family: sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; color: #333; }
-.oculta { display: none !important; }
+/* ESTILS GENERALS */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+}
 
-/* PANTALLA DE CÀRREGA - FOTO GRAN */
+.oculta {
+    display: none !important; 
+}
+
+/* PANTALLA DE CÀRREGA (FOTO GRAN - 5 SEGONS) */
 .loading-screen {
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background-color: #2c3e50;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: #2c3e50; 
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -14,46 +25,121 @@ body { font-family: sans-serif; margin: 0; padding: 0; background-color: #f4f4f9
     color: white;
 }
 .loading-image {
-    width: 90%;          /* Molt més gran */
+    width: 90%;
     max-width: 1000px;
-    height: 65vh;        /* Ocupa bona part de la pantalla vertical */
-    object-fit: cover;   /* No es deforma */
+    height: 65vh;
+    object-fit: cover;
     border: 5px solid white;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     margin-bottom: 20px;
 }
-.spinner { border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid #EBC89C; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid #EBC89C;
+    border-radius: 50%;
+    width: 40px; height: 40px;
+    animation: spin 1s linear infinite;
+}
 @keyframes spin { 100% { transform: rotate(360deg); } }
 
-/* CAPÇALERA COLOR SORRA */
+/* CAPÇALERA ORIGINAL AMB COLOR SORRA */
 .portada.menu-roig {
-    background-color: #EBC89C;
+    background-color: #EBC89C; 
     color: #5A453A;
-    padding: 20px;
+    padding: 15px 30px; 
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; 
     align-items: center;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-.header-content h1, .header-content p { margin: 5px 0; color: #5A453A; }
 
-/* BOTONS I QUADRES ORIGINALS */
-.quadre-container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; padding: 20px; }
-.quadre {
-    background: white; padding: 20px; border-radius: 10px; text-align: center;
-    text-decoration: none; color: #333; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    flex: 1; min-width: 250px; transition: 0.3s;
+.header-content h1 { font-size: 1.5rem; margin: 0; }
+.header-content p { font-size: 1rem; margin: 5px 0 0 0; }
+
+/* BOTÓ TORNAR INICI (Dins del banner) */
+.boto-tornar-inici {
+    background-color: #f39c12;
+    color: white;
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 0.9rem;
 }
-.quadre:hover { transform: translateY(-5px); }
-.menu-quadre-image { width: 100%; height: auto; border-radius: 5px; margin-top: 10px; }
-.boto-tornar-inici { background: #f39c12; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none; font-weight: bold; }
+
+/* CONTENIDORS DE QUADRES (GRID ORIGINAL) */
+.quadre-container {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+
+.quadre {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
+    padding: 20px;
+    text-align: center;
+    text-decoration: none; 
+    color: #333;
+    transition: transform 0.3s;
+}
+
+/* Mides exactes com abans */
+#menu-principal-botons .quadre {
+    flex: 0 1 calc(30% - 20px); /* Tres quadres en línia */
+    min-width: 280px;
+}
+
+.sensors-container .quadre, 
+.casa1-detall-container .quadre {
+    flex: 0 1 calc(22% - 20px); /* Quatre quadres en línia */
+    min-width: 200px;
+}
+
+.menu-quadre-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+/* COLORS DELS QUADRES */
+#menu-principal-botons .quadre h3 { color: #5A453A; }
+.sensors-container .quadre { background-color: #3498db; color: white; }
+.casa1-detall-container .quadre { background-color: #ecf0f1; }
 
 /* INDICADOR */
-.indicador { display: flex; align-items: center; font-weight: bold; }
-.icona-connectat, .icona-desconnectat { width: 15px; height: 15px; border-radius: 50%; margin-left: 10px; }
-.icona-connectat { background: #27ae60; }
-.icona-desconnectat { background: #e74c3c; }
+.indicador { display: flex; align-items: center; font-size: 0.8rem; }
+.icona-connectat, .icona-desconnectat {
+    width: 12px; height: 12px; border-radius: 50%; margin-left: 8px;
+}
+.icona-connectat { background-color: #27ae60; }
+.icona-desconnectat { background-color: #e74c3c; }
 
 /* SECCIONS */
-section { padding: 40px 20px; max-width: 1200px; margin: auto; }
-.boto-tornar { background: #95a5a6; color: white; padding: 8px 12px; border-radius: 5px; text-decoration: none; display: inline-block; margin-bottom: 20px; }
+section {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.boto-tornar {
+    display: inline-block;
+    background-color: #95a5a6;
+    color: white;
+    padding: 8px 12px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+#grafic-temperatura {
+    width: 100%;
+    height: 400px;
+    background: white;
+    margin-top: 20px;
+    border-radius: 10px;
+}
