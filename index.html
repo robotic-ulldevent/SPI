@@ -12,12 +12,13 @@
             padding: 0;
             background-color: #f4f4f9;
             color: #333;
+            overflow-x: hidden;
         }
 
         .oculta { display: none !important; }
 
         /* --- PANTALLA DE CÀRREGA (5 SEGONS + FOTO GRAN) --- */
-        .loading-screen {
+        #loading-screen {
             position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh;
@@ -26,8 +27,9 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 9999; /* Màxima prioritat */
             color: white;
+            transition: opacity 0.5s ease;
         }
         .loading-image {
             width: 90%;
@@ -54,7 +56,7 @@
             color: #5A453A;
             padding: 30px 20px;
             display: flex;
-            flex-direction: column; /* Estil mòbil: un sota l'altre */
+            flex-direction: column;
             align-items: center;
             text-align: center;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -71,7 +73,6 @@
             margin: 10px 0 20px 0;
         }
 
-        /* Grup de la dreta (ID + Botó) */
         .header-right {
             display: flex;
             flex-direction: column;
@@ -86,14 +87,9 @@
             font-size: 1.1rem;
         }
 
-        .icona-connectat, .icona-desconnectat {
-            width: 18px; height: 18px;
-            border-radius: 50%; margin-left: 10px;
-        }
-        .icona-connectat { background-color: #27ae60; }
-        .icona-desconnectat { background-color: #e74c3c; }
+        .icona-connectat { background-color: #27ae60; width: 18px; height: 18px; border-radius: 50%; margin-left: 10px; }
+        .icona-desconnectat { background-color: #e74c3c; width: 18px; height: 18px; border-radius: 50%; margin-left: 10px; }
 
-        /* Botó Menú Principal */
         .boto-tornar-inici {
             background-color: #f39c12;
             color: white;
@@ -106,20 +102,15 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        /* --- ADAPTACIÓ PER A ORDINADOR --- */
+        /* ADAPTACIÓ ORDINADOR */
         @media (min-width: 900px) {
-            .portada.menu-roig {
-                flex-direction: row;
-                justify-content: space-between;
-                text-align: left;
-                padding: 20px 50px;
-            }
+            .portada.menu-roig { flex-direction: row; justify-content: space-between; text-align: left; padding: 20px 50px; }
             .header-content { text-align: left; margin-bottom: 0; }
             .header-right { flex-direction: row; }
             .indicador { margin-bottom: 0; margin-right: 30px; }
         }
 
-        /* --- QUADRES DEL MENÚ --- */
+        /* --- CONTINGUT --- */
         .quadre-container {
             padding: 20px;
             display: flex;
@@ -140,7 +131,6 @@
             max-width: 400px;
             transition: 0.3s;
         }
-        .quadre:hover { transform: translateY(-5px); }
 
         .menu-quadre-image {
             width: 100%;
@@ -150,25 +140,16 @@
             margin-top: 15px;
         }
 
-        /* --- SECCIONS --- */
         section { padding: 20px; max-width: 1200px; margin: 0 auto; }
-        .boto-tornar {
-            display: inline-block;
-            background-color: #95a5a6;
-            color: white;
-            padding: 10px 15px;
-            text-decoration: none;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
+        .boto-tornar { display: inline-block; background-color: #95a5a6; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
-    <div id="loading-screen" class="loading-screen">
+    <div id="loading-screen">
         <img src="foto1.jpg" alt="Portada Jaciment" class="loading-image">
-        <div class="loading-text">Carregant dades...</div>
-        <div class="spinner"></div> 
+        <div class="loading-text" style="margin-top:15px; font-size: 1.5rem;">Carregant dades...</div>
+        <div class="spinner" style="margin-top:15px;"></div> 
     </div>
 
     <div id="app-container" class="oculta">
@@ -192,9 +173,91 @@
         </header>
 
         <main id="menu-principal-botons" class="quadre-container">
-            <a href="#sensors" class="quadre" onclick="mostrarSeccio('sensors')">
+            <a href="javascript:void(0)" class="quadre" onclick="mostrarSeccio('sensors')">
                 <h3>Mòdul de Sensors</h3>
                 <img src="foto2.jpg" alt="Sensors" class="menu-quadre-image">
             </a>
             
-            <a href="#vigilancia"
+            <a href="javascript:void(0)" class="quadre" onclick="mostrarSeccio('vigilancia')">
+                <h3>Sistema de Vigilància Perimetral</h3>
+                <img src="foto3.jpg" alt="Vigilància" class="menu-quadre-image">
+            </a>
+            
+            <a href="javascript:void(0)" class="quadre" onclick="mostrarSeccio('mapa')">
+                <h3>Mapa del Jaciment</h3>
+                <img src="foto4.jpg" alt="Mapa" class="menu-quadre-image">
+            </a>
+        </main>
+        
+        <section id="modul-sensors" class="seccio oculta">
+            <a href="javascript:void(0)" class="boto-tornar" onclick="mostrarSeccio('principal')">&larr; Tornar</a>
+            <h2>Mòdul de Sensors</h2> 
+            <div class="quadre-container">
+                <div class="quadre" style="background:#3498db; color:white;"><h3>Casa 1</h3></div>
+                <div class="quadre" style="background:#3498db; color:white;"><h3>Casa 2</h3></div>
+            </div>
+        </section>
+
+        <section id="vigilancia" class="seccio oculta">
+            <a href="javascript:void(0)" class="boto-tornar" onclick="mostrarSeccio('principal')">&larr; Tornar</a>
+            <h2>Sistema de Vigilància</h2>
+            <p>Contingut en desenvolupament...</p>
+        </section>
+
+        <section id="mapa" class="seccio oculta">
+            <a href="javascript:void(0)" class="boto-tornar" onclick="mostrarSeccio('principal')">&larr; Tornar</a>
+            <h2>Mapa del Jaciment</h2>
+            <p>Mapa interactiu...</p>
+        </section>
+
+    </div> 
+
+    <script>
+        // Funció per gestionar el canvi de vistes
+        function mostrarSeccio(seccioID) {
+            // Amaguem absolutament totes les seccions i el menú principal
+            const seccions = document.querySelectorAll('section');
+            seccions.forEach(s => s.classList.add('oculta'));
+            
+            const menuPrincipal = document.getElementById('menu-principal-botons');
+            if(menuPrincipal) menuPrincipal.classList.add('oculta');
+
+            // Mostrem la que toca
+            if (seccioID === 'principal') {
+                if(menuPrincipal) menuPrincipal.classList.remove('oculta');
+            } else {
+                const target = document.getElementById(seccioID === 'sensors' ? 'modul-sensors' : seccioID);
+                if(target) target.classList.remove('oculta');
+            }
+            window.scrollTo(0, 0); // Torna a dalt de tot en canviar
+        }
+
+        // Funció que desbloqueja la pantalla
+        function finalitzarCarrega() {
+            const loading = document.getElementById('loading-screen');
+            const app = document.getElementById('app-container');
+            
+            if(loading) loading.classList.add('oculta');
+            if(app) app.classList.remove('oculta');
+            
+            mostrarSeccio('principal');
+            console.log("Aplicació llesta.");
+        }
+
+        // Al carregar el document, iniciem el temporitzador de 5 segons
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("Iniciant temporitzador de 5 segons...");
+            setTimeout(finalitzarCarrega, 5000);
+        });
+
+        // Mesura de seguretat: Si als 8 segons no ha carregat per algun error, forcem l'entrada
+        setTimeout(() => {
+            const app = document.getElementById('app-container');
+            if (app && app.classList.contains('oculta')) {
+                console.warn("Forçant càrrega per seguretat...");
+                finalitzarCarrega();
+            }
+        }, 8000);
+    </script>
+</body>
+</html>
