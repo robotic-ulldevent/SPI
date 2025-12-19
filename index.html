@@ -11,203 +11,184 @@
 
         /* --- PANTALLA DE CÀRREGA (5 SEGONS) --- */
         #loading-screen {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            background-color: #2c3e50;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            color: white;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #2c3e50; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 9999; color: white;
         }
         .loading-image {
-            width: 90%; max-width: 1000px; height: 65vh;
-            object-fit: cover; border: 5px solid white; border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5); margin-bottom: 20px;
+            width: 90%; max-width: 1000px; height: 60vh; object-fit: cover;
+            border: 5px solid white; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.5); margin-bottom: 20px;
         }
         .spinner {
             border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid #EBC89C;
-            border-radius: 50%; width: 40px; height: 40px;
-            animation: spin 1s linear infinite;
+            border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite;
         }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
         /* --- CAPÇALERA (BANNER) --- */
         .portada.menu-roig {
-            background-color: #EBC89C; color: #5A453A;
-            padding: 30px 20px; display: flex; flex-direction: column;
-            align-items: center; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background-color: #EBC89C; color: #5A453A; padding: 30px 20px;
+            display: flex; flex-direction: column; align-items: center; text-align: center;
         }
-        .header-content h1 { font-size: 1.8rem; margin: 0; line-height: 1.2; }
-        .header-content p { font-size: 1.1rem; margin: 10px 0 20px 0; }
-        .header-right { display: flex; flex-direction: column; align-items: center; }
-        .indicador { font-weight: bold; margin-bottom: 20px; display: flex; align-items: center; font-size: 1.1rem; }
-        .icona-connectat { background-color: #27ae60; width: 18px; height: 18px; border-radius: 50%; margin-left: 10px; }
-
-        .boto-tornar-inici {
-            background-color: #f39c12; color: white; padding: 15px 30px;
-            text-decoration: none; border-radius: 8px; font-weight: bold; display: block;
-        }
+        .header-right { display: flex; flex-direction: column; align-items: center; margin-top: 15px; }
+        .indicador { font-weight: bold; margin-bottom: 15px; display: flex; align-items: center; }
+        .icona-connectat { background-color: #27ae60; width: 15px; height: 15px; border-radius: 50%; margin-left: 10px; }
+        .boto-tornar-inici { background-color: #f39c12; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; }
 
         @media (min-width: 900px) {
             .portada.menu-roig { flex-direction: row; justify-content: space-between; text-align: left; padding: 20px 50px; }
-            .header-right { flex-direction: row; }
+            .header-right { flex-direction: row; margin-top: 0; }
             .indicador { margin-bottom: 0; margin-right: 30px; }
         }
 
         /* --- CONTINGUT I QUADRES --- */
-        .quadre-container { padding: 20px; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+        .quadre-container { padding: 20px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
         .quadre {
             background-color: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            padding: 20px; text-align: center; text-decoration: none; color: #333;
-            flex: 1 1 250px; max-width: 400px; cursor: pointer;
+            padding: 20px; text-align: center; flex: 1 1 200px; max-width: 350px; cursor: pointer;
         }
-        .quadre-casa { background-color: #3498db; color: white; flex: 1 1 200px; max-width: 250px; }
-        .menu-quadre-image { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-top: 15px; }
+        .quadre-dades { cursor: default; }
+        .menu-quadre-image { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-top: 10px; }
 
-        /* --- SECCIONS --- */
-        section { padding: 20px; max-width: 1200px; margin: 0 auto; }
-        .boto-tornar { display: inline-block; background-color: #95a5a6; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; margin-bottom: 20px; }
+        /* --- SECCIONS I GRÀFICS --- */
+        section { padding: 20px; max-width: 1100px; margin: 0 auto; }
+        .grafic-wrapper { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-top: 25px; }
+        h4 { margin: 0 0 10px 0; color: #5A453A; text-align: center; }
+        .boto-tornar { display: inline-block; background-color: #95a5a6; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px; margin-bottom: 15px; }
         
-        .grafic-wrapper { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-top: 20px; }
-        canvas { width: 100% !important; height: auto !important; }
+        #status-refresh { font-size: 0.8rem; color: #7f8c8d; text-align: center; margin-top: 5px; font-style: italic; }
     </style>
 </head>
 <body>
 
     <div id="loading-screen">
         <img src="foto1.jpg" alt="Portada" class="loading-image">
-        <div style="font-size: 1.5rem;">Carregant dades...</div>
+        <div>Actualitzant sistema de dades...</div>
         <div class="spinner" style="margin-top:15px;"></div> 
     </div>
 
     <div id="app-container" class="oculta">
         <header class="portada menu-roig">
-            <div class="header-content">
-                <h1>JACIMENT ARQUEOLÒGIC:<br>Ciutadella Ibèrica de Calafell</h1>
+            <div>
+                <h1>JACIMENT ARQUEOLÒGIC: Ciutadella Ibèrica</h1>
                 <p>Sistema de protecció integral del jaciment</p>
             </div>
             <div class="header-right">
-                <div class="indicador">
-                    <span>Estat: Connectat (ID: 27)</span>
-                    <div class="icona-connectat"></div>
-                </div>
+                <div class="indicador"><span>Estat: Connectat (ID: 27)</span><div class="icona-connectat"></div></div>
                 <a href="#" class="boto-tornar-inici" onclick="mostrarSeccio('seccio-principal'); return false;">🏠 Menú Principal</a>
             </div>
         </header>
 
         <main id="seccio-principal" class="quadre-container">
-            <div class="quadre" onclick="mostrarSeccio('seccio-sensors')">
-                <h3>Mòdul de Sensors</h3>
-                <img src="foto2.jpg" alt="Sensors" class="menu-quadre-image">
-            </div>
-            <div class="quadre" onclick="mostrarSeccio('seccio-vigilancia')">
-                <h3>Sistema de Vigilància Perimetral</h3>
-                <img src="foto3.jpg" alt="Vigilància" class="menu-quadre-image">
-            </div>
-            <div class="quadre" onclick="mostrarSeccio('seccio-mapa')">
-                <h3>Mapa del Jaciment</h3>
-                <img src="foto4.jpg" alt="Mapa" class="menu-quadre-image">
-            </div>
+            <div class="quadre" onclick="mostrarSeccio('seccio-sensors')"><h3>Mòdul de Sensors</h3><img src="foto2.jpg" class="menu-quadre-image"></div>
+            <div class="quadre" onclick="mostrarSeccio('seccio-vigilancia')"><h3>Vigilància Perimetral</h3><img src="foto3.jpg" class="menu-quadre-image"></div>
+            <div class="quadre" onclick="mostrarSeccio('seccio-mapa')"><h3>Mapa del Jaciment</h3><img src="foto4.jpg" class="menu-quadre-image"></div>
         </main>
         
         <section id="seccio-sensors" class="oculta">
             <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal')">&larr; Tornar</a>
-            <h2>Mòdul de Sensors</h2> 
             <div class="quadre-container">
-                <div class="quadre quadre-casa" onclick="mostrarSeccio('seccio-casa1')"><h3>Casa 1</h3></div>
-                <div class="quadre quadre-casa"><h3>Casa 2</h3></div>
-                <div class="quadre quadre-casa"><h3>Casa 3</h3></div>
-                <div class="quadre quadre-casa"><h3>Casa 4</h3></div>
+                <div class="quadre" style="background:#3498db; color:white;" onclick="mostrarSeccio('seccio-casa1')"><h3>Casa 1</h3></div>
+                <div class="quadre" style="background:#3498db; color:white;"><h3>Casa 2</h3></div>
+                <div class="quadre" style="background:#3498db; color:white;"><h3>Casa 3</h3></div>
+                <div class="quadre" style="background:#3498db; color:white;"><h3>Casa 4</h3></div>
             </div>
         </section>
 
         <section id="seccio-casa1" class="oculta">
             <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-sensors')">&larr; Tornar</a>
-            <h2>Casa 1: Dades Ambientals</h2>
+            <div id="status-refresh">Dades actualitzades en temps real (cada 30 segons)</div>
+            
             <div class="quadre-container">
-                <div class="quadre"><h3>Temperatura</h3><p id="val-temp" style="font-size:1.5rem; font-weight:bold;">-- °C</p></div>
-                <div class="quadre"><h3>Humitat</h3><p id="val-hum" style="font-size:1.5rem; font-weight:bold;">-- %</p></div>
-                <div class="quadre"><h3>Inclinació</h3><p id="val-inc" style="font-size:1.5rem; font-weight:bold;">-- °</p></div>
+                <div class="quadre quadre-dades"><h4>Temperatura</h4><p id="val-temp" style="font-size:1.6rem; font-weight:bold; color:#f39c12;">-- °C</p></div>
+                <div class="quadre quadre-dades"><h4>Humitat</h4><p id="val-hum" style="font-size:1.6rem; font-weight:bold; color:#3498db;">-- %</p></div>
+                <div class="quadre quadre-dades"><h4>Inclinació</h4><p id="val-inc" style="font-size:1.6rem; font-weight:bold; color:#27ae60;">-- °</p></div>
             </div>
-            <div class="grafic-wrapper">
-                <canvas id="graficTemp"></canvas>
-            </div>
+            
+            <div class="grafic-wrapper"><h4>Evolució Temperatura (°C)</h4><canvas id="graficTemp"></canvas></div>
+            <div class="grafic-wrapper"><h4>Evolució Humitat (%)</h4><canvas id="graficHum"></canvas></div>
+            <div class="grafic-wrapper"><h4>Evolució Inclinació (Graus)</h4><canvas id="graficInc"></canvas></div>
         </section>
 
-        <section id="seccio-vigilancia" class="oculta">
-            <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal')">&larr; Tornar</a>
-            <h2>Vigilància Perimetral</h2><p>En desenvolupament...</p>
-        </section>
-
-        <section id="seccio-mapa" class="oculta">
-            <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal')">&larr; Tornar</a>
-            <h2>Mapa del Jaciment</h2><p>En desenvolupament...</p>
-        </section>
+        <section id="seccio-vigilancia" class="oculta"><h2>Vigilància</h2><p>Mòdul en construcció.</p></section>
+        <section id="seccio-mapa" class="oculta"><h2>Mapa</h2><p>Mòdul en construcció.</p></section>
     </div> 
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        let elMeuGrafic;
+        let charts = {};
+        let refreshInterval = null;
 
         function mostrarSeccio(id) {
-            document.getElementById('seccio-principal').classList.add('oculta');
-            document.getElementById('seccio-sensors').classList.add('oculta');
-            document.getElementById('seccio-casa1').classList.add('oculta');
-            document.getElementById('seccio-vigilancia').classList.add('oculta');
-            document.getElementById('seccio-mapa').classList.add('oculta');
+            // Aturar refrescos anteriors per seguretat
+            if(refreshInterval) clearInterval(refreshInterval);
 
-            const desti = document.getElementById(id);
-            if(desti) {
-                desti.classList.remove('oculta');
-                if(id === 'seccio-casa1') carregarDadesThingSpeak();
+            // Amagar seccions
+            document.querySelectorAll('main, section').forEach(s => s.classList.add('oculta'));
+            document.getElementById(id).classList.remove('oculta');
+            
+            // Si entrem a la Casa 1, activem càrrega i refresc
+            if(id === 'seccio-casa1') {
+                carregarDades();
+                refreshInterval = setInterval(carregarDades, 30000); // 30 segons
             }
             window.scrollTo(0,0);
         }
 
-        async function carregarDadesThingSpeak() {
+        async function carregarDades() {
             try {
-                const url = 'https://api.thingspeak.com/channels/3200447/feeds.json?results=10';
-                const response = await fetch(url);
-                const data = await response.json();
+                const res = await fetch('https://api.thingspeak.com/channels/3200447/feeds.json?results=15');
+                const data = await res.json();
+                const feeds = data.feeds;
+                const ultim = feeds[feeds.length - 1];
+
+                // Actualitzar textos
+                document.getElementById('val-temp').innerText = (ultim.field2 || "0") + " °C";
+                document.getElementById('val-hum').innerText = (ultim.field1 || "0") + " %";
+                document.getElementById('val-inc').innerText = (ultim.field3 || "0") + " °";
+
+                // Preparar labels (hores)
+                const labels = feeds.map(f => new Date(f.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}));
                 
-                // Actualitzar valors actuals (última entrada)
-                const ultim = data.feeds[data.feeds.length - 1];
-                document.getElementById('val-temp').innerText = ultim.field2 + " °C";
-                document.getElementById('val-hum').innerText = ultim.field1 + " %";
-                document.getElementById('val-inc').innerText = ultim.field3 + " °";
-
-                // Preparar dades per al gràfic
-                const etiquetes = data.feeds.map(f => new Date(f.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}));
-                const dadesTemp = data.feeds.map(f => f.field2);
-
-                dibuixarGrafic(etiquetes, dadesTemp);
-            } catch (e) { console.error("Error carregant dades"); }
+                // Actualitzar els 3 gràfics
+                crearGrafic('graficTemp', labels, feeds.map(f => f.field2), 'Temperatura', '#f39c12');
+                crearGrafic('graficHum', labels, feeds.map(f => f.field1), 'Humitat', '#3498db');
+                crearGrafic('graficInc', labels, feeds.map(f => f.field3), 'Inclinació', '#27ae60');
+                
+                console.log("Dades actualitzades: " + new Date().toLocaleTimeString());
+            } catch (e) { 
+                console.error("Error al carregar dades:", e); 
+            }
         }
 
-        function dibuixarGrafic(labels, dades) {
-            const ctx = document.getElementById('graficTemp').getContext('2d');
-            if (elMeuGrafic) elMeuGrafic.destroy(); // Esborra el gràfic anterior per no duplicar
-
-            elMeuGrafic = new Chart(ctx, {
+        function crearGrafic(canvasId, labels, dataPoints, label, color) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            if(charts[canvasId]) charts[canvasId].destroy();
+            
+            charts[canvasId] = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: labels,
-                    datasets: [{
-                        label: 'Evolució Temperatura (°C)',
-                        data: dades,
-                        borderColor: '#f39c12',
-                        backgroundColor: 'rgba(243, 156, 18, 0.2)',
+                    datasets: [{ 
+                        label: label, 
+                        data: dataPoints, 
+                        borderColor: color, 
+                        backgroundColor: color + '22', 
+                        fill: true, 
+                        tension: 0.4,
                         borderWidth: 3,
-                        fill: true,
-                        tension: 0.4
+                        pointRadius: 2
                     }]
                 },
-                options: {
+                options: { 
                     responsive: true,
-                    scales: { y: { beginAtZero: false } }
+                    maintainAspectRatio: false,
+                    animation: { duration: 800 },
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: false, grid: { color: '#eee' } },
+                        x: { grid: { display: false } }
+                    }
                 }
             });
         }
