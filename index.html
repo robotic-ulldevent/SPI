@@ -42,28 +42,30 @@
         }
 
         /* --- CONTINGUT I QUADRES --- */
-        .quadre-container { padding: 20px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
+        .quadre-container { padding: 20px; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
         .quadre {
             background-color: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            padding: 20px; text-align: center; flex: 1 1 200px; max-width: 350px; cursor: pointer;
+            padding: 20px; text-align: center; flex: 1 1 300px; max-width: 450px; cursor: pointer;
         }
-        .quadre-dades { cursor: default; }
+        .quadre-detall { cursor: default; display: flex; flex-direction: column; align-items: center; }
         .menu-quadre-image { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-top: 10px; }
 
         /* --- SECCIONS I GRÀFICS --- */
-        section { padding: 20px; max-width: 1100px; margin: 0 auto; }
-        .grafic-wrapper { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-top: 25px; }
-        h4 { margin: 0 0 10px 0; color: #5A453A; text-align: center; }
+        section { padding: 20px; max-width: 1200px; margin: 0 auto; }
         .boto-tornar { display: inline-block; background-color: #95a5a6; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px; margin-bottom: 15px; }
         
-        #status-refresh { font-size: 0.8rem; color: #7f8c8d; text-align: center; margin-top: 5px; font-style: italic; }
+        /* Contenidor del gràfic dins de la targeta */
+        .canvas-container { width: 100%; height: 200px; margin-top: 15px; }
+        h4 { margin: 0; color: #5A453A; font-size: 1.2rem; }
+        .valor-gran { font-size: 2rem; font-weight: bold; margin: 10px 0; }
+        #status-refresh { font-size: 0.8rem; color: #7f8c8d; text-align: center; margin-bottom: 10px; font-style: italic; }
     </style>
 </head>
 <body>
 
     <div id="loading-screen">
         <img src="foto1.jpg" alt="Portada" class="loading-image">
-        <div>Actualitzant sistema de dades...</div>
+        <div>Sincronitzant dades del jaciment...</div>
         <div class="spinner" style="margin-top:15px;"></div> 
     </div>
 
@@ -97,17 +99,27 @@
 
         <section id="seccio-casa1" class="oculta">
             <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-sensors')">&larr; Tornar</a>
-            <div id="status-refresh">Dades actualitzades en temps real (cada 30 segons)</div>
+            <div id="status-refresh">Actualització automàtica cada hora</div>
             
             <div class="quadre-container">
-                <div class="quadre quadre-dades"><h4>Temperatura</h4><p id="val-temp" style="font-size:1.6rem; font-weight:bold; color:#f39c12;">-- °C</p></div>
-                <div class="quadre quadre-dades"><h4>Humitat</h4><p id="val-hum" style="font-size:1.6rem; font-weight:bold; color:#3498db;">-- %</p></div>
-                <div class="quadre quadre-dades"><h4>Inclinació</h4><p id="val-inc" style="font-size:1.6rem; font-weight:bold; color:#27ae60;">-- °</p></div>
+                <div class="quadre quadre-detall">
+                    <h4>Temperatura</h4>
+                    <p id="val-temp" class="valor-gran" style="color:#f39c12;">-- °C</p>
+                    <div class="canvas-container"><canvas id="graficTemp"></canvas></div>
+                </div>
+
+                <div class="quadre quadre-detall">
+                    <h4>Humitat</h4>
+                    <p id="val-hum" class="valor-gran" style="color:#3498db;">-- %</p>
+                    <div class="canvas-container"><canvas id="graficHum"></canvas></div>
+                </div>
+
+                <div class="quadre quadre-detall">
+                    <h4>Inclinació</h4>
+                    <p id="val-inc" class="valor-gran" style="color:#27ae60;">-- °</p>
+                    <div class="canvas-container"><canvas id="graficInc"></canvas></div>
+                </div>
             </div>
-            
-            <div class="grafic-wrapper"><h4>Evolució Temperatura (°C)</h4><canvas id="graficTemp"></canvas></div>
-            <div class="grafic-wrapper"><h4>Evolució Humitat (%)</h4><canvas id="graficHum"></canvas></div>
-            <div class="grafic-wrapper"><h4>Evolució Inclinació (Graus)</h4><canvas id="graficInc"></canvas></div>
         </section>
 
         <section id="seccio-vigilancia" class="oculta"><h2>Vigilància</h2><p>Mòdul en construcció.</p></section>
@@ -120,17 +132,15 @@
         let refreshInterval = null;
 
         function mostrarSeccio(id) {
-            // Aturar refrescos anteriors per seguretat
             if(refreshInterval) clearInterval(refreshInterval);
 
-            // Amagar seccions
             document.querySelectorAll('main, section').forEach(s => s.classList.add('oculta'));
             document.getElementById(id).classList.remove('oculta');
             
-            // Si entrem a la Casa 1, activem càrrega i refresc
             if(id === 'seccio-casa1') {
                 carregarDades();
-                refreshInterval = setInterval(carregarDades, 30000); // 30 segons
+                // Actualització cada 1 hora (3.600.000 ms)
+                refreshInterval = setInterval(carregarDades, 3600000); 
             }
             window.scrollTo(0,0);
         }
@@ -142,23 +152,17 @@
                 const feeds = data.feeds;
                 const ultim = feeds[feeds.length - 1];
 
-                // Actualitzar textos
                 document.getElementById('val-temp').innerText = (ultim.field2 || "0") + " °C";
                 document.getElementById('val-hum').innerText = (ultim.field1 || "0") + " %";
                 document.getElementById('val-inc').innerText = (ultim.field3 || "0") + " °";
 
-                // Preparar labels (hores)
                 const labels = feeds.map(f => new Date(f.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}));
                 
-                // Actualitzar els 3 gràfics
-                crearGrafic('graficTemp', labels, feeds.map(f => f.field2), 'Temperatura', '#f39c12');
-                crearGrafic('graficHum', labels, feeds.map(f => f.field1), 'Humitat', '#3498db');
-                crearGrafic('graficInc', labels, feeds.map(f => f.field3), 'Inclinació', '#27ae60');
+                crearGrafic('graficTemp', labels, feeds.map(f => f.field2), 'Temp', '#f39c12');
+                crearGrafic('graficHum', labels, feeds.map(f => f.field1), 'Hum', '#3498db');
+                crearGrafic('graficInc', labels, feeds.map(f => f.field3), 'Inc', '#27ae60');
                 
-                console.log("Dades actualitzades: " + new Date().toLocaleTimeString());
-            } catch (e) { 
-                console.error("Error al carregar dades:", e); 
-            }
+            } catch (e) { console.error("Error dades:", e); }
         }
 
         function crearGrafic(canvasId, labels, dataPoints, label, color) {
@@ -170,24 +174,22 @@
                 data: {
                     labels: labels,
                     datasets: [{ 
-                        label: label, 
                         data: dataPoints, 
                         borderColor: color, 
                         backgroundColor: color + '22', 
                         fill: true, 
                         tension: 0.4,
-                        borderWidth: 3,
-                        pointRadius: 2
+                        borderWidth: 2,
+                        pointRadius: 0 // Gràfic més net
                     }]
                 },
                 options: { 
                     responsive: true,
                     maintainAspectRatio: false,
-                    animation: { duration: 800 },
                     plugins: { legend: { display: false } },
                     scales: {
-                        y: { beginAtZero: false, grid: { color: '#eee' } },
-                        x: { grid: { display: false } }
+                        y: { display: true, ticks: { display: false }, grid: { display: false } },
+                        x: { display: true, ticks: { display: false }, grid: { display: false } }
                     }
                 }
             });
