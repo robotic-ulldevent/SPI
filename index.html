@@ -42,7 +42,7 @@
         }
 
         /* --- CONTINGUT I QUADRES --- */
-        .quadre-container { padding: 20px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
+        .quadre-container { padding: 20px; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
         
         .quadre {
             background-color: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
@@ -50,13 +50,15 @@
         }
         .quadre:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.15); }
 
-        /* Estil específic per a les pestanyes de les cases (Color Menú Principal) */
+        /* Estil per a les 4 cases (2 dalt, 2 baix) */
         .quadre-casa {
             background-color: #EBC89C !important; 
             color: #5A453A !important;
-            flex: 1 1 calc(23% - 15px); /* Alineades 4 en fila en pantalles grans */
-            min-width: 150px;
+            flex: 0 1 calc(45% - 20px); /* Força a ocupar aproximadament la meitat */
+            min-width: 140px;
+            max-width: 200px; /* Limita la mida perquè no es facin massa llargues */
             font-weight: bold;
+            font-size: 1.2rem;
         }
 
         .quadre-detall { cursor: default; flex: 1 1 300px; }
@@ -98,7 +100,7 @@
         
         <section id="seccio-sensors" class="oculta">
             <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal')">&larr; Tornar</a>
-            <h2 style="text-align:center; color:#5A453A;">Selecció d'Estació</h2>
+            <h2 style="text-align:center; color:#5A453A; margin-bottom:30px;">Selecció d'Estació</h2>
             <div class="quadre-container">
                 <div class="quadre quadre-casa" onclick="mostrarSeccio('seccio-casa1')">Casa 1</div>
                 <div class="quadre quadre-casa">Casa 2</div>
@@ -142,7 +144,8 @@
             if(refreshInterval) clearInterval(refreshInterval);
 
             document.querySelectorAll('main, section').forEach(s => s.classList.add('oculta'));
-            document.getElementById(id).classList.remove('oculta');
+            const target = document.getElementById(id);
+            if(target) target.classList.remove('oculta');
             
             if(id === 'seccio-casa1') {
                 carregarDades();
