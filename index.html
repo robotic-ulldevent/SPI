@@ -9,7 +9,7 @@
         body { font-family: sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; color: #333; }
         .oculta { display: none !important; }
 
-        /* --- PANTALLA DE CÀRREGA (5 SEGONS) --- */
+        /* --- PANTALLA DE CÀRREGA --- */
         #loading-screen {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background-color: #2c3e50; display: flex; flex-direction: column;
@@ -25,7 +25,7 @@
         }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* --- CAPÇALERA (BANNER) --- */
+        /* --- CAPÇALERA --- */
         .portada.menu-roig {
             background-color: #EBC89C; color: #5A453A; padding: 30px 20px;
             display: flex; flex-direction: column; align-items: center; text-align: center;
@@ -54,11 +54,19 @@
         .quadre-casa {
             background-color: #EBC89C !important; 
             color: #5A453A !important;
-            flex: 0 1 calc(45% - 20px); /* Força a ocupar aproximadament la meitat */
-            min-width: 140px;
-            max-width: 200px; /* Limita la mida perquè no es facin massa llargues */
+            flex: 0 1 calc(45% - 20px); 
+            min-width: 160px;
+            max-width: 280px; 
             font-weight: bold;
-            font-size: 1.2rem;
+            padding: 15px;
+        }
+
+        .casa-image {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
         }
 
         .quadre-detall { cursor: default; flex: 1 1 300px; }
@@ -100,12 +108,24 @@
         
         <section id="seccio-sensors" class="oculta">
             <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal')">&larr; Tornar</a>
-            <h2 style="text-align:center; color:#5A453A; margin-bottom:30px;">Selecció d'Estació</h2>
+            <h2 style="text-align:center; color:#5A453A; margin-bottom:20px;">Selecció d'Estació</h2>
             <div class="quadre-container">
-                <div class="quadre quadre-casa" onclick="mostrarSeccio('seccio-casa1')">Casa 1</div>
-                <div class="quadre quadre-casa">Casa 2</div>
-                <div class="quadre quadre-casa">Casa 3</div>
-                <div class="quadre quadre-casa">Casa 4</div>
+                <div class="quadre quadre-casa" onclick="mostrarSeccio('seccio-casa1')">
+                    <img src="fotocasa1.jpg" alt="Casa 1" class="casa-image">
+                    <span>Casa 1</span>
+                </div>
+                <div class="quadre quadre-casa">
+                    <img src="fotocasa2.jpg" alt="Casa 2" class="casa-image">
+                    <span>Casa 2</span>
+                </div>
+                <div class="quadre quadre-casa">
+                    <img src="fotocasa3.jpg" alt="Casa 3" class="casa-image">
+                    <span>Casa 3</span>
+                </div>
+                <div class="quadre quadre-casa">
+                    <img src="fotocasa4.jpg" alt="Casa 4" class="casa-image">
+                    <span>Casa 4</span>
+                </div>
             </div>
         </section>
 
