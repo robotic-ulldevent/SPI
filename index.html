@@ -42,23 +42,32 @@
         }
 
         /* --- CONTINGUT I QUADRES --- */
-        .quadre-container { padding: 20px; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+        .quadre-container { padding: 20px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
+        
         .quadre {
             background-color: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            padding: 20px; text-align: center; flex: 1 1 300px; max-width: 450px; cursor: pointer;
+            padding: 20px; text-align: center; flex: 1 1 250px; max-width: 350px; cursor: pointer; transition: 0.3s;
         }
-        .quadre-detall { cursor: default; display: flex; flex-direction: column; align-items: center; }
+        .quadre:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.15); }
+
+        /* Estil específic per a les pestanyes de les cases (Color Menú Principal) */
+        .quadre-casa {
+            background-color: #EBC89C !important; 
+            color: #5A453A !important;
+            flex: 1 1 calc(23% - 15px); /* Alineades 4 en fila en pantalles grans */
+            min-width: 150px;
+            font-weight: bold;
+        }
+
+        .quadre-detall { cursor: default; flex: 1 1 300px; }
         .menu-quadre-image { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-top: 10px; }
 
         /* --- SECCIONS I GRÀFICS --- */
         section { padding: 20px; max-width: 1200px; margin: 0 auto; }
         .boto-tornar { display: inline-block; background-color: #95a5a6; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px; margin-bottom: 15px; }
         
-        /* Contenidor del gràfic dins de la targeta */
-        .canvas-container { width: 100%; height: 200px; margin-top: 15px; }
-        h4 { margin: 0; color: #5A453A; font-size: 1.2rem; }
-        .valor-gran { font-size: 2rem; font-weight: bold; margin: 10px 0; }
-        #status-refresh { font-size: 0.8rem; color: #7f8c8d; text-align: center; margin-bottom: 10px; font-style: italic; }
+        .canvas-container { width: 100%; height: 180px; margin-top: 10px; }
+        .valor-gran { font-size: 1.8rem; font-weight: bold; margin: 5px 0; }
     </style>
 </head>
 <body>
@@ -89,31 +98,29 @@
         
         <section id="seccio-sensors" class="oculta">
             <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal')">&larr; Tornar</a>
+            <h2 style="text-align:center; color:#5A453A;">Selecció d'Estació</h2>
             <div class="quadre-container">
-                <div class="quadre" style="background:#3498db; color:white;" onclick="mostrarSeccio('seccio-casa1')"><h3>Casa 1</h3></div>
-                <div class="quadre" style="background:#3498db; color:white;"><h3>Casa 2</h3></div>
-                <div class="quadre" style="background:#3498db; color:white;"><h3>Casa 3</h3></div>
-                <div class="quadre" style="background:#3498db; color:white;"><h3>Casa 4</h3></div>
+                <div class="quadre quadre-casa" onclick="mostrarSeccio('seccio-casa1')">Casa 1</div>
+                <div class="quadre quadre-casa">Casa 2</div>
+                <div class="quadre quadre-casa">Casa 3</div>
+                <div class="quadre quadre-casa">Casa 4</div>
             </div>
         </section>
 
         <section id="seccio-casa1" class="oculta">
             <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-sensors')">&larr; Tornar</a>
-            <div id="status-refresh">Actualització automàtica cada hora</div>
-            
+            <h2 style="text-align:center; color:#5A453A;">Casa 1: Monitorització en temps real</h2>
             <div class="quadre-container">
                 <div class="quadre quadre-detall">
                     <h4>Temperatura</h4>
                     <p id="val-temp" class="valor-gran" style="color:#f39c12;">-- °C</p>
                     <div class="canvas-container"><canvas id="graficTemp"></canvas></div>
                 </div>
-
                 <div class="quadre quadre-detall">
                     <h4>Humitat</h4>
                     <p id="val-hum" class="valor-gran" style="color:#3498db;">-- %</p>
                     <div class="canvas-container"><canvas id="graficHum"></canvas></div>
                 </div>
-
                 <div class="quadre quadre-detall">
                     <h4>Inclinació</h4>
                     <p id="val-inc" class="valor-gran" style="color:#27ae60;">-- °</p>
@@ -139,7 +146,6 @@
             
             if(id === 'seccio-casa1') {
                 carregarDades();
-                // Actualització cada 1 hora (3.600.000 ms)
                 refreshInterval = setInterval(carregarDades, 3600000); 
             }
             window.scrollTo(0,0);
@@ -180,7 +186,7 @@
                         fill: true, 
                         tension: 0.4,
                         borderWidth: 2,
-                        pointRadius: 0 // Gràfic més net
+                        pointRadius: 0
                     }]
                 },
                 options: { 
