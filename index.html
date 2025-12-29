@@ -152,8 +152,29 @@
         </section>
 
         <section id="seccio-vigilancia" class="oculta"><h2>Vigilància</h2><p>Mòdul en construcció.</p></section>
-        <section id="seccio-mapa" class="oculta"><h2>Mapa</h2><p>Mòdul en construcció.</p></section>
-    </div> 
+        <section id="seccio-mapa" class="oculta">
+            <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal')">← Tornar</a>
+            <h2 style="text-align:center; color:#5A453A;">Mapa del Jaciment</h2>
+            
+            <div class="quadre" style="max-width: 100%; padding: 15px; cursor: default;">
+                <p style="margin-bottom: 15px; font-weight: bold;">Ubicació de la Ciutadella Ibèrica de Calafell:</p>
+                
+                <div style="overflow:hidden; padding-bottom:56.25%; position:relative; height:0; border-radius: 12px; border: 2px solid #EBC89C;">
+                    
+                    <iframe 
+                        src="http://googleusercontent.com/maps.google.com/7" 
+                        style="left:0; top:0; height:100%; width:100%; position:absolute; border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+
+                </div>
+                
+                <p style="margin-top: 15px; font-size: 0.9rem; color: #666; text-align: center;">
+                    📍 Carrer de Vilarenc, s/n, 43820 Calafell, Tarragona
+                </p>
+            </div> 
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
