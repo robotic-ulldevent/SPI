@@ -6,7 +6,7 @@
     <title>JACIMENT ARQUEOLÒGIC: Ciutadella Ibèrica de Calafell</title>
     <style>
         /* --- ESTILS GENERALS --- */
-        body { font-family: sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; color: #333; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; color: #333; }
         .oculta { display: none !important; }
 
         /* --- PANTALLA DE CÀRREGA --- */
@@ -16,8 +16,8 @@
             justify-content: center; align-items: center; z-index: 9999; color: white;
         }
         .loading-image {
-            width: 90%; max-width: 1000px; height: 60vh; object-fit: cover;
-            border: 5px solid white; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.5); margin-bottom: 20px;
+            width: 90%; max-width: 800px; height: 50vh; object-fit: cover;
+            border: 5px solid white; border-radius: 10px; margin-bottom: 20px;
         }
         .spinner {
             border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid #EBC89C;
@@ -25,225 +25,133 @@
         }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* --- CAPÇALERA --- */
-        .portada.menu-roig {
-            background-color: #EBC89C; color: #5A453A; padding: 30px 20px;
-            display: flex; flex-direction: column; align-items: center; text-align: center;
+        /* --- CAPÇALERA FIXA --- */
+        header {
+            background-color: #EBC89C; color: #5A453A; padding: 15px 25px;
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .header-right { display: flex; flex-direction: column; align-items: center; margin-top: 15px; }
-        .indicador { font-weight: bold; margin-bottom: 15px; display: flex; align-items: center; }
-        .icona-connectat { background-color: #27ae60; width: 15px; height: 15px; border-radius: 50%; margin-left: 10px; }
-        .boto-tornar-inici { background-color: #f39c12; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; }
-
-        @media (min-width: 900px) {
-            .portada.menu-roig { flex-direction: row; justify-content: space-between; text-align: left; padding: 20px 50px; }
-            .header-right { flex-direction: row; margin-top: 0; }
-            .indicador { margin-bottom: 0; margin-right: 30px; }
-        }
+        .header-titol h1 { margin: 0; font-size: 1.2rem; }
+        .header-right { display: flex; align-items: center; gap: 15px; }
+        .boto-inici { background-color: #5A453A; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 0.9rem; }
 
         /* --- CONTINGUT I QUADRES --- */
-        .quadre-container { padding: 20px; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+        .quadre-container { padding: 20px; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; max-width: 1200px; margin: 0 auto; }
         
         .quadre {
             background-color: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            padding: 20px; text-align: center; flex: 1 1 250px; max-width: 350px; cursor: pointer; transition: 0.3s;
+            padding: 15px; text-align: center; flex: 1 1 280px; max-width: 350px; cursor: pointer; transition: 0.3s;
         }
-        .quadre:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.15); }
+        .quadre:hover { transform: translateY(-5px); }
 
-        /* Estil per a les 4 cases (2 dalt, 2 baix) */
+        /* Estil 2 a dalt i 2 a baix per a les cases */
         .quadre-casa {
-            background-color: #EBC89C !important; 
-            color: #5A453A !important;
-            flex: 0 1 calc(45% - 20px); 
-            min-width: 160px;
-            max-width: 280px; 
-            font-weight: bold;
-            padding: 15px;
+            flex: 0 1 calc(45% - 20px);
+            min-width: 150px;
+            max-width: 250px;
+            background-color: #fdf2e4;
+        }
+        .casa-image { width: 100%; height: 100px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
+
+        /* --- MAPA --- */
+        .map-responsive {
+            overflow: hidden; padding-bottom: 56.25%; position: relative; height: 0;
+            border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .map-responsive iframe {
+            left: 0; top: 0; height: 100%; width: 100%; position: absolute; border: 0;
         }
 
-        .casa-image {
-            width: 100%;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 10px;
+        /* --- BOTÓ TORNAR --- */
+        .boto-tornar {
+            display: inline-block; background-color: #95a5a6; color: white; padding: 10px 20px;
+            text-decoration: none; border-radius: 5px; margin: 10px 0 20px 0; font-weight: bold;
         }
 
-        .quadre-detall { cursor: default; flex: 1 1 300px; }
-        .menu-quadre-image { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-top: 10px; }
-
-        /* --- SECCIONS I GRÀFICS --- */
-        section { padding: 20px; max-width: 1200px; margin: 0 auto; }
-        .boto-tornar { display: inline-block; background-color: #95a5a6; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px; margin-bottom: 15px; }
-        
-        .canvas-container { width: 100%; height: 180px; margin-top: 10px; }
-        .valor-gran { font-size: 1.8rem; font-weight: bold; margin: 5px 0; }
+        .canvas-container { width: 100%; height: 180px; }
     </style>
 </head>
 <body>
 
     <div id="loading-screen">
         <img src="foto1.jpg" alt="Portada" class="loading-image">
-        <div>Sincronitzant dades del jaciment...</div>
-        <div class="spinner" style="margin-top:15px;"></div> 
+        <p>Carregant sistema de control...</p>
+        <div class="spinner"></div> 
     </div>
 
     <div id="app-container" class="oculta">
-        <header class="portada menu-roig">
-            <div>
-                <h1>JACIMENT ARQUEOLÒGIC: Ciutadella Ibèrica</h1>
-                <p>Sistema de protecció integral del jaciment</p>
+        <header>
+            <div class="header-titol">
+                <h1>Ciutadella Ibèrica</h1>
             </div>
             <div class="header-right">
-                <div class="indicador">
-    <span id="estat-text">Estat: Connectant...</span>
-    <div id="estat-icona" class="icona-connectat" style="background-color: #bdc3c7;"></div>
+                <a href="#" class="boto-inici" onclick="mostrarSeccio('seccio-principal'); return false;">🏠 INICI</a>
             </div>
         </header>
 
         <main id="seccio-principal" class="quadre-container">
-            <div class="quadre" onclick="mostrarSeccio('seccio-sensors')"><h3>Mòdul de Sensors</h3><img src="foto2.jpg" class="menu-quadre-image"></div>
-            <div class="quadre" onclick="mostrarSeccio('seccio-vigilancia')"><h3>Vigilància Perimetral</h3><img src="foto3.jpg" class="menu-quadre-image"></div>
-            <div class="quadre" onclick="mostrarSeccio('seccio-mapa')"><h3>Mapa del Jaciment</h3><img src="foto4.jpg" class="menu-quadre-image"></div>
+            <div class="quadre" onclick="mostrarSeccio('seccio-sensors')">
+                <h3>Mòdul de Sensors</h3>
+                <img src="foto2.jpg" style="width:100%; height:150px; object-fit:cover; border-radius:8px;">
+            </div>
+            <div class="quadre" onclick="mostrarSeccio('seccio-vigilancia')">
+                <h3>Vigilància</h3>
+                <img src="foto3.jpg" style="width:100%; height:150px; object-fit:cover; border-radius:8px;">
+            </div>
+            <div class="quadre" onclick="mostrarSeccio('seccio-mapa')">
+                <h3>Mapa del Jaciment</h3>
+                <img src="foto4.jpg" style="width:100%; height:150px; object-fit:cover; border-radius:8px;">
+            </div>
         </main>
         
-        <section id="seccio-sensors" class="oculta">
-            <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal')">&larr; Tornar</a>
-            <h2 style="text-align:center; color:#5A453A; margin-bottom:20px;">Selecció d'Estació</h2>
+        <section id="seccio-sensors" class="oculta" style="padding:20px;">
+            <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal'); return false;">&larr; Tornar al Menú</a>
+            <h2 style="text-align:center;">Estacions de Control</h2>
             <div class="quadre-container">
                 <div class="quadre quadre-casa" onclick="mostrarSeccio('seccio-casa1')">
-                    <img src="fotocasa1.jpg" alt="Casa 1" class="casa-image">
-                    <span>Casa 1</span>
+                    <img src="fotocasa1.jpg" class="casa-image"> <span>Casa 1</span>
                 </div>
-                <div class="quadre quadre-casa">
-                    <img src="fotocasa2.jpg" alt="Casa 2" class="casa-image">
-                    <span>Casa 2</span>
+                <div class="quadre quadre-casa" onclick="alert('Properament')">
+                    <img src="fotocasa2.jpg" class="casa-image"> <span>Casa 2</span>
                 </div>
-                <div class="quadre quadre-casa">
-                    <img src="fotocasa3.jpeg" alt="Casa 3" class="casa-image">
-                    <span>Casa 3</span>
+                <div class="quadre quadre-casa" onclick="alert('Properament')">
+                    <img src="fotocasa3.jpg" class="casa-image"> <span>Casa 3</span>
                 </div>
-                <div class="quadre quadre-casa">
-                    <img src="fotocasa4.jpg" alt="Casa 4" class="casa-image">
-                    <span>Casa 4</span>
+                <div class="quadre quadre-casa" onclick="alert('Properament')">
+                    <img src="fotocasa4.jpg" class="casa-image"> <span>Casa 4</span>
                 </div>
             </div>
         </section>
 
-        <section id="seccio-casa1" class="oculta">
-            <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-sensors')">&larr; Tornar</a>
-            <h2 style="text-align:center; color:#5A453A;">Casa 1: Monitorització en temps real</h2>
+        <section id="seccio-mapa" class="oculta" style="padding:20px;">
+            <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal'); return false;">&larr; Tornar</a>
+            <h2 style="text-align:center;">Localització del Jaciment</h2>
+            <div class="map-responsive">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m13!1d2999.047547515053!2d1.5796690765874415!3d41.18804610834246!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12a389814407b629%3A0xc682974b7c631980!2sCiutadella%20Ib%C3%A8rica%20de%20Calafell!5e0!3m2!1sca!2ses!4v1700000000000!5m2!1sca!2ses" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </section>
+
+        <section id="seccio-casa1" class="oculta" style="padding:20px;">
+            <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-sensors'); return false;">&larr; Tornar a Sensors</a>
+            <h2 style="text-align:center;">Dades Casa 1</h2>
             <div class="quadre-container">
-                <div class="quadre quadre-detall">
-                    <h4>Temperatura</h4>
-                    <p id="val-temp" class="valor-gran" style="color:#f39c12;">-- °C</p>
-                    <div class="canvas-container"><canvas id="graficTemp"></canvas></div>
-                </div>
-                <div class="quadre quadre-detall">
-                    <h4>Humitat</h4>
-                    <p id="val-hum" class="valor-gran" style="color:#3498db;">-- %</p>
-                    <div class="canvas-container"><canvas id="graficHum"></canvas></div>
-                </div>
-                <div class="quadre quadre-detall">
-                    <h4>Inclinació</h4>
-                    <p id="val-inc" class="valor-gran" style="color:#27ae60;">-- °</p>
-                    <div class="canvas-container"><canvas id="graficInc"></canvas></div>
-                </div>
+                <div class="quadre"><h4>Temperatura</h4><p id="val-temp" style="font-size:2rem;">--</p></div>
+                <div class="quadre"><h4>Humitat</h4><p id="val-hum" style="font-size:2rem;">--</p></div>
             </div>
         </section>
 
-        <section id="seccio-vigilancia" class="oculta"><h2>Vigilància</h2><p>Mòdul en construcció.</p></section>
-        <section id="seccio-mapa" class="oculta">
-            <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal')">← Tornar</a>
-            <h2 style="text-align:center; color:#5A453A;">Mapa del Jaciment</h2>
-            
-            <div class="quadre" style="max-width: 100%; padding: 15px; cursor: default;">
-                <p style="margin-bottom: 15px; font-weight: bold;">Ubicació de la Ciutadella Ibèrica de Calafell:</p>
-                
-                <div style="overflow:hidden; padding-bottom:56.25%; position:relative; height:0; border-radius: 12px; border: 2px solid #EBC89C;">
-                    
-                    <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6004.887101993668!2d1.5786138764320858!3d41.19030250819626!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12a38bf573c35029%3A0xbbdde16743050ef9!2sCiutadella%20Ib%C3%A8rica%20de%20Calafell!5e0!3m2!1sca!2ses!4v1767010339010!5m2!1sca!2ses" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-                        style="left:0; top:0; height:100%; width:100%; position:absolute; border:0;" 
-                        allowfullscreen="" 
-                        loading="lazy" 
-                        referrerpolicy="no-referrer-when-downgrade">
-                    </iframe>
+        <section id="seccio-vigilancia" class="oculta" style="padding:20px;">
+            <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal'); return false;">&larr; Tornar</a>
+            <h2>Càmeres de Vigilància</h2>
+            <p>Mòdul en manteniment.</p>
+        </section>
+    </div> 
 
-                </div>
-                
-                <p style="margin-top: 15px; font-size: 0.9rem; color: #666; text-align: center;">
-                    📍 Carrer de Vilarenc, s/n, 43820 Calafell, Tarragona
-                </p>
-            </div> 
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        let charts = {};
-        let refreshInterval = null;
-
         function mostrarSeccio(id) {
-            if(refreshInterval) clearInterval(refreshInterval);
-
             document.querySelectorAll('main, section').forEach(s => s.classList.add('oculta'));
-            const target = document.getElementById(id);
-            if(target) target.classList.remove('oculta');
-            
-            if(id === 'seccio-casa1') {
-                carregarDades();
-                refreshInterval = setInterval(carregarDades, 3600000); 
-            }
+            document.getElementById(id).classList.remove('oculta');
             window.scrollTo(0,0);
-        }
-
-        async function carregarDades() {
-            try {
-                const res = await fetch('https://api.thingspeak.com/channels/3200447/feeds.json?results=15');
-                const data = await res.json();
-                const feeds = data.feeds;
-                const ultim = feeds[feeds.length - 1];
-
-                document.getElementById('val-temp').innerText = (ultim.field2 || "0") + " °C";
-                document.getElementById('val-hum').innerText = (ultim.field1 || "0") + " %";
-                document.getElementById('val-inc').innerText = (ultim.field3 || "0") + " °";
-
-                const labels = feeds.map(f => new Date(f.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}));
-                
-                crearGrafic('graficTemp', labels, feeds.map(f => f.field2), 'Temp', '#f39c12');
-                crearGrafic('graficHum', labels, feeds.map(f => f.field1), 'Hum', '#3498db');
-                crearGrafic('graficInc', labels, feeds.map(f => f.field3), 'Inc', '#27ae60');
-                
-            } catch (e) { console.error("Error dades:", e); }
-        }
-
-        function crearGrafic(canvasId, labels, dataPoints, label, color) {
-            const ctx = document.getElementById(canvasId).getContext('2d');
-            if(charts[canvasId]) charts[canvasId].destroy();
-            
-            charts[canvasId] = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{ 
-                        data: dataPoints, 
-                        borderColor: color, 
-                        backgroundColor: color + '22', 
-                        fill: true, 
-                        tension: 0.4,
-                        borderWidth: 2,
-                        pointRadius: 0
-                    }]
-                },
-                options: { 
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        y: { display: true, ticks: { display: false }, grid: { display: false } },
-                        x: { display: true, ticks: { display: false }, grid: { display: false } }
-                    }
-                }
-            });
         }
 
         document.addEventListener('DOMContentLoaded', () => {
