@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JACIMENT ARQUEOLÒGIC: Ciutadella Ibèrica de Calafell</title>
+    <title>SISTEMA CIUTADELLA - Vigilància Avançada</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; color: #333; }
         .oculta { display: none !important; }
@@ -15,36 +15,29 @@
             position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         .header-right { display: flex; align-items: center; gap: 15px; }
-        
-        /* Indicador dinàmic */
-        .indicador { display: flex; align-items: center; font-size: 0.85rem; font-weight: bold; }
-        .icona-estat { width: 12px; height: 12px; border-radius: 50%; margin-left: 8px; transition: 0.5s; }
-        .estat-online { background-color: #27ae60; box-shadow: 0 0 8px #27ae60; }
-        .estat-offline { background-color: #e74c3c; box-shadow: 0 0 8px #e74c3c; }
-
         .boto-inici { background-color: #5A453A; color: white; padding: 8px 12px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 0.8rem; }
 
-        /* --- CONTINGUT I QUADRES --- */
+        /* --- INDICADORS --- */
+        .icona-estat { width: 12px; height: 12px; border-radius: 50%; margin-left: 8px; display: inline-block; }
+        .estat-online { background-color: #27ae60; box-shadow: 0 0 8px #27ae60; } /* Verd: OK / No dades */
+        .estat-offline { background-color: #e74c3c; box-shadow: 0 0 8px #e74c3c; } /* Vermell: Alarma / Dades recents */
+        .estat-error { background-color: #f1c40f; box-shadow: 0 0 8px #f1c40f; } /* Groc: Error connexió */
+
+        /* --- MENU I QUADRES --- */
         .quadre-container { padding: 20px; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; max-width: 1200px; margin: 0 auto; }
-        .quadre { background-color: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); padding: 15px; text-align: center; flex: 1 1 280px; max-width: 350px; cursor: pointer; transition: 0.3s; overflow: hidden; }
-        .quadre:hover { transform: translateY(-5px); }
+        .quadre { background-color: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); padding: 15px; text-align: center; flex: 1 1 280px; max-width: 350px; cursor: pointer; transition: 0.3s; }
+        .menu-img { width: 100%; height: 180px; object-fit: contain; background-color: #fafafa; border-radius: 8px; margin-bottom: 10px; }
+        
+        .quadre-vig { flex: 0 1 calc(45% - 20px); min-width: 150px; background-color: #f0f0f0; position: relative; }
+        .pilot-vigi { position: absolute; top: 10px; right: 10px; width: 15px; height: 15px; border-radius: 50%; border: 2px solid white; }
 
-        /* AJUST DE FOTOS COMPLETES */
-        .menu-img { 
-            width: 100%; 
-            height: 180px; 
-            object-fit: contain; /* Foto completa sense retallar */
-            background-color: #fafafa; 
-            border-radius: 8px; 
-            margin-bottom: 10px; 
-        }
-
-        .quadre-casa, .quadre-vig { flex: 0 1 calc(45% - 20px); min-width: 150px; background-color: #fdf2e4; }
-        .casa-img { width: 100%; height: 110px; object-fit: cover; border-radius: 8px; }
+        /* --- TAULA ALARMES --- */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; border-radius: 8px; overflow: hidden; }
+        th, td { padding: 12px; text-align: center; border-bottom: 1px solid #eee; }
+        th { background-color: #5A453A; color: white; }
+        .alarma-text { color: #e74c3c; font-weight: bold; }
 
         .boto-tornar { display: inline-block; background-color: #95a5a6; color: white; padding: 10px 18px; text-decoration: none; border-radius: 5px; margin-bottom: 15px; font-weight: bold; }
-        .valor-gran { font-size: 2.5rem; font-weight: bold; color: #2c3e50; }
-        .canvas-container { width: 100%; height: 150px; }
     </style>
 </head>
 <body>
@@ -52,138 +45,128 @@
     <header>
         <div><h1 style="margin:0; font-size:1.1rem;">Ciutadella de Calafell</h1></div>
         <div class="header-right">
-            <div class="indicador">
-                <span id="text-estat">Sincronitzant...</span>
-                <div id="llum-estat" class="icona-estat estat-offline"></div>
+            <div id="indicador-general" style="font-size: 0.8rem; font-weight: bold;">
+                Sistema: <div id="llum-general" class="icona-estat estat-offline"></div>
             </div>
             <a href="#" class="boto-inici" onclick="mostrarSeccio('seccio-principal'); return false;">🏠 INICI</a>
         </div>
     </header>
 
     <main id="seccio-principal" class="quadre-container">
-        <div class="quadre" onclick="mostrarSeccio('seccio-sensors')">
-            <img src="menu1.jpg" class="menu-img">
-            <h3>Mòdul de Sensors</h3>
-        </div>
-        <div class="quadre" onclick="mostrarSeccio('seccio-vigilancia')">
-            <img src="menu2.jpg" class="menu-img">
-            <h3>Vigilància</h3>
-        </div>
-        <div class="quadre" onclick="mostrarSeccio('seccio-mapa')">
-            <img src="menu3.jpg" class="menu-img">
-            <h3>Mapa del Jaciment</h3>
-        </div>
+        <div class="quadre" onclick="mostrarSeccio('seccio-sensors')"><img src="menu1.jpg" class="menu-img"><h3>Mòdul de Sensors</h3></div>
+        <div class="quadre" onclick="mostrarSeccio('seccio-vigilancia')"><img src="menu2.jpg" class="menu-img"><h3>Vigilància</h3></div>
+        <div class="quadre" onclick="mostrarSeccio('seccio-mapa')"><img src="menu3.jpg" class="menu-img"><h3>Mapa del Jaciment</h3></div>
     </main>
-
-    <section id="seccio-sensors" class="oculta" style="padding:20px;">
-        <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal'); return false;">← Menú</a>
-        <h2 style="text-align:center;">Control de les Cases</h2>
-        <div class="quadre-container">
-            <div class="quadre quadre-casa" onclick="mostrarSeccio('seccio-casa1')">
-                <img src="fotocasa1.jpg" class="casa-img"> <p>Casa 1</p>
-            </div>
-            <div class="quadre quadre-casa">
-                <img src="fotocasa2.jpg" class="casa-img"> <p>Casa 2</p>
-            </div>
-            <div class="quadre quadre-casa">
-                <img src="fotocasa3.jpeg" class="casa-img"> <p>Casa 3</p>
-            </div>
-            <div class="quadre quadre-casa">
-                <img src="fotocasa4.jpg" class="casa-img"> <p>Casa 4</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="seccio-casa1" class="oculta" style="padding:20px;">
-        <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-sensors'); return false;">← Tornar</a>
-        <h2 style="text-align:center;">Dades Casa 1</h2>
-        <div class="quadre-container">
-            <div class="quadre"><h4>Temperatura</h4><p id="val-temp" class="valor-gran">--°C</p><div class="canvas-container"><canvas id="graficTemp"></canvas></div></div>
-            <div class="quadre"><h4>Humitat</h4><p id="val-hum" class="valor-gran">--%</p><div class="canvas-container"><canvas id="graficHum"></canvas></div></div>
-        </div>
-    </section>
 
     <section id="seccio-vigilancia" class="oculta" style="padding:20px;">
         <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal'); return false;">← Menú</a>
-        <h2 style="text-align:center;">Càmeres de Vigilància</h2>
+        <h2 style="text-align:center;">Càmeres i Seguretat</h2>
         <div class="quadre-container">
-            <div class="quadre quadre-vig" onclick="alert('Accedint a Nord-est')"><span>↗️</span><br>Nord-est</div>
-            <div class="quadre quadre-vig" onclick="alert('Accedint a Nord-oest')"><span>↖️</span><br>Nord-oest</div>
-            <div class="quadre quadre-vig" onclick="alert('Accedint a Sud-est')"><span>↘️</span><br>Sud-est</div>
-            <div class="quadre quadre-vig" onclick="alert('Accedint a Sud-oest')"><span>↙️</span><br>Sud-oest</div>
+            <div class="quadre quadre-vig"><span>↗️</span><br>Nord-est</div>
+            
+            <div class="quadre quadre-vig" onclick="mostrarSeccio('detall-nord-oest')">
+                <div id="pilot-no" class="pilot-vigi estat-error"></div>
+                <span>↖️</span><br>Nord-oest
+            </div>
+            
+            <div class="quadre quadre-vig"><span>↘️</span><br>Sud-est</div>
+            <div class="quadre quadre-vig"><span>↙️</span><br>Sud-oest</div>
         </div>
+    </section>
+
+    <section id="detall-nord-oest" class="oculta" style="padding:20px;">
+        <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-vigilancia'); return false;">← Tornar</a>
+        <h2 style="text-align:center;">Registre d'Alarmes - Nord-oest</h2>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Estat</th>
+                    <th>Hora del Registre</th>
+                </tr>
+            </thead>
+            <tbody id="taula-alarmes">
+                <tr><td colspan="2">Carregant dades...</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section id="seccio-sensors" class="oculta" style="padding:20px;">
+        <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal'); return false;">← Menú</a>
+        <h2>Mòdul de Sensors</h2>
+        <p>Seleccioneu una de les cases per veure'n la telemetria.</p>
     </section>
 
     <section id="seccio-mapa" class="oculta" style="padding:20px;">
-        <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal'); return false;">← Tornar</a>
-        <div style="width:100%; height:450px; background:#ddd; border-radius:15px; display:flex; align-items:center; justify-content:center;">
-            <p>Mapa de la Ciutadella Ibèrica</p>
-        </div>
+        <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal'); return false;">← Menú</a>
+        <h2>Localització</h2>
+        <div style="width:100%; height:300px; background:#ddd; border-radius:10px; display:flex; align-items:center; justify-content:center;">[Mapa Actiu]</div>
     </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        let charts = {};
+        // CONFIGURACIÓ CANAL ALARMES
+        const API_KEY_ALARMES = "KNCM7HX4YHP3H3NB";
+        const CHANNEL_ID_ALARMES = "3200452"; 
 
         function mostrarSeccio(id) {
             document.querySelectorAll('main, section').forEach(s => s.classList.add('oculta'));
             document.getElementById(id).classList.remove('oculta');
-            if(id === 'seccio-casa1' || id === 'seccio-principal') carregarDades();
+            if(id === 'seccio-vigilancia' || id === 'detall-nord-oest') carregarAlarmes();
             window.scrollTo(0,0);
         }
 
-        async function carregarDades() {
+        async function carregarAlarmes() {
+            const pilot = document.getElementById('pilot-no');
+            const taula = document.getElementById('taula-alarmes');
+
             try {
-                const res = await fetch('https://api.thingspeak.com/channels/3200447/feeds.json?results=10');
+                const res = await fetch(`https://api.thingspeak.com/channels/${CHANNEL_ID_ALARMES}/feeds.json?api_key=${API_KEY_ALARMES}&results=10`);
+                if (!res.ok) throw new Error("Error de xarxa");
+                
                 const data = await res.json();
-                const feeds = data.feeds;
-                const ultim = feeds[feeds.length - 1];
+                const feeds = data.feeds.reverse(); 
 
-                // Lògica de l'indicador (30 minuts)
+                if (feeds.length === 0) {
+                    pilot.className = 'pilot-vigi estat-online'; // Verd: No hi ha dades
+                    taula.innerHTML = "<tr><td colspan='2'>Sense activitat recent</td></tr>";
+                    return;
+                }
+
+                const ultimRegistre = new Date(feeds[0].created_at);
                 const ara = new Date();
-                const ultimaDada = new Date(ultim.created_at);
-                const diferenciaMinuts = (ara - ultimaDada) / 1000 / 60;
+                const horesPassades = (ara - ultimRegistre) / (1000 * 60 * 60);
 
-                const llum = document.getElementById('llum-estat');
-                const text = document.getElementById('text-estat');
-
-                if (diferenciaMinuts > 30) {
-                    llum.className = 'icona-estat estat-offline';
-                    text.innerText = "Offline (+30min)";
+                // LÒGICA PILOT (8 HORES)
+                if (horesPassades <= 8) {
+                    pilot.className = 'pilot-vigi estat-offline'; // Vermell: Dada en < 8h (ALARMA)
                 } else {
-                    llum.className = 'icona-estat estat-online';
-                    text.innerText = "Connectat (ID: 27)";
+                    pilot.className = 'pilot-vigi estat-online'; // Verd: No hi ha dades recents
                 }
 
-                // Actualitzar valors Casa 1 si la secció està visible
-                if (!document.getElementById('seccio-casa1').classList.contains('oculta')) {
-                    document.getElementById('val-temp').innerText = (ultim.field2 || "0") + "°C";
-                    document.getElementById('val-hum').innerText = (ultim.field1 || "0") + "%";
-                    const labels = feeds.map(f => new Date(f.created_at).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}));
-                    crearGrafic('graficTemp', labels, feeds.map(f => f.field2), '#f39c12');
-                    crearGrafic('graficHum', labels, feeds.map(f => f.field1), '#3498db');
-                }
+                // OMPLIR TAULA
+                taula.innerHTML = "";
+                feeds.forEach(feed => {
+                    const dataHora = new Date(feed.created_at).toLocaleString('ca-ES', { 
+                        day: '2-digit', month: '2-digit', year: 'numeric', 
+                        hour: '2-digit', minute: '2-digit', second: '2-digit' 
+                    });
+                    taula.innerHTML += `
+                        <tr>
+                            <td class="alarma-text">⚠️ ALARMA</td>
+                            <td>${dataHora}</td>
+                        </tr>
+                    `;
+                });
+
             } catch (e) {
-                document.getElementById('llum-estat').className = 'icona-estat estat-offline';
-                document.getElementById('text-estat').innerText = "Error connexió";
+                console.error("Error ThingSpeak:", e);
+                pilot.className = 'pilot-vigi estat-error'; // Groc: Error de servidor/API
             }
         }
 
-        function crearGrafic(canvasId, labels, dades, color) {
-            const canvas = document.getElementById(canvasId);
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            if(charts[canvasId]) charts[canvasId].destroy();
-            charts[canvasId] = new Chart(ctx, {
-                type: 'line',
-                data: { labels, datasets: [{ data: dades, borderColor: color, fill: false, tension: 0.3 }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-            });
-        }
-
-        // Carregar estat cada 30 segons
-        setInterval(carregarDades, 30000);
-        window.onload = carregarDades;
+        // Refresca dades automàticament cada 2 minuts
+        setInterval(carregarAlarmes, 120000);
+        window.onload = carregarAlarmes;
     </script>
 </body>
 </html>
