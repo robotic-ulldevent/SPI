@@ -163,7 +163,7 @@
 
             // 2. GESTIÓ ALARMES (NORD-OEST)
             try {
-                const resA = await fetch(`https://api.thingspeak.com/channels/${CH_CH_ALARMES}/feeds.json?api_key=${API_KEY_ALARMES}&results=10`);
+                const resA = await fetch(`https://api.thingspeak.com/channels/${CH_ALARMES}/feeds.json?api_key=${API_KEY_ALARMES}&results=10`);
                 const dataA = await resA.json();
                 const feedsA = dataA.feeds.reverse();
                 const pilot = document.getElementById('pilot-no');
