@@ -5,134 +5,121 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JACIMENT ARQUEOLÒGIC: Ciutadella Ibèrica de Calafell</title>
     <style>
-        /* --- ESTILS GENERALS --- */
         body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; color: #333; }
         .oculta { display: none !important; }
 
-        /* --- PANTALLA DE CÀRREGA --- */
-        #loading-screen {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: #2c3e50; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; z-index: 9999; color: white;
-        }
-        .loading-image { width: 90%; max-width: 800px; height: 50vh; object-fit: cover; border: 5px solid white; border-radius: 10px; margin-bottom: 20px; }
-        .spinner { border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid #EBC89C; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-
-        /* --- CAPÇALERA FIXA --- */
+        /* --- CAPÇALERA --- */
         header {
             background-color: #EBC89C; color: #5A453A; padding: 10px 20px;
             display: flex; justify-content: space-between; align-items: center;
             position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .header-left h1 { margin: 0; font-size: 1.1rem; }
-        .header-right { display: flex; align-items: center; gap: 20px; }
+        .header-right { display: flex; align-items: center; gap: 15px; }
+        
+        /* Indicador dinàmic */
         .indicador { display: flex; align-items: center; font-size: 0.85rem; font-weight: bold; }
-        .icona-connectat { background-color: #27ae60; width: 12px; height: 12px; border-radius: 50%; margin-left: 8px; box-shadow: 0 0 5px #27ae60; }
+        .icona-estat { width: 12px; height: 12px; border-radius: 50%; margin-left: 8px; transition: 0.5s; }
+        .estat-online { background-color: #27ae60; box-shadow: 0 0 8px #27ae60; }
+        .estat-offline { background-color: #e74c3c; box-shadow: 0 0 8px #e74c3c; }
+
         .boto-inici { background-color: #5A453A; color: white; padding: 8px 12px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 0.8rem; }
 
         /* --- CONTINGUT I QUADRES --- */
         .quadre-container { padding: 20px; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; max-width: 1200px; margin: 0 auto; }
-        .quadre { background-color: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); padding: 15px; text-align: center; flex: 1 1 280px; max-width: 350px; cursor: pointer; transition: 0.3s; }
+        .quadre { background-color: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); padding: 15px; text-align: center; flex: 1 1 280px; max-width: 350px; cursor: pointer; transition: 0.3s; overflow: hidden; }
         .quadre:hover { transform: translateY(-5px); }
-        .menu-img { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
 
-        /* Estructura 2x2 per a les cases */
-        .quadre-casa { flex: 0 1 calc(45% - 20px); min-width: 150px; max-width: 250px; background-color: #fdf2e4; }
-        .casa-image { width: 100%; height: 110px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
+        /* AJUST DE FOTOS COMPLETES */
+        .menu-img { 
+            width: 100%; 
+            height: 180px; 
+            object-fit: contain; /* Foto completa sense retallar */
+            background-color: #fafafa; 
+            border-radius: 8px; 
+            margin-bottom: 10px; 
+        }
 
-        /* --- MAPA --- */
-        .map-responsive { overflow: hidden; padding-bottom: 56.25%; position: relative; height: 0; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .map-responsive iframe { left: 0; top: 0; height: 100%; width: 100%; position: absolute; border: 0; }
+        .quadre-casa, .quadre-vig { flex: 0 1 calc(45% - 20px); min-width: 150px; background-color: #fdf2e4; }
+        .casa-img { width: 100%; height: 110px; object-fit: cover; border-radius: 8px; }
 
-        /* --- BOTONS NAVEGACIÓ --- */
         .boto-tornar { display: inline-block; background-color: #95a5a6; color: white; padding: 10px 18px; text-decoration: none; border-radius: 5px; margin-bottom: 15px; font-weight: bold; }
-        .valor-gran { font-size: 2.5rem; font-weight: bold; margin: 10px 0; color: #2c3e50; }
-        .canvas-container { width: 100%; height: 150px; margin-top: 10px; }
+        .valor-gran { font-size: 2.5rem; font-weight: bold; color: #2c3e50; }
+        .canvas-container { width: 100%; height: 150px; }
     </style>
 </head>
 <body>
 
-    <div id="loading-screen">
-        <img src="foto1.jpg" alt="Portada" class="loading-image">
-        <p>Sincronitzant amb ThingSpeak...</p>
-        <div class="spinner"></div> 
-    </div>
+    <header>
+        <div><h1 style="margin:0; font-size:1.1rem;">Ciutadella de Calafell</h1></div>
+        <div class="header-right">
+            <div class="indicador">
+                <span id="text-estat">Sincronitzant...</span>
+                <div id="llum-estat" class="icona-estat estat-offline"></div>
+            </div>
+            <a href="#" class="boto-inici" onclick="mostrarSeccio('seccio-principal'); return false;">🏠 INICI</a>
+        </div>
+    </header>
 
-    <div id="app-container" class="oculta">
-        <header>
-            <div class="header-left">
-                <h1>Ciutadella de Calafell</h1>
-            </div>
-            <div class="header-right">
-                <div class="indicador">ID: 27 <div class="icona-connectat"></div></div>
-                <a href="#" class="boto-inici" onclick="mostrarSeccio('seccio-principal'); return false;">🏠 INICI</a>
-            </div>
-        </header>
+    <main id="seccio-principal" class="quadre-container">
+        <div class="quadre" onclick="mostrarSeccio('seccio-sensors')">
+            <img src="menu1.jpg" class="menu-img">
+            <h3>Mòdul de Sensors</h3>
+        </div>
+        <div class="quadre" onclick="mostrarSeccio('seccio-vigilancia')">
+            <img src="menu2.jpg" class="menu-img">
+            <h3>Vigilància</h3>
+        </div>
+        <div class="quadre" onclick="mostrarSeccio('seccio-mapa')">
+            <img src="menu3.jpg" class="menu-img">
+            <h3>Mapa del Jaciment</h3>
+        </div>
+    </main>
 
-        <main id="seccio-principal" class="quadre-container">
-            <div class="quadre" onclick="mostrarSeccio('seccio-sensors')">
-                <img src="menu1.jpg" class="menu-img" alt="Sensors">
-                <h3>Mòdul de Sensors</h3>
+    <section id="seccio-sensors" class="oculta" style="padding:20px;">
+        <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal'); return false;">← Menú</a>
+        <h2 style="text-align:center;">Control de les Cases</h2>
+        <div class="quadre-container">
+            <div class="quadre quadre-casa" onclick="mostrarSeccio('seccio-casa1')">
+                <img src="fotocasa1.jpg" class="casa-img"> <p>Casa 1</p>
             </div>
-            <div class="quadre" onclick="mostrarSeccio('seccio-vigilancia')">
-                <img src="menu2.jpg" class="menu-img" alt="Vigilància">
-                <h3>Vigilància</h3>
+            <div class="quadre quadre-casa">
+                <img src="fotocasa2.jpg" class="casa-img"> <p>Casa 2</p>
             </div>
-            <div class="quadre" onclick="mostrarSeccio('seccio-mapa')">
-                <img src="menu3.jpg" class="menu-img" alt="Mapa">
-                <h3>Mapa del Jaciment</h3>
+            <div class="quadre quadre-casa">
+                <img src="fotocasa3.jpeg" class="casa-img"> <p>Casa 3</p>
             </div>
-        </main>
-        
-        <section id="seccio-sensors" class="oculta" style="padding:20px;">
-            <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal'); return false;">← Menú</a>
-            <h2 style="text-align:center; color:#5A453A;">Control de les Cases</h2>
-            <div class="quadre-container">
-                <div class="quadre quadre-casa" onclick="mostrarSeccio('seccio-casa1')">
-                    <img src="fotocasa1.jpg" class="casa-image"> <span>Casa 1</span>
-                </div>
-                <div class="quadre quadre-casa">
-                    <img src="fotocasa2.jpg" class="casa-image"> <span>Casa 2</span>
-                </div>
-                <div class="quadre quadre-casa">
-                    <img src="fotocasa3.jpeg" class="casa-image"> <span>Casa 3</span>
-                </div>
-                <div class="quadre quadre-casa">
-                    <img src="fotocasa4.jpg" class="casa-image"> <span>Casa 4</span>
-                </div>
+            <div class="quadre quadre-casa">
+                <img src="fotocasa4.jpg" class="casa-img"> <p>Casa 4</p>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section id="seccio-casa1" class="oculta" style="padding:20px;">
-            <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-sensors'); return false;">← Tornar</a>
-            <h2 style="text-align:center;">Dades en temps real - Casa 1</h2>
-            <div class="quadre-container">
-                <div class="quadre">
-                    <h4>Temperatura</h4>
-                    <p id="val-temp" class="valor-gran">-- °C</p>
-                    <div class="canvas-container"><canvas id="graficTemp"></canvas></div>
-                </div>
-                <div class="quadre">
-                    <h4>Humitat</h4>
-                    <p id="val-hum" class="valor-gran">-- %</p>
-                    <div class="canvas-container"><canvas id="graficHum"></canvas></div>
-                </div>
-            </div>
-        </section>
+    <section id="seccio-casa1" class="oculta" style="padding:20px;">
+        <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-sensors'); return false;">← Tornar</a>
+        <h2 style="text-align:center;">Dades Casa 1</h2>
+        <div class="quadre-container">
+            <div class="quadre"><h4>Temperatura</h4><p id="val-temp" class="valor-gran">--°C</p><div class="canvas-container"><canvas id="graficTemp"></canvas></div></div>
+            <div class="quadre"><h4>Humitat</h4><p id="val-hum" class="valor-gran">--%</p><div class="canvas-container"><canvas id="graficHum"></canvas></div></div>
+        </div>
+    </section>
 
-        <section id="seccio-mapa" class="oculta" style="padding:20px;">
-            <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal'); return false;">← Tornar</a>
-            <div class="map-responsive">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2999.58434720934!2d1.5791784765662705!3d41.19815040771804!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12a38a3903115457%3A0x6b72d244c4b5748a!2sCiutadella%20Ib%C3%A8rica%20de%20Calafell!5e0!3m2!1sca!2ses!4v1700000000000" allowfullscreen=""></iframe>
-            </div>
-        </section>
+    <section id="seccio-vigilancia" class="oculta" style="padding:20px;">
+        <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal'); return false;">← Menú</a>
+        <h2 style="text-align:center;">Càmeres de Vigilància</h2>
+        <div class="quadre-container">
+            <div class="quadre quadre-vig" onclick="alert('Accedint a Nord-est')"><span>↗️</span><br>Nord-est</div>
+            <div class="quadre quadre-vig" onclick="alert('Accedint a Nord-oest')"><span>↖️</span><br>Nord-oest</div>
+            <div class="quadre quadre-vig" onclick="alert('Accedint a Sud-est')"><span>↘️</span><br>Sud-est</div>
+            <div class="quadre quadre-vig" onclick="alert('Accedint a Sud-oest')"><span>↙️</span><br>Sud-oest</div>
+        </div>
+    </section>
 
-        <section id="seccio-vigilancia" class="oculta" style="padding:20px;">
-            <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal'); return false;">← Tornar</a>
-            <h2>Càmeres de Vigilància</h2><p>Mòdul en manteniment per actualització de xarxa.</p>
-        </section>
-    </div> 
+    <section id="seccio-mapa" class="oculta" style="padding:20px;">
+        <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal'); return false;">← Tornar</a>
+        <div style="width:100%; height:450px; background:#ddd; border-radius:15px; display:flex; align-items:center; justify-content:center;">
+            <p>Mapa de la Ciutadella Ibèrica</p>
+        </div>
+    </section>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -141,7 +128,7 @@
         function mostrarSeccio(id) {
             document.querySelectorAll('main, section').forEach(s => s.classList.add('oculta'));
             document.getElementById(id).classList.remove('oculta');
-            if(id === 'seccio-casa1') carregarDades();
+            if(id === 'seccio-casa1' || id === 'seccio-principal') carregarDades();
             window.scrollTo(0,0);
         }
 
@@ -152,17 +139,40 @@
                 const feeds = data.feeds;
                 const ultim = feeds[feeds.length - 1];
 
-                document.getElementById('val-temp').innerText = (ultim.field2 || "0") + "°C";
-                document.getElementById('val-hum').innerText = (ultim.field1 || "0") + "%";
+                // Lògica de l'indicador (30 minuts)
+                const ara = new Date();
+                const ultimaDada = new Date(ultim.created_at);
+                const diferenciaMinuts = (ara - ultimaDada) / 1000 / 60;
 
-                const labels = feeds.map(f => new Date(f.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}));
-                crearGrafic('graficTemp', labels, feeds.map(f => f.field2), '#f39c12');
-                crearGrafic('graficHum', labels, feeds.map(f => f.field1), '#3498db');
-            } catch (e) { console.error("Error dades:", e); }
+                const llum = document.getElementById('llum-estat');
+                const text = document.getElementById('text-estat');
+
+                if (diferenciaMinuts > 30) {
+                    llum.className = 'icona-estat estat-offline';
+                    text.innerText = "Offline (+30min)";
+                } else {
+                    llum.className = 'icona-estat estat-online';
+                    text.innerText = "Connectat (ID: 27)";
+                }
+
+                // Actualitzar valors Casa 1 si la secció està visible
+                if (!document.getElementById('seccio-casa1').classList.contains('oculta')) {
+                    document.getElementById('val-temp').innerText = (ultim.field2 || "0") + "°C";
+                    document.getElementById('val-hum').innerText = (ultim.field1 || "0") + "%";
+                    const labels = feeds.map(f => new Date(f.created_at).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}));
+                    crearGrafic('graficTemp', labels, feeds.map(f => f.field2), '#f39c12');
+                    crearGrafic('graficHum', labels, feeds.map(f => f.field1), '#3498db');
+                }
+            } catch (e) {
+                document.getElementById('llum-estat').className = 'icona-estat estat-offline';
+                document.getElementById('text-estat').innerText = "Error connexió";
+            }
         }
 
         function crearGrafic(canvasId, labels, dades, color) {
-            const ctx = document.getElementById(canvasId).getContext('2d');
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
             if(charts[canvasId]) charts[canvasId].destroy();
             charts[canvasId] = new Chart(ctx, {
                 type: 'line',
@@ -171,13 +181,9 @@
             });
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
-                document.getElementById('loading-screen').classList.add('oculta');
-                document.getElementById('app-container').classList.remove('oculta');
-                mostrarSeccio('seccio-principal');
-            }, 5000);
-        });
+        // Carregar estat cada 30 segons
+        setInterval(carregarDades, 30000);
+        window.onload = carregarDades;
     </script>
 </body>
 </html>
