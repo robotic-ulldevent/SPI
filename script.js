@@ -122,17 +122,12 @@ let charts = {};
             });
         }
 
-        // 4. INICI DE L'APLICACIÓ (PANTALLA DE CÀRREGA)
-        document.addEventListener('DOMContentLoaded', () => {
-            // Simulem una càrrega de 5 segons per la portada
-            setTimeout(() => {
-                const loadingScreen = document.getElementById('loading-screen');
-                const appContainer = document.getElementById('app-container');
-                
-                if(loadingScreen) loadingScreen.classList.add('oculta');
-                if(appContainer) appContainer.classList.remove('oculta');
-                
-                // Mostrem el menú principal al començar
-                mostrarSeccio('seccio-principal');
-            }, 5000);
-        });
+     window.addEventListener('load', function() {
+    setTimeout(function() {
+        const splash = document.getElementById('splash');
+        splash.style.opacity = '0';
+        setTimeout(() => {
+            splash.style.display = 'none';
+        }, 1000); // Temps perquè acabi l'animació de desaparèixer
+    }, 5000); // 5 segons de visualització
+});
