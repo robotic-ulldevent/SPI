@@ -129,9 +129,19 @@
         </table>
     </section>
 
-    <section id="seccio-mapa" class="oculta" style="padding:20px;">
+   <section id="seccio-mapa" class="oculta" style="padding:20px;">
         <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal'); return false;">← Menú</a>
-        <div style="width:100%; height:400px; background:#ddd; border-radius:15px; display:flex; align-items:center; justify-content:center;">[Mapa de la Ciutadella]</div>
+        <div style="width:100%; border-radius:15px; overflow:hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2999.508713437156!2d1.579450376555191!3d41.19980597132431!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12a38612f00a406b%3A0xe5457f9754f7678c!2sCiutadella%20Ib%C3%A8rica%20de%20Calafell!5e0!3m2!1sca!2ses!4v1715850000000!5m2!1sca!2ses" 
+                width="100%" 
+                height="450" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
