@@ -4,92 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SISTEMA INTEGRAT - Ciutadella de Calafell</title>
+    
     <style>
+        /* --- 1. CSS COMPLET --- */
         body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; color: #333; }
         .oculta { display: none !important; }
 
-        /* --- ESTILS DEL SPLASH (PANTALLA DE BENVINGUDA) --- */
+        /* PANTALLA DE BENVINGUDA (SPLASH) */
         #splash {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: #007bff; /* Blau */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 99999; /* Per sobre de tot */
-            transition: opacity 1s ease;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #007bff;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 10000; transition: opacity 1s ease;
         }
-        #splash img {
-            max-width: 70%;
-            max-height: 50%;
-            object-fit: contain;
-            margin-bottom: 25px;
-        }
-        .loader {
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #5A453A;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .loading-text {
-            color: white;
-            margin-top: 15px;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
+        #splash img { max-width: 70%; max-height: 50%; object-fit: contain; margin-bottom: 25px; }
+        .loader { border: 5px solid #f3f3f3; border-top: 5px solid #5A453A; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .loading-text { color: white; margin-top: 15px; font-weight: bold; letter-spacing: 1px; }
 
-        /* --- ESTILS DE L'APP --- */
+        /* CAPÇALERA */
         header {
-            background-color: #EBC89C; 
-            color: #5A453A; 
-            padding: 15px 30px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-            position: sticky; 
-            top: 0; 
-            z-index: 1000; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            width: 100%;
-            box-sizing: border-box;
+            background-color: #EBC89C; color: #5A453A; padding: 15px 30px; 
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            width: 100%; box-sizing: border-box;
         }
-        .header-right { display: flex; align-items: center; gap: 20px; }
-        .boto-inici { background-color: #5A453A; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 0.85rem; }
+        .header-right { display: flex; align-items: center; gap: 15px; }
+        .icona-estat { width: 12px; height: 12px; border-radius: 50%; display: inline-block; background-color: #f1c40f; }
 
-        .icona-estat { width: 12px; height: 12px; border-radius: 50%; margin-left: 8px; display: inline-block; }
-        .estat-online { background-color: #27ae60; box-shadow: 0 0 8px #27ae60; }
-        .estat-offline { background-color: #e74c3c; box-shadow: 0 0 8px #e74c3c; }
-        .estat-error { background-color: #f1c40f; box-shadow: 0 0 8px #f1c40f; }
-
-        .quadre-container { padding: 20px; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; max-width: 1200px; margin: 0 auto; }
+        /* CONTENIDORS I MENÚ */
+        .quadre-container { padding: 20px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; max-width: 1200px; margin: 0 auto; }
         .quadre { background-color: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); padding: 15px; text-align: center; flex: 1 1 280px; max-width: 350px; cursor: pointer; transition: 0.3s; }
         .menu-img { width: 100%; height: 180px; object-fit: contain; background-color: #fafafa; border-radius: 8px; margin-bottom: 10px; }
-        
-        .quadre-casa, .quadre-vig { flex: 0 1 calc(45% - 20px); min-width: 150px; background-color: #fdf2e4; position: relative; }
-        .casa-img { width: 100%; height: 110px; object-fit: cover; border-radius: 8px; }
-        .pilot-vigi { position: absolute; top: 10px; right: 10px; width: 15px; height: 15px; border-radius: 50%; border: 2px solid white; }
 
-        .boto-sensor { background: white; border-radius: 10px; padding: 15px; flex: 1 1 200px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer; border: 2px solid transparent; transition: 0.3s; text-align: center; }
-        .boto-sensor:hover { border-color: #EBC89C; }
-        .sensor-titol { font-weight: bold; font-size: 0.9rem; color: #5A453A; margin-bottom: 5px; }
-        .sensor-valor { font-size: 1.8rem; font-weight: bold; color: #2c3e50; }
-        .sensor-data { font-size: 0.7rem; color: #7f8c8d; margin-top: 5px; }
-        .icona-s { font-size: 1.5rem; display: block; margin-bottom: 5px; }
-        .canvas-container { width: 100%; height: 250px; margin-top: 20px; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        /* SENSORS CASA 1 */
+        .boto-sensor { 
+            background: white; border-radius: 12px; padding: 15px; 
+            flex: 1 1 220px; max-width: 280px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08); text-align: center;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .sensor-titol { font-weight: bold; color: #5A453A; font-size: 0.9rem; margin-bottom: 5px; }
+        .sensor-valor { font-size: 1.6rem; font-weight: bold; color: #2c3e50; margin-bottom: 10px; }
+        .canvas-mini { width: 100% !important; height: 100px !important; margin-top: 5px; }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; border-radius: 8px; overflow: hidden; }
-        th, td { padding: 12px; text-align: center; border-bottom: 1px solid #eee; }
-        th { background-color: #5A453A; color: white; }
+        /* BOTONS TORNAR */
         .boto-tornar { display: inline-block; background-color: #95a5a6; color: white; padding: 10px 18px; text-decoration: none; border-radius: 5px; margin-bottom: 15px; font-weight: bold; }
     </style>
 </head>
@@ -102,12 +62,11 @@
     </div>
 
     <header>
-        <div><h1 style="margin:0; font-size:1.3rem;">Ciutadella de Calafell</h1></div>
+        <h1 style="margin:0; font-size:1.3rem;">Ciutadella de Calafell</h1>
         <div class="header-right">
-            <div id="indicador-general-txt" style="font-size: 0.9rem; font-weight: bold;">
-                Xarxa: <div id="llum-general" class="icona-estat estat-error"></div>
-            </div>
-            <a href="#" class="boto-inici" onclick="mostrarSeccio('seccio-principal'); return false;">🏠 INICI</a>
+            <span id="estat-text" style="font-size:0.8rem; font-weight:bold;">Connectant...</span>
+            <div id="estat-icona" class="icona-estat"></div>
+            <a href="#" class="boto-tornar" style="margin:0; background-color:#5A453A;" onclick="mostrarSeccio('seccio-principal'); return false;">🏠</a>
         </div>
     </header>
 
@@ -121,35 +80,37 @@
         <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal'); return false;">← Menú</a>
         <h2 style="text-align:center;">Control de les Cases</h2>
         <div class="quadre-container">
-            <div class="quadre quadre-casa" onclick="mostrarSeccio('seccio-casa1')">
-                <img src="fotocasa1.jpg" class="casa-img"> <p>Casa 1</p>
+            <div class="quadre" onclick="mostrarSeccio('seccio-casa1')">
+                <img src="fotocasa1.jpg" class="menu-img">
+                <p>Casa 1</p>
             </div>
-            <div class="quadre quadre-casa"><img src="fotocasa2.jpg" class="casa-img"> <p>Casa 2</p></div>
-            <div class="quadre quadre-casa"><img src="fotocasa3.jpeg" class="casa-img"> <p>Casa 3</p></div>
-            <div class="quadre quadre-casa"><img src="fotocasa4.jpg" class="casa-img"> <p>Casa 4</p></div>
         </div>
     </section>
 
     <section id="seccio-casa1" class="oculta" style="padding:20px;">
         <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-sensors'); return false;">← Tornar</a>
         <h2 style="text-align:center;">Estat Casa 1</h2>
-        <div class="quadre-container" style="gap:10px;">
-            <div class="boto-sensor" onclick="mostrarGraficSensor('field1', 'Humitat', '#3498db')">
-                <span class="icona-s">💧</span><div class="sensor-titol">Humitat</div><div id="val-field1" class="sensor-valor">--</div><div id="data-field1" class="sensor-data">--</div>
+        <div class="quadre-container">
+            <div class="boto-sensor">
+                <div class="sensor-titol">Humitat</div>
+                <div id="val-hum" class="sensor-valor">-- %</div>
+                <canvas id="graficHum" class="canvas-mini"></canvas>
             </div>
-            <div class="boto-sensor" onclick="mostrarGraficSensor('field2', 'Temperatura', '#f39c12')">
-                <span class="icona-s">🌡️</span><div class="sensor-titol">Temperatura</div><div id="val-field2" class="sensor-valor">--</div><div id="data-field2" class="sensor-data">--</div>
+            <div class="boto-sensor">
+                <div class="sensor-titol">Temperatura</div>
+                <div id="val-temp" class="sensor-valor">-- °C</div>
+                <canvas id="graficTemp" class="canvas-mini"></canvas>
             </div>
-            <div class="boto-sensor" onclick="mostrarGraficSensor('field3', 'Inclinació', '#9b59b6')">
-                <span class="icona-s">📐</span><div class="sensor-titol">Inclinació</div><div id="val-field3" class="sensor-valor">--</div><div id="data-field3" class="sensor-data">--</div>
+            <div class="boto-sensor">
+                <div class="sensor-titol">Inclinació</div>
+                <div id="val-inc" class="sensor-valor">-- °</div>
+                <canvas id="graficInc" class="canvas-mini"></canvas>
             </div>
-            <div class="boto-sensor" onclick="mostrarGraficSensor('field4', 'Pluja', '#2ecc71')">
-                <span class="icona-s">🌧️</span><div class="sensor-titol">Pluja</div><div id="val-field4" class="sensor-valor">--</div><div id="data-field4" class="sensor-data">--</div>
+            <div class="boto-sensor">
+                <div class="sensor-titol">Pluja</div>
+                <div id="val-pluja" class="sensor-valor">-- mm</div>
+                <canvas id="graficPluja" class="canvas-mini"></canvas>
             </div>
-        </div>
-        <div id="contenidor-grafic" class="oculta">
-            <h3 id="titol-grafic" style="text-align:center; color:#5A453A;"></h3>
-            <div class="canvas-container"><canvas id="graficCasa1"></canvas></div>
         </div>
     </section>
 
@@ -157,115 +118,102 @@
         <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal'); return false;">← Menú</a>
         <h2 style="text-align:center;">Vigilància Perimetral</h2>
         <div class="quadre-container">
-            <div class="quadre quadre-vig"><span>↗️</span><br>Nord-est</div>
-            <div class="quadre quadre-vig" onclick="mostrarSeccio('detall-nord-oest')">
-                <div id="pilot-no" class="pilot-vigi estat-error"></div>
-                <span>↖️</span><br>Nord-oest
-            </div>
-            <div class="quadre quadre-vig"><span>↘️</span><br>Sud-est</div>
-            <div class="quadre quadre-vig"><span>↙️</span><br>Sud-oest</div>
+            <div class="quadre"><span>↖️</span><br>Nord-oest</div>
         </div>
-    </section>
-
-    <section id="detall-nord-oest" class="oculta" style="padding:20px;">
-        <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-vigilancia'); return false;">← Tornar</a>
-        <h2 style="text-align:center;">Registre d'Alarmes - Nord-oest</h2>
-        <table>
-            <thead><tr><th>Estat</th><th>Hora del Registre</th></tr></thead>
-            <tbody id="taula-alarmes"></tbody>
-        </table>
     </section>
 
     <section id="seccio-mapa" class="oculta" style="padding:20px;">
         <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal'); return false;">← Menú</a>
         <div style="width:100%; border-radius:15px; overflow:hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2999.4239845700445!2d1.5796263156637305!3d41.19076097928236!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12a38a3915151515%3A0x1515151515151515!2sCiutadella%20Ib%C3%A8rica%20de%20Calafell!5e0!3m2!1sca!2ses!4v1620000000000!5m2!1sca!2ses" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2999.047513076044!2d1.5794825!3d41.1914104!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12a38a379f8c050b%3A0x6b772c72b2604018!2sCiutadella%20Ib%C3%A8rica%20de%20Calafell!5e0!3m2!1sca!2ses!4v1700000000000" 
+            width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         </div>
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        let chartCasa1 = null;
-        let dadesGlobalsCasa1 = [];
-        const API_KEY_ALARMES = "KNCM7HX4YHP3H3NB";
-        const CH_ALARMES = "3200452";
-        const CH_SENSORS = "3200447";
+        let charts = {};
+        let refreshInterval = null;
 
-        // GESTIÓ DEL SPLASH SCREEN
+        // CONTROL DEL SPLASH (5 SEGONS)
         window.addEventListener('load', function() {
             setTimeout(function() {
                 const splash = document.getElementById('splash');
                 if(splash) {
                     splash.style.opacity = '0';
-                    setTimeout(() => {
-                        splash.style.display = 'none';
-                    }, 1000);
+                    setTimeout(() => { splash.style.display = 'none'; }, 1000);
                 }
             }, 5000);
         });
 
         function mostrarSeccio(id) {
+            if(refreshInterval) clearInterval(refreshInterval);
             document.querySelectorAll('main, section').forEach(s => s.classList.add('oculta'));
-            document.getElementById(id).classList.remove('oculta');
-            actualitzarTot();
+            const target = document.getElementById(id);
+            if(target) target.classList.remove('oculta');
+            
+            if(id === 'seccio-casa1') {
+                carregarDades();
+                refreshInterval = setInterval(carregarDades, 3600000); // 1 hora
+            }
             window.scrollTo(0,0);
         }
 
-        async function actualitzarTot() {
+        async function carregarDades() {
+            const icona = document.getElementById('estat-icona');
+            const text = document.getElementById('estat-text');
             try {
-                const resS = await fetch(`https://api.thingspeak.com/channels/${CH_SENSORS}/feeds.json?results=24`);
-                const dataS = await resS.json();
-                if (dataS.feeds && dataS.feeds.length > 0) {
-                    dadesGlobalsCasa1 = dataS.feeds;
-                    const ultimS = dadesGlobalsCasa1[dadesGlobalsCasa1.length - 1];
-                    const diffMin = (new Date() - new Date(ultimS.created_at)) / 60000;
-                    document.getElementById('llum-general').className = 'icona-estat ' + (diffMin < 30 ? 'estat-online' : 'estat-offline');
-
-                    const dt = new Date(ultimS.created_at).toLocaleString('ca-ES', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'});
+                const res = await fetch('https://api.thingspeak.com/channels/3200447/feeds.json?results=15');
+                if (!res.ok) throw new Error();
+                const data = await res.json();
+                const feeds = data.feeds;
+                
+                if (feeds && feeds.length > 0) {
+                    const ultim = feeds[feeds.length - 1];
                     
-                    document.getElementById('val-field1').innerText = (ultimS.field1 || "0") + "%";
-                    document.getElementById('data-field1').innerText = dt;
-                    document.getElementById('val-field2').innerText = (ultimS.field2 || "0") + "°";
-                    document.getElementById('data-field2').innerText = dt;
-                    document.getElementById('val-field3').innerText = (ultimS.field3 || "0") + "°";
-                    document.getElementById('data-field3').innerText = dt;
-                    document.getElementById('val-field4').innerText = (ultimS.field4 || "0") + "mm";
-                    document.getElementById('data-field4').innerText = dt;
+                    // Valors textuals
+                    document.getElementById('val-hum').innerText = (ultim.field1 || "0") + " %";
+                    document.getElementById('val-temp').innerText = (ultim.field2 || "0") + " °C";
+                    document.getElementById('val-inc').innerText = (ultim.field3 || "0") + " °";
+                    document.getElementById('val-pluja').innerText = (ultim.field4 || "0") + " mm";
+
+                    if(icona) icona.style.backgroundColor = "#27ae60"; 
+                    if(text) text.innerText = "Connectat (ID: 27)";
+
+                    const labels = feeds.map(f => new Date(f.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}));
+                    
+                    // Crear els 4 gràfics
+                    crearGrafic('graficHum', labels, feeds.map(f => f.field1), 'Humitat', '#3498db');
+                    crearGrafic('graficTemp', labels, feeds.map(f => f.field2), 'Temperatura', '#f39c12');
+                    crearGrafic('graficInc', labels, feeds.map(f => f.field3), 'Inclinació', '#27ae60');
+                    crearGrafic('graficPluja', labels, feeds.map(f => f.field4), 'Pluja', '#16a085');
                 }
-            } catch (e) { document.getElementById('llum-general').className = 'icona-estat estat-error'; }
-
-            try {
-                const resA = await fetch(`https://api.thingspeak.com/channels/${CH_ALARMES}/feeds.json?api_key=${API_KEY_ALARMES}&results=10`);
-                const dataA = await resA.json();
-                const pilot = document.getElementById('pilot-no');
-                if (dataA.feeds && dataA.feeds.length > 0) {
-                    const feedsA = [...dataA.feeds].reverse();
-                    const horesPassades = (new Date() - new Date(feedsA[0].created_at)) / 3600000;
-                    pilot.className = 'pilot-vigi ' + (horesPassades <= 8 ? 'estat-offline' : 'estat-online');
-                    if (!document.getElementById('detall-nord-oest').classList.contains('oculta')) {
-                        document.getElementById('taula-alarmes').innerHTML = feedsA.map(f => `<tr><td style="color:red; font-weight:bold;">⚠️ ALARMA</td><td>${new Date(f.created_at).toLocaleString()}</td></tr>`).join('');
-                    }
-                } else { pilot.className = 'pilot-vigi estat-online'; }
-            } catch (e) { document.getElementById('pilot-no').className = 'pilot-vigi estat-error'; }
+            } catch (e) {
+                if(icona) icona.style.backgroundColor = "#e74c3c"; 
+                if(text) text.innerText = "Desconnectat";
+            }
         }
 
-        function mostrarGraficSensor(field, titol, color) {
-            document.getElementById('contenidor-grafic').classList.remove('oculta');
-            document.getElementById('titol-grafic').innerText = "Històric: " + titol;
-            const labels = dadesGlobalsCasa1.map(f => new Date(f.created_at).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}));
-            const valors = dadesGlobalsCasa1.map(f => f[field]);
-            const ctx = document.getElementById('graficCasa1').getContext('2d');
-            if(chartCasa1) chartCasa1.destroy();
-            chartCasa1 = new Chart(ctx, {
+        function crearGrafic(canvasId, labels, dataPoints, label, color) {
+            const canvasElement = document.getElementById(canvasId);
+            if(!canvasElement) return;
+            const ctx = canvasElement.getContext('2d');
+            if(charts[canvasId]) charts[canvasId].destroy();
+            charts[canvasId] = new Chart(ctx, {
                 type: 'line',
-                data: { labels, datasets: [{ label: titol, data: valors, borderColor: color, backgroundColor: color + '22', fill: true, tension: 0.3 }] },
-                options: { responsive: true, maintainAspectRatio: false }
+                data: {
+                    labels: labels,
+                    datasets: [{ 
+                        data: dataPoints, borderColor: color, backgroundColor: color + '22', fill: true, tension: 0.4, borderWidth: 2, pointRadius: 0 
+                    }]
+                },
+                options: { 
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { display: false }, x: { display: false } }
+                }
             });
-            window.scrollTo(0, document.body.scrollHeight);
         }
-
-        setInterval(actualitzarTot, 30000);
-        window.onload = actualitzarTot;
     </script>
 </body>
 </html>
