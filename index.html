@@ -1,12 +1,3 @@
-<body>
-    <div id="splash">
-        <img src="foto1.jpg" alt="Benvinguda">
-        <div class="loader"></div>
-        <div class="loading-text">CARREGANT DADES...</div>
-    </div>
-
-    <header> ... </header>
-    <main> ... </main>
 <!DOCTYPE html>
 <html lang="ca">
 <head>
@@ -17,6 +8,47 @@
         body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; color: #333; }
         .oculta { display: none !important; }
 
+        /* --- ESTILS DEL SPLASH (PANTALLA DE BENVINGUDA) --- */
+        #splash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #007bff; /* Blau */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999; /* Per sobre de tot */
+            transition: opacity 1s ease;
+        }
+        #splash img {
+            max-width: 70%;
+            max-height: 50%;
+            object-fit: contain;
+            margin-bottom: 25px;
+        }
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #5A453A;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-text {
+            color: white;
+            margin-top: 15px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        /* --- ESTILS DE L'APP --- */
         header {
             background-color: #EBC89C; 
             color: #5A453A; 
@@ -62,6 +94,12 @@
     </style>
 </head>
 <body>
+
+    <div id="splash">
+        <img src="foto1.jpg" alt="Benvinguda">
+        <div class="loader"></div>
+        <div class="loading-text">CARREGANT DADES...</div>
+    </div>
 
     <header>
         <div><h1 style="margin:0; font-size:1.3rem;">Ciutadella de Calafell</h1></div>
@@ -138,18 +176,10 @@
         </table>
     </section>
 
-   <section id="seccio-mapa" class="oculta" style="padding:20px;">
+    <section id="seccio-mapa" class="oculta" style="padding:20px;">
         <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal'); return false;">← Menú</a>
         <div style="width:100%; border-radius:15px; overflow:hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-            <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2999.508713437156!2d1.579450376555191!3d41.19980597132431!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12a38612f00a406b%3A0xe5457f9754f7678c!2sCiutadella%20Ib%C3%A8rica%20de%20Calafell!5e0!3m2!1sca!2ses!4v1715850000000!5m2!1sca!2ses" 
-                width="100%" 
-                height="450" 
-                style="border:0;" 
-                allowfullscreen="" 
-                loading="lazy" 
-                referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2999.4239845700445!2d1.5796263156637305!3d41.19076097928236!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12a38a3915151515%3A0x1515151515151515!2sCiutadella%20Ib%C3%A8rica%20de%20Calafell!5e0!3m2!1sca!2ses!4v1620000000000!5m2!1sca!2ses" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         </div>
     </section>
 
@@ -160,6 +190,19 @@
         const API_KEY_ALARMES = "KNCM7HX4YHP3H3NB";
         const CH_ALARMES = "3200452";
         const CH_SENSORS = "3200447";
+
+        // GESTIÓ DEL SPLASH SCREEN
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const splash = document.getElementById('splash');
+                if(splash) {
+                    splash.style.opacity = '0';
+                    setTimeout(() => {
+                        splash.style.display = 'none';
+                    }, 1000);
+                }
+            }, 5000);
+        });
 
         function mostrarSeccio(id) {
             document.querySelectorAll('main, section').forEach(s => s.classList.add('oculta'));
