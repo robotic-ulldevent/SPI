@@ -93,11 +93,11 @@
             <div class="boto-sensor" onclick="mostrarGraficSensor('field2', 'Temperatura', '#f39c12')">
                 <span class="icona-s">🌡️</span><div class="sensor-titol">Temperatura</div><div id="val-field2" class="sensor-valor">--</div><div id="data-field2" class="sensor-data">--</div>
             </div>
-            <div class="boto-sensor" onclick="mostrarGraficSensor('field3', 'Pluja', '#2ecc71')">
-                <span class="icona-s">🌧️</span><div class="sensor-titol">Pluja</div><div id="val-field3" class="sensor-valor">--</div><div id="data-field3" class="sensor-data">--</div>
+            <div class="boto-sensor" onclick="mostrarGraficSensor('field3', 'Inclinació', '#9b59b6')">
+                <span class="icona-s">📐</span><div class="sensor-titol">Inclinació</div><div id="val-field3" class="sensor-valor">--</div><div id="data-field3" class="sensor-data">--</div>
             </div>
-            <div class="boto-sensor" onclick="mostrarGraficSensor('field4', 'Inclinació', '#9b59b6')">
-                <span class="icona-s">📐</span><div class="sensor-titol">Inclinació</div><div id="val-field4" class="sensor-valor">--</div><div id="data-field4" class="sensor-data">--</div>
+            <div class="boto-sensor" onclick="mostrarGraficSensor('field4', 'Pluja', '#2ecc71')">
+                <span class="icona-s">🌧️</span><div class="sensor-titol">Pluja</div><div id="val-field4" class="sensor-valor">--</div><div id="data-field4" class="sensor-data">--</div>
             </div>
         </div>
         <div id="contenidor-grafic" class="oculta">
@@ -161,14 +161,13 @@
 
                     const dt = new Date(ultimS.created_at).toLocaleString('ca-ES', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'});
                     
-                    // Assignació de valors segons la teva petició
                     document.getElementById('val-field1').innerText = (ultimS.field1 || "0") + "%";
                     document.getElementById('data-field1').innerText = dt;
                     document.getElementById('val-field2').innerText = (ultimS.field2 || "0") + "°";
                     document.getElementById('data-field2').innerText = dt;
-                    document.getElementById('val-field3').innerText = (ultimS.field3 || "0") + "mm";
+                    document.getElementById('val-field3').innerText = (ultimS.field3 || "0") + "°";
                     document.getElementById('data-field3').innerText = dt;
-                    document.getElementById('val-field4').innerText = (ultimS.field4 || "0") + "°";
+                    document.getElementById('val-field4').innerText = (ultimS.field4 || "0") + "mm";
                     document.getElementById('data-field4').innerText = dt;
                 }
             } catch (e) { document.getElementById('llum-general').className = 'icona-estat estat-error'; }
