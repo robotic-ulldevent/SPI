@@ -8,14 +8,23 @@
         body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; color: #333; }
         .oculta { display: none !important; }
 
-        /* --- CAPÇALERA --- */
+        /* --- CAPÇALERA ORIGINAL AMPLA --- */
         header {
-            background-color: #EBC89C; color: #5A453A; padding: 10px 20px;
-            display: flex; justify-content: space-between; align-items: center;
-            position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background-color: #EBC89C; 
+            color: #5A453A; 
+            padding: 15px 30px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            width: 100%;
+            box-sizing: border-box;
         }
-        .header-right { display: flex; align-items: center; gap: 15px; }
-        .boto-inici { background-color: #5A453A; color: white; padding: 8px 12px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 0.8rem; }
+        .header-right { display: flex; align-items: center; gap: 20px; }
+        .boto-inici { background-color: #5A453A; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 0.85rem; }
 
         /* --- INDICADORS --- */
         .icona-estat { width: 12px; height: 12px; border-radius: 50%; margin-left: 8px; display: inline-block; }
@@ -32,17 +41,16 @@
         .casa-img { width: 100%; height: 110px; object-fit: cover; border-radius: 8px; }
         .pilot-vigi { position: absolute; top: 10px; right: 10px; width: 15px; height: 15px; border-radius: 50%; border: 2px solid white; }
 
-        /* --- ESTILS CASA 1 (NOUS) --- */
-        .boto-sensor { background: white; border-radius: 10px; padding: 15px; flex: 1 1 200px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer; border: 2px solid transparent; transition: 0.3s; }
+        /* --- BOTONS SENSORS CASA 1 --- */
+        .boto-sensor { background: white; border-radius: 10px; padding: 15px; flex: 1 1 200px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer; border: 2px solid transparent; transition: 0.3s; text-align: center; }
         .boto-sensor:hover { border-color: #EBC89C; }
         .sensor-titol { font-weight: bold; font-size: 0.9rem; color: #5A453A; margin-bottom: 5px; }
         .sensor-valor { font-size: 1.8rem; font-weight: bold; color: #2c3e50; }
         .sensor-data { font-size: 0.7rem; color: #7f8c8d; margin-top: 5px; }
         .icona-s { font-size: 1.5rem; display: block; margin-bottom: 5px; }
-
         .canvas-container { width: 100%; height: 250px; margin-top: 20px; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-        /* --- TAULA I ALTRES --- */
+        /* --- TAULA I RETORN --- */
         table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; border-radius: 8px; overflow: hidden; }
         th, td { padding: 12px; text-align: center; border-bottom: 1px solid #eee; }
         th { background-color: #5A453A; color: white; }
@@ -52,9 +60,9 @@
 <body>
 
     <header>
-        <div><h1 style="margin:0; font-size:1.1rem;">Ciutadella de Calafell</h1></div>
+        <div><h1 style="margin:0; font-size:1.3rem;">Ciutadella de Calafell</h1></div>
         <div class="header-right">
-            <div id="indicador-general-txt" style="font-size: 0.8rem; font-weight: bold;">
+            <div id="indicador-general-txt" style="font-size: 0.9rem; font-weight: bold;">
                 Xarxa: <div id="llum-general" class="icona-estat estat-error"></div>
             </div>
             <a href="#" class="boto-inici" onclick="mostrarSeccio('seccio-principal'); return false;">🏠 INICI</a>
@@ -63,7 +71,7 @@
 
     <main id="seccio-principal" class="quadre-container">
         <div class="quadre" onclick="mostrarSeccio('seccio-sensors')"><img src="menu1.jpg" class="menu-img"><h3>Mòdul de Sensors</h3></div>
-        <div class="quadre" onclick="mostrarSeccio('seccio-vigilancia')"><img src="menu2.jpg" class="menu-img"><h3>Vigilància</h3></div>
+        <div class="quadre" onclick="mostrarSeccio('seccio-vigilancia')"><img src="menu2.jpg" class="menu-img"><h3>Vigilància Perimetral</h3></div>
         <div class="quadre" onclick="mostrarSeccio('seccio-mapa')"><img src="menu3.jpg" class="menu-img"><h3>Mapa del Jaciment</h3></div>
     </main>
 
@@ -83,34 +91,20 @@
     <section id="seccio-casa1" class="oculta" style="padding:20px;">
         <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-sensors'); return false;">← Tornar</a>
         <h2 style="text-align:center;">Estat Casa 1</h2>
-        
         <div class="quadre-container" style="gap:10px;">
             <div class="boto-sensor" onclick="mostrarGraficSensor('field1', 'Temperatura', '#f39c12')">
-                <span class="icona-s">🌡️</span>
-                <div class="sensor-titol">Temperatura</div>
-                <div id="val-field1" class="sensor-valor">--</div>
-                <div id="data-field1" class="sensor-data">--</div>
+                <span class="icona-s">🌡️</span><div class="sensor-titol">Temperatura</div><div id="val-field1" class="sensor-valor">--</div><div id="data-field1" class="sensor-data">--</div>
             </div>
             <div class="boto-sensor" onclick="mostrarGraficSensor('field2', 'Humitat', '#3498db')">
-                <span class="icona-s">💧</span>
-                <div class="sensor-titol">Humitat</div>
-                <div id="val-field2" class="sensor-valor">--</div>
-                <div id="data-field2" class="sensor-data">--</div>
+                <span class="icona-s">💧</span><div class="sensor-titol">Humitat</div><div id="val-field2" class="sensor-valor">--</div><div id="data-field2" class="sensor-data">--</div>
             </div>
             <div class="boto-sensor" onclick="mostrarGraficSensor('field3', 'Pluja', '#2ecc71')">
-                <span class="icona-s">🌧️</span>
-                <div class="sensor-titol">Pluja</div>
-                <div id="val-field3" class="sensor-valor">--</div>
-                <div id="data-field3" class="sensor-data">--</div>
+                <span class="icona-s">🌧️</span><div class="sensor-titol">Pluja</div><div id="val-field3" class="sensor-valor">--</div><div id="data-field3" class="sensor-data">--</div>
             </div>
             <div class="boto-sensor" onclick="mostrarGraficSensor('field4', 'Inclinació', '#9b59b6')">
-                <span class="icona-s">📐</span>
-                <div class="sensor-titol">Inclinació</div>
-                <div id="val-field4" class="sensor-valor">--</div>
-                <div id="data-field4" class="sensor-data">--</div>
+                <span class="icona-s">📐</span><div class="sensor-titol">Inclinació</div><div id="val-field4" class="sensor-valor">--</div><div id="data-field4" class="sensor-data">--</div>
             </div>
         </div>
-
         <div id="contenidor-grafic" class="oculta">
             <h3 id="titol-grafic" style="text-align:center; color:#5A453A;"></h3>
             <div class="canvas-container"><canvas id="graficCasa1"></canvas></div>
@@ -119,7 +113,7 @@
 
     <section id="seccio-vigilancia" class="oculta" style="padding:20px;">
         <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-principal'); return false;">← Menú</a>
-        <h2 style="text-align:center;">Càmeres i Seguretat</h2>
+        <h2 style="text-align:center;">Vigilància Perimetral</h2>
         <div class="quadre-container">
             <div class="quadre quadre-vig"><span>↗️</span><br>Nord-est</div>
             <div class="quadre quadre-vig" onclick="mostrarSeccio('detall-nord-oest')">
@@ -133,7 +127,7 @@
 
     <section id="detall-nord-oest" class="oculta" style="padding:20px;">
         <a href="#" class="boto-tornar" onclick="mostrarSeccio('seccio-vigilancia'); return false;">← Tornar</a>
-        <h2 style="text-align:center;">Registre d'Alarmes - Canal 3200452</h2>
+        <h2 style="text-align:center;">Registre d'Alarmes - Nord-oest</h2>
         <table>
             <thead><tr><th>Estat</th><th>Hora del Registre</th></tr></thead>
             <tbody id="taula-alarmes"></tbody>
@@ -161,52 +155,39 @@
         }
 
         async function actualitzarTot() {
-            // 1. GESTIÓ SENSORS (Casa 1) - Llegim 24 per tenir el gràfic preparat
+            // 1. GESTIÓ SENSORS (Casa 1)
             try {
                 const resS = await fetch(`https://api.thingspeak.com/channels/${CH_SENSORS}/feeds.json?results=24`);
                 const dataS = await resS.json();
                 if (dataS.feeds && dataS.feeds.length > 0) {
                     dadesGlobalsCasa1 = dataS.feeds;
                     const ultimS = dadesGlobalsCasa1[dadesGlobalsCasa1.length - 1];
-                    
-                    // Indicador xarxa (30 min)
                     const diffMin = (new Date() - new Date(ultimS.created_at)) / 60000;
                     document.getElementById('llum-general').className = 'icona-estat ' + (diffMin < 30 ? 'estat-online' : 'estat-offline');
 
-                    // Actualitzar els 4 botons de la Casa 1
-                    const dataFormatada = new Date(ultimS.created_at).toLocaleString('ca-ES', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'});
-                    
+                    const dt = new Date(ultimS.created_at).toLocaleString('ca-ES', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'});
                     document.getElementById('val-field1').innerText = (ultimS.field1 || "0") + "°";
-                    document.getElementById('data-field1').innerText = dataFormatada;
-
+                    document.getElementById('data-field1').innerText = dt;
                     document.getElementById('val-field2').innerText = (ultimS.field2 || "0") + "%";
-                    document.getElementById('data-field2').innerText = dataFormatada;
-
+                    document.getElementById('data-field2').innerText = dt;
                     document.getElementById('val-field3').innerText = (ultimS.field3 || "0") + "mm";
-                    document.getElementById('data-field3').innerText = dataFormatada;
-
+                    document.getElementById('data-field3').innerText = dt;
                     document.getElementById('val-field4').innerText = (ultimS.field4 || "0") + "°";
-                    document.getElementById('data-field4').innerText = dataFormatada;
+                    document.getElementById('data-field4').innerText = dt;
                 }
-            } catch (e) { 
-                document.getElementById('llum-general').className = 'icona-estat estat-error';
-            }
+            } catch (e) { document.getElementById('llum-general').className = 'icona-estat estat-error'; }
 
             // 2. GESTIÓ ALARMES (Vigilància)
             try {
                 const resA = await fetch(`https://api.thingspeak.com/channels/${CH_ALARMES}/feeds.json?api_key=${API_KEY_ALARMES}&results=10`);
                 const dataA = await resA.json();
                 const pilot = document.getElementById('pilot-no');
-
                 if (dataA.feeds && dataA.feeds.length > 0) {
                     const feedsA = [...dataA.feeds].reverse();
                     const horesPassades = (new Date() - new Date(feedsA[0].created_at)) / 3600000;
                     pilot.className = 'pilot-vigi ' + (horesPassades <= 8 ? 'estat-offline' : 'estat-online');
-                    
                     if (!document.getElementById('detall-nord-oest').classList.contains('oculta')) {
-                        document.getElementById('taula-alarmes').innerHTML = feedsA.map(f => `
-                            <tr><td style="color:red; font-weight:bold;">⚠️ ALARMA</td><td>${new Date(f.created_at).toLocaleString()}</td></tr>
-                        `).join('');
+                        document.getElementById('taula-alarmes').innerHTML = feedsA.map(f => `<tr><td style="color:red; font-weight:bold;">⚠️ ALARMA</td><td>${new Date(f.created_at).toLocaleString()}</td></tr>`).join('');
                     }
                 } else { pilot.className = 'pilot-vigi estat-online'; }
             } catch (e) { document.getElementById('pilot-no').className = 'pilot-vigi estat-error'; }
@@ -215,13 +196,10 @@
         function mostrarGraficSensor(field, titol, color) {
             document.getElementById('contenidor-grafic').classList.remove('oculta');
             document.getElementById('titol-grafic').innerText = "Històric: " + titol;
-
             const labels = dadesGlobalsCasa1.map(f => new Date(f.created_at).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}));
             const valors = dadesGlobalsCasa1.map(f => f[field]);
-
             const ctx = document.getElementById('graficCasa1').getContext('2d');
             if(chartCasa1) chartCasa1.destroy();
-            
             chartCasa1 = new Chart(ctx, {
                 type: 'line',
                 data: { labels, datasets: [{ label: titol, data: valors, borderColor: color, backgroundColor: color + '22', fill: true, tension: 0.3 }] },
