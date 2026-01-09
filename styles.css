@@ -127,11 +127,19 @@
     z-index: 9999;
     transition: opacity 1s ease;
 }
-#splash img {
-    max-width: 70%;
-    max-height: 60%;
-    object-fit: contain;
-    margin-bottom: 20px;
+#splash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw; /* Força l'amplada total de la finestra */
+    height: 100vh; /* Força l'alçada total de la finestra */
+    background-color: #007bff; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000; /* Un número molt alt per garantir que va sobre el menú */
+    transition: opacity 1s ease;
 }
 .loader {
     border: 5px solid #f3f3f3;
