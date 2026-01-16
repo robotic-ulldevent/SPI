@@ -1,146 +1,210 @@
 let charts = {};
 let refreshInterval = null;
+let vrefreshInterval = null;
 
-// Configuració de les claus d'API i Canals
-const configCases = {
-    'casa1': { clau: 'EL_TEU_API_KEY_CASA1', canal: '3200447' }, 
-    'casa2': { clau: 'I9QM383Z4L55KB0F', canal: 'CANAL_ID_CASA2' }, // Posa l'ID del canal si el saps
-    'casa3': { clau: 'ULWM1RF9EGBLJ3I5', canal: 'CANAL_ID_CASA3' },
-    'casa4': { clau: 'BZYJ00BYU6P4P48M', canal: 'CANAL_ID_CASA4' }
+// 1. CONFIGURACIÓ DE CANALS I CLAUS
+// He actualitzat els IDs de canal per a la vigilància segons les teves instruccions
+const CONFIG = {
+    'casa1': { key: 'READ_KEY_CASA1', id: '3200447', v_id: '3229918', punt: 'ne', titol: 'Nord-est' },
+    'casa2': { key: 'I9QM383Z4L55KB0F', id: '2815143', v_id: '3229918', punt: 'no', titol: 'Nord-oest' },
+    'casa3': { key: 'ULWM1RF9EGBLJ3I5', id: '2815144', v_id: '3229919', punt: 'se', titol: 'Sud-est' },
+    'casa4': { key: 'BZYJ00BYU6P4P48M', id: '2815145', v_id: '3229920', punt: 'so', titol: 'Sud-oest' }
 };
 
-// 1. CONTROL DEL SPLASH SCREEN (5 SEGONS)
-window.addEventListener('load', function() {
-    setTimeout(function() {
+// 2. CONTROL DEL SPLASH SCREEN
+window.addEventListener('load', () => {
+    setTimeout(() => {
         const splash = document.getElementById('splash');
         if(splash) {
             splash.style.opacity = '0';
-            setTimeout(() => { splash.style.display = 'none'; }, 1000);
+            setTimeout(() => splash.style.display = 'none', 1000);
         }
     }, 5000);
     
-    // Verificació d'estat inicial per a totes les cases al menú principal
-    verificarAlertesTotes();
-    setInterval(verificarAlertesTotes, 60000); // Actualitza els punts cada minut
+    // Inicialització d'estats
+    verificarEstatTotesCases();
+    verificarVigilanciaTotes();
+    
+    // Intervals de refresc en segon pla
+    setInterval(verificarEstatTotesCases, 60000); 
+    setInterval(verificarVigilanciaTotes, 300000); // Cada 5 minuts
 });
 
-// 2. NAVEGACIÓ ENTRE SECCIONS
+// 3. NAVEGACIÓ
 function mostrarSeccio(id) {
     if(refreshInterval) clearInterval(refreshInterval);
-    document.querySelectorAll('main, section').forEach(s => s.classList.add('oculta'));
+    if(vrefreshInterval) clearInterval(vrefreshInterval);
     
+    document.querySelectorAll('main, section').forEach(s => s.classList.add('oculta'));
     const target = document.getElementById(id);
-    if(target) {
-        target.classList.remove('oculta');
-    }
+    if(target) target.classList.remove('oculta');
 
-    // Lògica per carregar dades segons la casa triada
-    if(id.startsWith('seccio-casa')) {
-        const casaId = id.replace('seccio-', ''); // Extreu 'casa1', 'casa2', etc.
-        carregarDades(casaId);
-        refreshInterval = setInterval(() => carregarDades(casaId), 3600000); 
-    }
+    if(id === 'seccio-sensors') verificarEstatTotesCases();
+    if(id === 'seccio-vigilancia') verificarVigilanciaTotes();
+    
     window.scrollTo(0,0);
 }
 
-// 3. SISTEMA D'ALERTES (PUNT VERD/VERMELL)
-async function verificarAlertesTotes() {
-    for (let id in configCases) {
-        const punt = document.getElementById(`punt-${id}`);
-        if (!punt) continue;
-
-        try {
-            const res = await fetch(`https://api.thingspeak.com/channels/${configCases[id].canal}/feeds.json?api_key=${configCases[id].clau}&results=1`);
-            const data = await res.json();
-            const ultim = data.feeds[0];
-
-            if (ultim) {
-                const ara = new Date();
-                const dataDada = new Date(ultim.created_at);
-                const diferenciaSegons = (ara - dataDada) / 1000;
-
-                // Si té accés i la dada és de fa menys d'1 hora (3600s)
-                if (diferenciaSegons < 3600) {
-                    punt.style.backgroundColor = "#27ae60"; // Verd
-                } else {
-                    punt.style.backgroundColor = "#e74c3c"; // Vermell (Dada antiga)
-                }
-            } else {
-                punt.style.backgroundColor = "#e74c3c"; // Vermell (Sense dades)
-            }
-        } catch (e) {
-            punt.style.backgroundColor = "#e74c3c"; // Vermell (Error connexió)
-        }
-    }
+// 4. MÒDUL SENSORS (DETALL)
+function obrirCasa(id) {
+    const titol = document.getElementById('titol-casa');
+    if(titol) titol.innerText = "Dades " + id.toUpperCase();
+    
+    mostrarSeccio('seccio-detall-casa');
+    carregarDadesSensors(id);
+    refreshInterval = setInterval(() => carregarDadesSensors(id), 60000);
 }
 
-// 4. CÀRREGA DE DADES DE THINGSPEAK (DETALL DE CASA)
-async function carregarDades(id) {
-    const icona = document.getElementById('estat-icona');
-    const text = document.getElementById('estat-text');
-    const config = configCases[id];
-
+async function carregarDadesSensors(id) {
     try {
-        const res = await fetch(`https://api.thingspeak.com/channels/${config.canal}/feeds.json?api_key=${config.clau}&results=15`);
-        if (!res.ok) throw new Error("Error de xarxa");
-
+        const res = await fetch(`https://api.thingspeak.com/channels/${CONFIG[id].id}/feeds.json?api_key=${CONFIG[id].key}&results=15`);
         const data = await res.json();
         const feeds = data.feeds;
+        const ultim = feeds[feeds.length - 1];
 
-        if (feeds && feeds.length > 0) {
-            const ultim = feeds[feeds.length - 1];
+        // Actualització valors textuals
+        document.getElementById('val-hum').innerText = (ultim.field1 || 0) + " %";
+        document.getElementById('val-temp').innerText = (ultim.field2 || 0) + " °C";
+        document.getElementById('val-inc').innerText = (ultim.field3 || 0) + " °";
+        document.getElementById('val-pluja').innerText = (ultim.field4 || 0) + " mm";
 
-            document.getElementById('val-hum').innerText = (ultim.field1 || "0") + " %";
-            document.getElementById('val-temp').innerText = (ultim.field2 || "0") + " °C";
-            document.getElementById('val-inc').innerText = (ultim.field3 || "0") + " °";
-            document.getElementById('val-pluja').innerText = (ultim.field4 || "0") + " mm";
+        // Estat de connexió al header
+        const icona = document.getElementById('estat-icona');
+        const text = document.getElementById('estat-text');
+        if(icona) icona.style.backgroundColor = "#27ae60";
+        if(text) text.innerText = "Connectat " + id.toUpperCase();
 
-            if(icona) icona.style.backgroundColor = "#27ae60"; 
-            if(text) text.innerText = `Estat: Connectat (${id.toUpperCase()})`;
-
-            const labels = feeds.map(f => new Date(f.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}));
-            
-            crearGrafic('graficHum', labels, feeds.map(f => f.field1), 'Humitat', '#3498db');
-            crearGrafic('graficTemp', labels, feeds.map(f => f.field2), 'Temperatura', '#f39c12');
-            crearGrafic('graficInc', labels, feeds.map(f => f.field3), 'Inclinació', '#27ae60');
-            crearGrafic('graficPluja', labels, feeds.map(f => f.field4), 'Pluja', '#16a085');
-        }
+        // Gràfics
+        const labels = feeds.map(f => new Date(f.created_at).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}));
+        crearGrafic('graficHum', labels, feeds.map(f => f.field1), 'Humitat', '#3498db');
+        crearGrafic('graficTemp', labels, feeds.map(f => f.field2), 'Temperatura', '#f39c12');
+        crearGrafic('graficInc', labels, feeds.map(f => f.field3), 'Inclinació', '#27ae60');
+        crearGrafic('graficPluja', labels, feeds.map(f => f.field4), 'Pluja', '#16a085');
+        
     } catch (e) {
-        if(icona) icona.style.backgroundColor = "#e74c3c"; 
-        if(text) text.innerText = "Estat: Error en " + id;
+        if(document.getElementById('estat-icona')) document.getElementById('estat-icona').style.backgroundColor = "#e74c3c";
     }
 }
 
-// 5. GENERADOR DE MINI-GRÀFICS
-function crearGrafic(canvasId, labels, dataPoints, label, color) {
-    const canvasElement = document.getElementById(canvasId);
-    if(!canvasElement) return;
+// 5. VIGILÀNCIA PERIMETRAL (NOVA LÒGICA)
+async function verificarVigilanciaTotes() {
+    for (let id in CONFIG) {
+        const pilot = document.getElementById(`pilot-${CONFIG[id].punt}`);
+        if (!pilot) continue;
 
-    const ctx = canvasElement.getContext('2d');
-    if(charts[canvasId]) charts[canvasId].destroy();
+        try {
+            // Demanem només l'última dada per verificar el temps
+            const res = await fetch(`https://api.thingspeak.com/channels/${CONFIG[id].v_id}/feeds.json?api_key=${CONFIG[id].key}&results=1`);
+            const data = await res.json();
+            
+            if (data.feeds && data.feeds.length > 0) {
+                const ultim = data.feeds[0];
+                const ara = new Date();
+                const dataDada = new Date(ultim.created_at);
+                const diffHores = (ara - dataDada) / (1000 * 60 * 60);
 
-    charts[canvasId] = new Chart(ctx, {
+                // Lògica de colors:
+                // VERMELL: Lectura en les últimes 12h
+                // VERD: No hi ha noves lectures en les últimes 12h
+                if (diffHores < 12) {
+                    pilot.className = "pilot-vigi estat-vigi-vermell";
+                } else {
+                    pilot.className = "pilot-vigi estat-vigi-verd";
+                }
+            } else {
+                // Si el canal respon però està buit, ho considerem sense alertes (verd)
+                pilot.className = "pilot-vigi estat-vigi-verd";
+            }
+        } catch (e) {
+            // GROC: No hi ha resposta de ThingSpeak
+            pilot.className = "pilot-vigi estat-vigi-groc";
+        }
+    }
+}
+
+async function obrirDetallVigilancia(puntId) {
+    const casaKey = Object.keys(CONFIG).find(k => CONFIG[k].punt === puntId);
+    const titol = document.getElementById('titol-vigi');
+    if(titol) titol.innerText = "Historial Vigilància - " + CONFIG[casaKey].titol;
+    
+    mostrarSeccio('detall-vigilancia');
+    carregarAlarmesVigi(casaKey);
+}
+
+async function carregarAlarmesVigi(casaKey) {
+    const llista = document.getElementById('llista-alarmes');
+    llista.innerHTML = "Carregant darreres 8 lectures...";
+    
+    try {
+        // Agafem les darreres 8 lectures de field5
+        const res = await fetch(`https://api.thingspeak.com/channels/${CONFIG[casaKey].v_id}/feeds.json?api_key=${CONFIG[casaKey].key}&results=8`);
+        const data = await res.json();
+        
+        if (data.feeds && data.feeds.length > 0) {
+            llista.innerHTML = data.feeds.reverse().map(f => `
+                <div style="border-bottom:1px solid #eee; padding:12px; display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <strong style="color:#5A453A;">Punt:</strong> ${CONFIG[casaKey].titol}<br>
+                        <small style="color:#888;">${new Date(f.created_at).toLocaleString()}</small>
+                    </div>
+                    <div style="text-align:right;">
+                        <span style="background:#f8f9fa; padding:4px 8px; border-radius:4px; font-weight:bold;">
+                            Dada: ${f.field5 || 'N/A'}
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            llista.innerHTML = "No hi ha registres disponibles.";
+        }
+    } catch (e) {
+        llista.innerHTML = "Error al carregar l'historial.";
+    }
+}
+
+// 6. FUNCIONS AUXILIARS (ESTATS I GRÀFICS)
+async function verificarEstatTotesCases() {
+    for (let id in CONFIG) {
+        const punt = document.getElementById(`punt-${id}`);
+        if (!punt) continue;
+        try {
+            const res = await fetch(`https://api.thingspeak.com/channels/${CONFIG[id].id}/feeds.json?api_key=${CONFIG[id].key}&results=1`);
+            const data = await res.json();
+            if (data.feeds && data.feeds[0]) {
+                const diff = (new Date() - new Date(data.feeds[0].created_at)) / (1000 * 60 * 60);
+                punt.className = "alerta-casa " + (diff < 1 ? "estat-connectat" : "estat-desconnectat");
+            } else {
+                punt.className = "alerta-casa estat-desconnectat";
+            }
+        } catch (e) {
+            punt.className = "alerta-casa estat-desconnectat";
+        }
+    }
+}
+
+function crearGrafic(id, labels, data, label, color) {
+    const canvas = document.getElementById(id);
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if(charts[id]) charts[id].destroy();
+    charts[id] = new Chart(ctx, {
         type: 'line',
-        data: {
-            labels: labels,
+        data: { 
+            labels, 
             datasets: [{ 
-                data: dataPoints, 
+                data, 
                 borderColor: color, 
-                backgroundColor: color + '22', 
+                backgroundColor: color+'22', 
                 fill: true, 
                 tension: 0.4, 
-                borderWidth: 2, 
                 pointRadius: 0 
-            }]
+            }] 
         },
         options: { 
             responsive: true, 
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-                y: { display: false },
-                x: { display: false }
-            }
+            maintainAspectRatio: false, 
+            plugins: { legend: { display: false } }, 
+            scales: { x: { display: false }, y: { display: false } } 
         }
     });
 }
