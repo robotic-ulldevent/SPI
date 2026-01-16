@@ -45,8 +45,9 @@
 
         /* VIGILÀNCIA */
         .pilot-vigi { position: absolute; top: 10px; right: 10px; width: 15px; height: 15px; border-radius: 50%; border: 2px solid white; }
-        .estat-ok { background-color: #27ae60; }
-        .estat-alert { background-color: #e74c3c; }
+        .estat-vigi-verd { background-color: #27ae60; }
+        .estat-vigi-vermell { background-color: #e74c3c; }
+        .estat-vigi-groc { background-color: #f1c40f; }
 
         .boto-tornar { display: inline-block; background-color: #5A453A; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-bottom: 20px; font-weight: bold; }
     </style>
@@ -111,18 +112,16 @@
     <section id="seccio-vigilancia" class="oculta" style="padding:20px;">
         <button class="boto-tornar" onclick="mostrarSeccio('seccio-principal')">← Menú</button>
         <div class="quadre-container">
-            <div class="quadre"><span>↗️</span><br>Nord-est<div class="pilot-vigi estat-ok"></div></div>
-            <div class="quadre" onclick="mostrarSeccio('detall-vig-no')">
-                <span>↖️</span><br>Nord-oest<div id="pilot-no" class="pilot-vigi estat-ok"></div>
-            </div>
-            <div class="quadre"><span>↘️</span><br>Sud-est<div class="pilot-vigi estat-ok"></div></div>
-            <div class="quadre"><span>↙️</span><br>Sud-oest<div class="pilot-vigi estat-ok"></div></div>
+            <div class="quadre" onclick="obrirDetallVigilancia('ne')"><span>↗️</span><br>Nord-est<div id="pilot-ne" class="pilot-vigi"></div></div>
+            <div class="quadre" onclick="obrirDetallVigilancia('no')"><span>↖️</span><br>Nord-oest<div id="pilot-no" class="pilot-vigi"></div></div>
+            <div class="quadre" onclick="obrirDetallVigilancia('se')"><span>↘️</span><br>Sud-est<div id="pilot-se" class="pilot-vigi"></div></div>
+            <div class="quadre" onclick="obrirDetallVigilancia('so')"><span>↙️</span><br>Sud-oest<div id="pilot-so" class="pilot-vigi"></div></div>
         </div>
     </section>
 
-    <section id="detall-vig-no" class="oculta" style="padding:20px;">
+    <section id="detall-vigilancia" class="oculta" style="padding:20px;">
         <button class="boto-tornar" onclick="mostrarSeccio('seccio-vigilancia')">← Tornar</button>
-        <h3>Registre d'Alarmes - Nord-oest</h3>
+        <h3 id="titol-vigi">Registre d'Alarmes</h3>
         <div id="llista-alarmes" style="background:white; padding:15px; border-radius:10px;">Carregant historial...</div>
     </section>
 
@@ -137,14 +136,14 @@
     <script>
         let charts = {};
         let refreshInterval = null;
-        let casaActual = null;
+        let vrefreshInterval = null;
 
-        // CONFIGURACIÓ CASES
-        const API_KEYS = {
-            'casa1': { key: 'READ_KEY_CASA1', id: '3200447' }, // Substitueix per la teva clau real de casa1
-            'casa2': { key: 'I9QM383Z4L55KB0F', id: '2815143' }, // Exemple d'ID de canal, posa el correcte
-            'casa3': { key: 'ULWM1RF9EGBLJ3I5', id: '2815144' },
-            'casa4': { key: 'BZYJ00BYU6P4P48M', id: '2815145' }
+        // CONFIGURACIÓ CASES I VIGILÀNCIA
+        const CONFIG = {
+            'casa1': { key: 'READ_KEY_CASA1', id: '3200447', v_id: '3229918', punt: 'ne', titol: 'Nord-est' },
+            'casa2': { key: 'I9QM383Z4L55KB0F', id: '2815143', v_id: '3229918', punt: 'no', titol: 'Nord-oest' },
+            'casa3': { key: 'ULWM1RF9EGBLJ3I5', id: '2815144', v_id: '3229919', punt: 'se', titol: 'Sud-est' },
+            'casa4': { key: 'BZYJ00BYU6P4P48M', id: '2815145', v_id: '3229920', punt: 'so', titol: 'Sud-oest' }
         };
 
         window.addEventListener('load', () => {
@@ -153,104 +152,112 @@
                 setTimeout(() => document.getElementById('splash').style.display = 'none', 1000);
             }, 5000);
             verificarEstatTotesCases();
+            verificarVigilanciaTotes();
         });
 
         function mostrarSeccio(id) {
             if(refreshInterval) clearInterval(refreshInterval);
+            if(vrefreshInterval) clearInterval(vrefreshInterval);
             document.querySelectorAll('main, section').forEach(s => s.classList.add('oculta'));
             document.getElementById(id).classList.remove('oculta');
             
             if(id === 'seccio-sensors') verificarEstatTotesCases();
-            if(id === 'detall-vig-no') carregarAlarmes();
+            if(id === 'seccio-vigilancia') verificarVigilanciaTotes();
             window.scrollTo(0,0);
         }
 
+        // --- MÒDUL SENSORS ---
         function obrirCasa(id) {
-            casaActual = id;
             document.getElementById('titol-casa').innerText = "Dades " + id.toUpperCase();
             mostrarSeccio('seccio-detall-casa');
             carregarDadesSensors(id);
-            refreshInterval = setInterval(() => carregarDadesSensors(id), 60000); // Cada minut si està obert
+            refreshInterval = setInterval(() => carregarDadesSensors(id), 60000);
         }
 
         async function verificarEstatTotesCases() {
-            for (let id in API_KEYS) {
+            for (let id in CONFIG) {
                 try {
-                    const res = await fetch(`https://api.thingspeak.com/channels/${API_KEYS[id].id}/feeds.json?api_key=${API_KEYS[id].key}&results=1`);
+                    const res = await fetch(`https://api.thingspeak.com/channels/${CONFIG[id].id}/feeds.json?api_key=${CONFIG[id].key}&results=1`);
                     const data = await res.json();
-                    const ultim = data.feeds[0];
                     const punt = document.getElementById(`punt-${id}`);
-                    
-                    if (ultim) {
-                        const ara = new Date();
-                        const dataDada = new Date(ultim.created_at);
-                        const diffHores = (ara - dataDada) / (1000 * 60 * 60);
-
-                        if (diffHores < 1) {
-                            punt.className = "alerta-casa estat-connectat";
-                        } else {
-                            punt.className = "alerta-casa estat-desconnectat";
-                        }
-                    } else {
-                        punt.className = "alerta-casa estat-desconnectat";
-                    }
-                } catch (e) {
-                    document.getElementById(`punt-${id}`).className = "alerta-casa estat-desconnectat";
-                }
+                    if (data.feeds && data.feeds[0]) {
+                        const diff = (new Date() - new Date(data.feeds[0].created_at)) / (1000 * 60 * 60);
+                        punt.className = "alerta-casa " + (diff < 1 ? "estat-connectat" : "estat-desconnectat");
+                    } else punt.className = "alerta-casa estat-desconnectat";
+                } catch (e) { document.getElementById(`punt-${id}`).className = "alerta-casa estat-desconnectat"; }
             }
         }
 
         async function carregarDadesSensors(id) {
             try {
-                const config = API_KEYS[id];
-                const res = await fetch(`https://api.thingspeak.com/channels/${config.id}/feeds.json?api_key=${config.key}&results=15`);
+                const res = await fetch(`https://api.thingspeak.com/channels/${CONFIG[id].id}/feeds.json?api_key=${CONFIG[id].key}&results=15`);
                 const data = await res.json();
                 const feeds = data.feeds;
                 const ultim = feeds[feeds.length - 1];
-
                 document.getElementById('val-hum').innerText = (ultim.field1 || 0) + " %";
                 document.getElementById('val-temp').innerText = (ultim.field2 || 0) + " °C";
                 document.getElementById('val-inc').innerText = (ultim.field3 || 0) + " °";
                 document.getElementById('val-pluja').innerText = (ultim.field4 || 0) + " mm";
-
                 document.getElementById('estat-icona').style.backgroundColor = "#27ae60";
                 document.getElementById('estat-text').innerText = "Connectat " + id;
-
                 const labels = feeds.map(f => new Date(f.created_at).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}));
                 crearGrafic('graficHum', labels, feeds.map(f => f.field1), 'Humitat', '#3498db');
                 crearGrafic('graficTemp', labels, feeds.map(f => f.field2), 'Temperatura', '#f39c12');
                 crearGrafic('graficInc', labels, feeds.map(f => f.field3), 'Inclinació', '#27ae60');
                 crearGrafic('graficPluja', labels, feeds.map(f => f.field4), 'Pluja', '#16a085');
-            } catch (e) {
-                document.getElementById('estat-icona').style.backgroundColor = "#e74c3c";
+            } catch (e) { document.getElementById('estat-icona').style.backgroundColor = "#e74c3c"; }
+        }
+
+        // --- MÒDUL VIGILÀNCIA PERIMETRAL ---
+        async function verificarVigilanciaTotes() {
+            for (let id in CONFIG) {
+                const pilot = document.getElementById(`pilot-${CONFIG[id].punt}`);
+                try {
+                    const res = await fetch(`https://api.thingspeak.com/channels/${CONFIG[id].v_id}/feeds.json?api_key=${CONFIG[id].key}&results=1`);
+                    const data = await res.json();
+                    if (data.feeds) {
+                        const ultim = data.feeds[0];
+                        if (ultim) {
+                            const diffHores = (new Date() - new Date(ultim.created_at)) / (1000 * 60 * 60);
+                            pilot.className = "pilot-vigi " + (diffHores < 12 ? "estat-vigi-vermell" : "estat-vigi-verd");
+                        } else pilot.className = "pilot-vigi estat-vigi-verd";
+                    } else pilot.className = "pilot-vigi estat-vigi-groc";
+                } catch (e) { pilot.className = "pilot-vigi estat-vigi-groc"; }
             }
         }
 
-        async function carregarAlarmes() {
-            try {
-                const res = await fetch('https://api.thingspeak.com/channels/3200452/feeds.json?api_key=KNCM7HX4YHP3H3NB&results=5');
-                const data = await res.json();
-                const llista = document.getElementById('llista-alarmes');
-                llista.innerHTML = data.feeds.reverse().map(f => `
-                    <div style="border-bottom:1px solid #eee; padding:10px;">
-                        <span style="color:red; font-weight:bold;">⚠️ ALERTA</span> | ${new Date(f.created_at).toLocaleString()}
-                    </div>
-                `).join('');
-            } catch (e) { console.error(e); }
+        function obrirDetallVigilancia(puntId) {
+            const casaKey = Object.keys(CONFIG).find(k => CONFIG[k].punt === puntId);
+            document.getElementById('titol-vigi').innerText = "Registre d'Alarmes - " + CONFIG[casaKey].titol;
+            mostrarSeccio('detall-vigilancia');
+            carregarAlarmesVigi(casaKey);
         }
 
+        async function carregarAlarmesVigi(casaKey) {
+            const llista = document.getElementById('llista-alarmes');
+            llista.innerHTML = "Carregant lectures...";
+            try {
+                const res = await fetch(`https://api.thingspeak.com/channels/${CONFIG[casaKey].v_id}/feeds.json?api_key=${CONFIG[casaKey].key}&results=8`);
+                const data = await res.json();
+                if (data.feeds && data.feeds.length > 0) {
+                    llista.innerHTML = data.feeds.reverse().map(f => `
+                        <div style="border-bottom:1px solid #eee; padding:10px; display:flex; justify-content:space-between;">
+                            <span><b style="color:#5A453A;">Lectura:</b> ${f.field5 || 'Detectada'}</span>
+                            <span style="font-size:0.8rem; color:#888;">${new Date(f.created_at).toLocaleString()}</span>
+                        </div>
+                    `).join('');
+                } else llista.innerHTML = "No hi ha registres recents.";
+            } catch (e) { llista.innerHTML = "Error connectant amb el servidor."; }
+        }
+
+        // --- UTILITATS ---
         function crearGrafic(id, labels, data, label, color) {
             const ctx = document.getElementById(id).getContext('2d');
             if(charts[id]) charts[id].destroy();
             charts[id] = new Chart(ctx, {
                 type: 'line',
                 data: { labels, datasets: [{ data, borderColor: color, backgroundColor: color+'22', fill: true, tension: 0.4, pointRadius: 0 }] },
-                options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    plugins: { legend: { display: false } }, 
-                    scales: { x: { display: false }, y: { display: false } } 
-                }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
             });
         }
     </script>
