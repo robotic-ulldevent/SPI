@@ -4,63 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SISTEMA INTEGRAT - Ciutadella de Calafell</title>
-    <style>
-        /* --- EL TEU CSS ACTUALITZAT --- */
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; color: #333; }
-        .oculta { display: none !important; }
-
-        /* SPLASH SCREEN */
-        #splash {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: #007bff; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; z-index: 10000; transition: opacity 1s ease;
-        }
-        #splash img { max-width: 70%; max-height: 50%; object-fit: contain; margin-bottom: 25px; }
-        .loader { border: 5px solid #f3f3f3; border-top: 5px solid #5A453A; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .loading-text { color: white; margin-top: 15px; font-weight: bold; letter-spacing: 1px; }
-
-        /* HEADER */
-        header {
-            background-color: #EBC89C; color: #5A453A; padding: 15px 30px; 
-            display: flex; justify-content: space-between; align-items: center;
-            position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .header-right { display: flex; align-items: center; gap: 15px; }
-
-        /* INDICADOR D'ESTAT */
-        .icona-estat { 
-            width: 12px; height: 12px; border-radius: 50%; display: inline-block; 
-            background-color: #bbb; transition: background-color 0.5s ease;
-        }
-        .estat-online { background-color: #2ecc71 !important; }
-        .estat-offline { background-color: #e74c3c !important; }
-
-        /* GRIDS */
-        .quadre-container { padding: 20px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; max-width: 1200px; margin: 0 auto; }
-        .quadre { background-color: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); padding: 15px; text-align: center; flex: 1 1 280px; max-width: 350px; cursor: pointer; position: relative; }
-        .menu-img { width: 100%; height: 180px; object-fit: contain; background-color: #fafafa; border-radius: 8px; margin-bottom: 10px; }
-
-        /* ALERTES VIGILÀNCIA */
-        .pilot-vigi { position: absolute; top: 10px; right: 10px; width: 15px; height: 15px; border-radius: 50%; border: 2px solid white; }
-        .vigi-vermell { background-color: #e74c3c; } /* Alerta < 12h */
-        .vigi-verd { background-color: #2ecc71; }    /* OK > 12h */
-        .vigi-groc { background-color: #f1c40f; }    /* Error connexió */
-        .alerta-casa { width: 15px; height: 15px; border-radius: 50%; position: absolute; top: 10px; right: 10px; border: 2px solid white; background-color: #bbb; }
-
-        /* BOTONS DE SENSOR (TEU DISSENY) */
-        .boto-sensor { 
-            background: white; border-radius: 12px; padding: 15px; 
-            flex: 1 1 220px; max-width: 280px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08); text-align: center;
-            display: flex; flex-direction: column; align-items: center;
-        }
-        .sensor-titol { font-weight: bold; color: #5A453A; font-size: 0.9rem; margin-bottom: 5px; }
-        .sensor-valor { font-size: 1.6rem; font-weight: bold; color: #2c3e50; margin-bottom: 10px; }
-        .canvas-mini { width: 100% !important; height: 100px !important; margin-top: 5px; }
-
-        .boto-tornar { display: inline-block; background-color: #95a5a6; color: white; padding: 10px 18px; text-decoration: none; border-radius: 5px; margin-bottom: 15px; font-weight: bold; cursor: pointer; border: none; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -124,104 +68,10 @@
 
     <section id="seccio-mapa" class="oculta" style="padding:20px;">
         <button class="boto-tornar" onclick="mostrarSeccio('seccio-principal')">← Menú</button>
-        <div style="width:100%; border-radius:15px; overflow:hidden;"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2999.55167523179!2d1.5796216!3d41.1917224" width="100%" height="450" style="border:0;" allowfullscreen=""></iframe></div>
+        <div style="width:100%; border-radius:15px; overflow:hidden;"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2999.421712497645!2d1.5835693766155708!3d41.19083540817454!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12a140f7b9287515%3A0xc6c766e4a305f2a1!2sCiutadella%20Ib%C3%A8rica%20de%20Calafell!5e0!3m2!1sca!2ses!4v1700000000000" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe></div>
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        let charts = {};
-        const CONFIG = {
-            'casa1': { key: 'READ_KEY_CASA1', id: '3200447', v_id: '3229918', punt: 'ne', titol: 'Nord-est' },
-            'casa2': { key: 'I9QM383Z4L55KB0F', id: '3229918', v_id: '3229918', punt: 'no', titol: 'Nord-oest' },
-            'casa3': { key: 'ULWM1RF9EGBLJ3I5', id: '3229919', v_id: '3229919', punt: 'se', titol: 'Sud-est' },
-            'casa4': { key: 'BZYJ00BYU6P4P48M', id: '3229920', v_id: '3229920', punt: 'so', titol: 'Sud-oest' }
-        };
-
-        window.addEventListener('load', () => {
-            setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 5000);
-            verificarEstatTotes();
-            verificarVigiTotes();
-        });
-
-        function mostrarSeccio(id) {
-            document.querySelectorAll('main, section').forEach(s => s.classList.add('oculta'));
-            document.getElementById(id).classList.remove('oculta');
-            if(id === 'seccio-vigilancia') verificarVigiTotes();
-        }
-
-        async function obrirCasa(id) {
-            document.getElementById('titol-casa').innerText = "Dades " + id.toUpperCase();
-            mostrarSeccio('seccio-detall-casa');
-            try {
-                const res = await fetch(`https://api.thingspeak.com/channels/${CONFIG[id].id}/feeds.json?api_key=${CONFIG[id].key}&results=15`);
-                const data = await res.json();
-                const ultim = data.feeds[data.feeds.length-1];
-                document.getElementById('val-hum').innerText = (ultim.field1 || 0) + " %";
-                document.getElementById('val-temp').innerText = (ultim.field2 || 0) + " °C";
-                document.getElementById('val-inc').innerText = (ultim.field3 || 0) + " °";
-                document.getElementById('val-pluja').innerText = (ultim.field4 || 0) + " mm";
-                
-                document.getElementById('estat-icona').className = "icona-estat estat-online";
-                document.getElementById('estat-text').innerText = "En línia: " + id;
-
-                const labels = data.feeds.map(f => new Date(f.created_at).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}));
-                crearGrafic('graficHum', labels, data.feeds.map(f => f.field1), '#3498db');
-                crearGrafic('graficTemp', labels, data.feeds.map(f => f.field2), '#f39c12');
-                crearGrafic('graficInc', labels, data.feeds.map(f => f.field3), '#27ae60');
-                crearGrafic('graficPluja', labels, data.feeds.map(f => f.field4), '#16a085');
-            } catch(e) { document.getElementById('estat-icona').className = "icona-estat estat-offline"; }
-        }
-
-        async function verificarVigiTotes() {
-            for (let k in CONFIG) {
-                const pilot = document.getElementById(`pilot-${CONFIG[k].punt}`);
-                try {
-                    const res = await fetch(`https://api.thingspeak.com/channels/${CONFIG[k].v_id}/feeds.json?api_key=${CONFIG[k].key}&results=1`);
-                    const data = await res.json();
-                    if(data.feeds && data.feeds[0]) {
-                        const hores = (new Date() - new Date(data.feeds[0].created_at)) / 3600000;
-                        pilot.className = "pilot-vigi " + (hores < 12 ? "vigi-vermell" : "vigi-verd");
-                    } else pilot.className = "pilot-vigi vigi-verd";
-                } catch(e) { pilot.className = "pilot-vigi vigi-groc"; }
-            }
-        }
-
-        async function obrirDetallVigi(puntId) {
-            const k = Object.keys(CONFIG).find(x => CONFIG[x].punt === puntId);
-            document.getElementById('titol-vigi').innerText = "Últimes 8 lectures - " + CONFIG[k].titol;
-            mostrarSeccio('detall-vigilancia');
-            const llista = document.getElementById('llista-alarmes');
-            llista.innerHTML = "Carregant...";
-            try {
-                const res = await fetch(`https://api.thingspeak.com/channels/${CONFIG[k].v_id}/feeds.json?api_key=${CONFIG[k].key}&results=8`);
-                const data = await res.json();
-                llista.innerHTML = data.feeds.reverse().map(f => `
-                    <div style="border-bottom:1px solid #eee; padding:10px;">
-                        <b>Dada (F5):</b> ${f.field5 || 'Detectada'} <br>
-                        <small>${new Date(f.created_at).toLocaleString()}</small>
-                    </div>`).join('');
-            } catch(e) { llista.innerHTML = "Error."; }
-        }
-
-        function crearGrafic(id, labels, data, color) {
-            if(charts[id]) charts[id].destroy();
-            charts[id] = new Chart(document.getElementById(id), {
-                type: 'line',
-                data: { labels, datasets: [{ data, borderColor: color, fill: false, tension: 0.3, pointRadius: 0 }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
-            });
-        }
-
-        async function verificarEstatTotes() {
-            for (let k in CONFIG) {
-                try {
-                    const res = await fetch(`https://api.thingspeak.com/channels/${CONFIG[k].id}/feeds.json?api_key=${CONFIG[k].key}&results=1`);
-                    const data = await res.json();
-                    const hores = (new Date() - new Date(data.feeds[0].created_at)) / 3600000;
-                    document.getElementById(`punt-${k}`).style.backgroundColor = (hores < 1 ? "#2ecc71" : "#e74c3c");
-                } catch(e) {}
-            }
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
