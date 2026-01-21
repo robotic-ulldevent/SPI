@@ -119,14 +119,14 @@
 
     <section id="seccio-mapa" class="oculta" style="padding:20px;">
         <button class="boto-tornar" onclick="mostrarSeccio('seccio-principal')">← Menú</button>
-        <div style="width:100%; border-radius:15px; overflow:hidden;"><iframe src="http://googleusercontent.com/maps.google.com/7" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe></div>
+        <div style="width:100%; border-radius:15px; overflow:hidden;"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2999.638510844781!2d1.5794595764834484!3d41.1969698713247!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12a38a798f480373%3A0xc6c766432049d187!2sCiutadella%20Ib%C3%A8rica%20de%20Calafell!5e0!3m2!1sca!2ses!4v1700000000000!5m2!1sca!2ses" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe></div>
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         let charts = {};
         const CONFIG = {
-            'casa1': { key: '85WNYIM35DMXK9Z7', id: '3200447', v_id: '3200447', punt: 'ne', titol: 'Nord-est' },
+            'casa1': { key: 'READ_KEY_CASA1', id: '3200447', v_id: '3200447', punt: 'ne', titol: 'Nord-est' },
             'casa2': { key: 'I9QM383Z4L55KB0F', id: '3229918', v_id: '3229918', punt: 'no', titol: 'Nord-oest' },
             'casa3': { key: 'ULWM1RF9EGBLJ3I5', id: '3229919', v_id: '3229919', punt: 'se', titol: 'Sud-est' },
             'casa4': { key: 'BZYJ00BYU6P4P48M', id: '3229920', v_id: '3229920', punt: 'so', titol: 'Sud-oest' }
@@ -191,11 +191,19 @@
             try {
                 const res = await fetch(`https://api.thingspeak.com/channels/${CONFIG[k].v_id}/feeds.json?api_key=${CONFIG[k].key}&results=8`);
                 const data = await res.json();
-                llista.innerHTML = data.feeds.reverse().map(f => `
-                    <div style="border-bottom:1px solid #eee; padding:10px; display:flex; justify-content:space-between; align-items:center;">
-                        <span><b>Estat:</b> ${f.field5 || 'Vigilant'}</span>
-                        <small style="color:#666;">${new Date(f.created_at).toLocaleString('ca-ES')}</small>
-                    </div>`).join('');
+                
+                // Filtrem per mostrar només les entrades on field5 és igual a 1
+                const alarmesFiltrades = data.feeds.filter(f => String(f.field5) === "1");
+
+                if (alarmesFiltrades.length === 0) {
+                    llista.innerHTML = "<p style='text-align:center; color:#666;'>No s'han detectat intrusions recents.</p>";
+                } else {
+                    llista.innerHTML = alarmesFiltrades.reverse().map(f => `
+                        <div style="border-bottom:1px solid #eee; padding:10px; display:flex; justify-content:space-between; align-items:center;">
+                            <span style="color:#e74c3c; font-weight:bold;">INTRUSIÓ</span>
+                            <small style="color:#666;">${new Date(f.created_at).toLocaleString('ca-ES')}</small>
+                        </div>`).join('');
+                }
             } catch(e) { llista.innerHTML = "Error de connexió."; }
         }
 
