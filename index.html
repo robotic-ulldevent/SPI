@@ -20,11 +20,11 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .loading-text { color: white; margin-top: 15px; font-weight: bold; letter-spacing: 1px; }
 
-        /* HEADER MODIFICAT */
+        /* HEADER MODIFICAT I AMPLIAT */
         header {
             background-color: #EBC89C; 
             color: #5A453A; 
-            padding: 30px 20px; /* Més ample verticalment */
+            padding: 40px 20px; /* Més espai vertical */
             display: flex; 
             flex-direction: column; 
             justify-content: center; 
@@ -37,7 +37,7 @@
         }
         .header-top-info {
             position: absolute;
-            right: 20px;
+            left: 20px; /* L'estat a l'esquerra per equilibrar */
             top: 50%;
             transform: translateY(-50%);
             display: flex;
@@ -46,15 +46,15 @@
         }
         .home-btn {
             position: absolute;
-            left: 20px;
+            right: 20px; /* TORNEM LA CASETA A LA DRETA */
             top: 50%;
             transform: translateY(-50%);
             background: none;
             border: none;
-            font-size: 1.8rem;
+            font-size: 2.5rem; /* Una mica més gran */
             cursor: pointer;
         }
-        .icona-estat { width: 12px; height: 12px; border-radius: 50%; display: inline-block; background-color: #bbb; transition: background-color 0.5s ease; }
+        .icona-estat { width: 12px; height: 12px; border-radius: 50%; display: inline-block; background-color: #bbb; }
         .estat-online { background-color: #2ecc71 !important; }
         .estat-offline { background-color: #e74c3c !important; }
 
@@ -63,7 +63,7 @@
         .quadre { background-color: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); padding: 15px; text-align: center; flex: 1 1 280px; max-width: 350px; cursor: pointer; position: relative; }
         .menu-img { width: 100%; height: 180px; object-fit: contain; background-color: #fafafa; border-radius: 8px; margin-bottom: 10px; }
 
-        /* SENSORS I ALERTES */
+        /* ALERTES */
         .pilot-vigi { position: absolute; top: 10px; right: 10px; width: 15px; height: 15px; border-radius: 50%; border: 2px solid white; }
         .vigi-vermell { background-color: #e74c3c; }
         .vigi-verd { background-color: #2ecc71; }
@@ -92,14 +92,15 @@
     </div>
 
     <header>
-        <button class="home-btn" onclick="mostrarSeccio('seccio-principal')">🏠</button>
-        <h1 style="margin:0; font-size:1.4rem; letter-spacing: 1px;">SISTEMA DE PROTECCIÓ INTEGRAL DEL JACIMENT (SPI)</h1>
-        <h2 style="margin:8px 0 0 0; font-size:1.1rem; font-weight: normal; opacity: 0.9;">Ciutadella de Calafell</h2>
-        
         <div class="header-top-info">
-            <span id="estat-text" style="font-size:0.7rem; font-weight: bold;">ESTAT</span>
+            <span id="estat-text" style="font-size:0.75rem; font-weight: bold;">ESTAT</span>
             <div id="estat-icona" class="icona-estat"></div>
         </div>
+
+        <h1 style="margin:0; font-size:1.8rem; letter-spacing: 1px;">SISTEMA DE PROTECCIÓ INTEGRAL DEL JACIMENT (SPI)</h1>
+        <h2 style="margin:10px 0 0 0; font-size:1.4rem; font-weight: normal;">Ciutadella de Calafell</h2>
+        
+        <button class="home-btn" onclick="mostrarSeccio('seccio-principal')">🏠</button>
     </header>
 
     <main id="seccio-principal" class="quadre-container">
@@ -109,7 +110,7 @@
     </main>
 
     <section id="seccio-sensors" class="oculta" style="padding:20px;">
-        <button class="boto-tornar" onclick="mostrarSeccio('seccio-principal')">← Menú Principal</button>
+        <button class="boto-tornar" onclick="mostrarSeccio('seccio-principal')">← Menú</button>
         <div class="quadre-container">
             <div class="quadre" onclick="obrirCasa('casa1')"><div id="punt-casa1" class="alerta-casa"></div><img src="fotocasa1.jpg" class="menu-img"><h4>Casa 1</h4></div>
             <div class="quadre" onclick="obrirCasa('casa2')"><div id="punt-casa2" class="alerta-casa"></div><img src="fotocasa2.jpg" class="menu-img"><h4>Casa 2</h4></div>
@@ -119,8 +120,8 @@
     </section>
 
     <section id="seccio-detall-casa" class="oculta" style="padding:20px;">
-        <button class="boto-tornar" onclick="mostrarSeccio('seccio-sensors')">← Tornar a l'inici</button>
-        <h2 id="titol-casa" style="text-align:center; color: #5A453A;">Dades de la Casa</h2>
+        <button class="boto-tornar" onclick="mostrarSeccio('seccio-sensors')">← Tornar</button>
+        <h2 id="titol-casa" style="text-align:center;">Dades de la Casa</h2>
         <div class="quadre-container">
             <div class="boto-sensor"><div class="sensor-titol">Humitat</div><div id="val-hum" class="sensor-valor">-- %</div><canvas id="graficHum" class="canvas-mini"></canvas></div>
             <div class="boto-sensor"><div class="sensor-titol">Temperatura</div><div id="val-temp" class="sensor-valor">-- °C</div><canvas id="graficTemp" class="canvas-mini"></canvas></div>
@@ -130,7 +131,7 @@
     </section>
 
     <section id="seccio-vigilancia" class="oculta" style="padding:20px;">
-        <button class="boto-tornar" onclick="mostrarSeccio('seccio-principal')">← Menú Principal</button>
+        <button class="boto-tornar" onclick="mostrarSeccio('seccio-principal')">← Menú</button>
         <div class="quadre-container">
             <div class="quadre" onclick="obrirDetallVigi('ne')"><span>↗️</span> Nord-est <div id="pilot-ne" class="pilot-vigi"></div></div>
             <div class="quadre" onclick="obrirDetallVigi('no')"><span>↖️</span> Nord-oest <div id="pilot-no" class="pilot-vigi"></div></div>
@@ -141,13 +142,13 @@
 
     <section id="detall-vigilancia" class="oculta" style="padding:20px;">
         <button class="boto-tornar" onclick="mostrarSeccio('seccio-vigilancia')">← Tornar</button>
-        <h3 id="titol-vigi" style="text-align:center; color: #5A453A;">Historial Vigilància</h3>
+        <h3 id="titol-vigi" style="text-align:center;">Historial Vigilància</h3>
         <div id="llista-alarmes" style="background:white; padding:15px; border-radius:10px; max-width:500px; margin:0 auto; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"></div>
     </section>
 
     <section id="seccio-mapa" class="oculta" style="padding:20px;">
-        <button class="boto-tornar" onclick="mostrarSeccio('seccio-principal')">← Menú Principal</button>
-        <div style="width:100%; border-radius:15px; overflow:hidden; border: 1px solid #ddd;"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2998.541334057884!2d1.5794!3d41.1895!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12a14966699369ab%3A0xc0688f918e7e1742!2sCiutadella%20Ib%C3%A8rica%20de%20Calafell!5e0!3m2!1sca!2ses!4v1700000000000!5m2!1sca!2ses" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe></div>
+        <button class="boto-tornar" onclick="mostrarSeccio('seccio-principal')">← Menú</button>
+        <div style="width:100%; border-radius:15px; overflow:hidden;"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2999.623123847427!2d1.57943487654512!3d41.19183490843641!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12a14966601f03f5%3A0xc3926317b2b2b100!2sCiutadella%20Ib%C3%A8rica%20de%20Calafell!5e0!3m2!1sca!2ses!4v1709123456789!5m2!1sca!2ses" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe></div>
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -192,9 +193,7 @@
                 crearGrafic('graficTemp', labels, data.feeds.map(f => f.field2), '#f39c12');
                 crearGrafic('graficInc', labels, data.feeds.map(f => f.field3), '#27ae60');
                 crearGrafic('graficPluja', labels, data.feeds.map(f => f.field4), '#16a085');
-            } catch(e) { 
-                document.getElementById('estat-icona').className = "icona-estat estat-offline"; 
-            }
+            } catch(e) { document.getElementById('estat-icona').className = "icona-estat estat-offline"; }
         }
 
         async function verificarVigiTotes() {
@@ -216,22 +215,21 @@
             document.getElementById('titol-vigi').innerText = "Historial - " + CONFIG[k].titol;
             mostrarSeccio('detall-vigilancia');
             const llista = document.getElementById('llista-alarmes');
-            llista.innerHTML = "Carregant dades...";
+            llista.innerHTML = "Carregant...";
             try {
                 const res = await fetch(`https://api.thingspeak.com/channels/${CONFIG[k].v_id}/feeds.json?api_key=${CONFIG[k].key}&results=10`);
                 const data = await res.json();
                 const alarmesFiltrades = data.feeds.filter(f => String(f.field5) === "1");
-
                 if (alarmesFiltrades.length === 0) {
-                    llista.innerHTML = "<p style='text-align:center;'>Sense intrusions recents.</p>";
+                    llista.innerHTML = "<p style='text-align:center;'>Sense intrusions.</p>";
                 } else {
                     llista.innerHTML = alarmesFiltrades.reverse().map(f => `
-                        <div style="border-bottom:1px solid #eee; padding:10px; display:flex; justify-content:space-between; align-items:center;">
-                            <span style="color:red; font-weight:bold;">⚠ INTRUSIÓ</span>
-                            <small>${new Date(f.created_at).toLocaleString('ca-ES')}</small>
+                        <div style="border-bottom:1px solid #eee; padding:10px; display:flex; justify-content:space-between;">
+                            <span style="color:red; font-weight:bold;">INTRUSIÓ</span>
+                            <small>${new Date(f.created_at).toLocaleString()}</small>
                         </div>`).join('');
                 }
-            } catch(e) { llista.innerHTML = "Error de connexió."; }
+            } catch(e) { llista.innerHTML = "Error."; }
         }
 
         function crearGrafic(id, labels, data, color) {
@@ -248,10 +246,8 @@
                 try {
                     const res = await fetch(`https://api.thingspeak.com/channels/${CONFIG[k].id}/feeds.json?api_key=${CONFIG[k].key}&results=1`);
                     const data = await res.json();
-                    if(data.feeds && data.feeds.length > 0) {
-                        const hores = (new Date() - new Date(data.feeds[0].created_at)) / 3600000;
-                        document.getElementById(`punt-${k}`).style.backgroundColor = (hores < 1 ? "#2ecc71" : "#e74c3c");
-                    }
+                    const hores = (new Date() - new Date(data.feeds[0].created_at)) / 3600000;
+                    document.getElementById(`punt-${k}`).style.backgroundColor = (hores < 1 ? "#2ecc71" : "#e74c3c");
                 } catch(e) {}
             }
         }
