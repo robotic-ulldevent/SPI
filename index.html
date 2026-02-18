@@ -9,21 +9,30 @@
         body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; color: #333; }
         .oculta { display: none !important; }
 
-        /* SPLASH SCREEN */
+        /* SPLASH SCREEN ACTUALITZAT */
         #splash {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: #007bff; display: flex; flex-direction: column;
+            background-color: #D2B48C; /* Color marró terra suau en lloc de blau */
+            display: flex; flex-direction: column;
             justify-content: center; align-items: center; z-index: 10000; transition: opacity 1s ease;
         }
-        #splash img { max-width: 70%; max-height: 50%; object-fit: contain; margin-bottom: 25px; }
-        .loader { border: 5px solid #f3f3f3; border-top: 5px solid #5A453A; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+        #splash img { 
+            width: 90%; /* Foto més gran */
+            max-width: 1000px;
+            height: auto;
+            max-height: 70vh; 
+            object-fit: contain; 
+            margin-bottom: 25px; 
+            border-radius: 10px;
+        }
+        .loader { border: 5px solid #f3f3f3; border-top: 5px solid #5A453A; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* HEADER AMB AJUSTOS DE POSICIÓ I COLOR */
+        /* HEADER MÉS ESTRET */
         header {
             background-color: #EBC89C; 
             color: #5A453A; 
-            padding: 50px 20px; 
+            padding: 25px 20px; /* Reduït per fer-lo més estret */
             display: flex; 
             flex-direction: column; 
             justify-content: center; 
@@ -35,27 +44,25 @@
             text-align: center;
         }
         
-        /* ESTAT: BAIXAT I COLOR MÉS FLUIX */
         .header-top-info {
             position: absolute;
             left: 35px; 
-            top: 70%; /* Baixat a l'alçada del subtítol */
+            top: 70%; 
             transform: translateY(-50%);
             display: flex;
             align-items: center;
             gap: 12px;
         }
         #estat-text { 
-            font-size: 1.1rem; /* Mida reduïda */
+            font-size: 1.1rem; 
             font-weight: 700; 
-            color: #8a766a; /* Color més suau/fluix */
+            color: #8a766a; 
         }
 
-        /* CASETA: BAIXADA A LA DRETA */
         .home-btn {
             position: absolute;
             right: 35px; 
-            top: 70%; /* Baixat a l'alçada del subtítol */
+            top: 70%; 
             transform: translateY(-50%);
             background: none;
             border: none;
@@ -64,7 +71,6 @@
             opacity: 0.8;
         }
 
-        /* TÍTOLS */
         h1.titol-principal { 
             margin: 0; 
             font-size: 2.8rem; 
@@ -73,17 +79,17 @@
             max-width: 85%;
         }
         h2.subtitol { 
-            margin: 10px 0 0 0; 
+            margin: 5px 0 0 0; 
             font-size: 2.6rem; 
             font-weight: bold; 
-            color: #8a766a; /* Color més suau/fluix */
+            color: #8a766a; 
         }
 
         .icona-estat { width: 18px; height: 18px; border-radius: 50%; display: inline-block; background-color: #bbb; border: 2px solid #8a766a; }
         .estat-online { background-color: #2ecc71 !important; }
         .estat-offline { background-color: #e74c3c !important; }
 
-        /* GRIDS I CONTINGUT */
+        /* LA RESTA DEL CODI ES MANTÉ IGUAL */
         .quadre-container { padding: 20px; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; max-width: 1200px; margin: 0 auto; }
         .quadre { background-color: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); padding: 15px; text-align: center; flex: 1 1 280px; max-width: 350px; cursor: pointer; position: relative; }
         .menu-img { width: 100%; height: 180px; object-fit: contain; background-color: #fafafa; border-radius: 8px; margin-bottom: 10px; }
@@ -100,7 +106,7 @@
     <div id="splash">
         <img src="foto1.jpg" alt="Benvinguda">
         <div class="loader"></div>
-        <div class="loading-text">CARREGANT SISTEMA...</div>
+        <div style="color: #5A453A; margin-top: 15px; font-weight: bold;">CARREGANT...</div>
     </div>
 
     <header>
@@ -110,7 +116,7 @@
         </div>
 
         <h1 class="titol-principal">SISTEMA DE PROTECCIÓ INTEGRAL DEL JACIMENT (SPI)</h1>
-        <h2 class="subtitol">Ciutadella Ibèrica</h2>
+        <h2 class="subtitol">Ciutadella Ibèrica de Calafell</h2>
         
         <button class="home-btn" onclick="mostrarSeccio('seccio-principal')">🏠</button>
     </header>
@@ -160,7 +166,7 @@
 
     <section id="seccio-mapa" class="oculta" style="padding:20px;">
         <button class="boto-tornar" onclick="mostrarSeccio('seccio-principal')">← Menú</button>
-        <div style="width:100%; border-radius:15px; overflow:hidden;"><iframe src="http://googleusercontent.com/maps.google.com/8" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe></div>
+        <div style="width:100%; border-radius:15px; overflow:hidden;"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2999.516518461757!2d1.5835626765798485!3d41.188737308945625!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12a389f417f7d7fd%3A0xc3c945484897f766!2sCiutadella%20Ib%C3%A8rica%20de%20Calafell!5e0!3m2!1sca!2ses!4v1700000000000!5m2!1sca!2ses" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe></div>
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
