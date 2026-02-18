@@ -51,7 +51,8 @@
             display: flex; flex-direction: column; align-items: center;
         }
         .sensor-titol { font-weight: bold; color: #5A453A; font-size: 0.9rem; margin-bottom: 5px; }
-        .sensor-valor { font-size: 1.6rem; font-weight: bold; color: #2c3e50; margin-bottom: 10px; }
+        .sensor-valor { font-size: 1.6rem; font-weight: bold; color: #2c3e50; margin-bottom: 5px; }
+        .sensor-hora { font-size: 0.7rem; color: #e67e22; font-weight: bold; margin-bottom: 5px; }
         .canvas-mini { width: 100% !important; height: 100px !important; margin-top: 5px; }
 
         .boto-tornar { display: inline-block; background-color: #95a5a6; color: white; padding: 10px 18px; text-decoration: none; border-radius: 5px; margin-bottom: 15px; font-weight: bold; cursor: pointer; border: none; }
@@ -94,10 +95,28 @@
         <button class="boto-tornar" onclick="mostrarSeccio('seccio-sensors')">← Tornar</button>
         <h2 id="titol-casa" style="text-align:center;">Dades de la Casa</h2>
         <div class="quadre-container">
-            <div class="boto-sensor"><div class="sensor-titol">Humitat</div><div id="val-hum" class="sensor-valor">-- %</div><canvas id="graficHum" class="canvas-mini"></canvas></div>
-            <div class="boto-sensor"><div class="sensor-titol">Temperatura</div><div id="val-temp" class="sensor-valor">-- °C</div><canvas id="graficTemp" class="canvas-mini"></canvas></div>
-            <div class="boto-sensor"><div class="sensor-titol">Inclinació</div><div id="val-inc" class="sensor-valor">-- °</div><canvas id="graficInc" class="canvas-mini"></canvas></div>
-            <div class="boto-sensor"><div class="sensor-titol">Pluja</div><div id="val-pluja" class="sensor-valor">-- mm</div><canvas id="graficPluja" class="canvas-mini"></canvas></div>
+            <div class="boto-sensor">
+                <div class="sensor-titol">Humitat</div>
+                <div id="val-hum" class="sensor-valor">-- %</div>
+                <div id="hora-hum" class="sensor-hora"></div>
+                <canvas id="graficHum" class="canvas-mini"></canvas>
+            </div>
+            <div class="boto-sensor">
+                <div class="sensor-titol">Temperatura</div>
+                <div id="val-temp" class="sensor-valor">-- °C</div>
+                <div id="hora-temp" class="sensor-hora"></div>
+                <canvas id="graficTemp" class="canvas-mini"></canvas>
+            </div>
+            <div class="boto-sensor">
+                <div class="sensor-titol">Inclinació</div>
+                <div id="val-inc" class="sensor-valor">-- °</div>
+                <canvas id="graficInc" class="canvas-mini"></canvas>
+            </div>
+            <div class="boto-sensor">
+                <div class="sensor-titol">Pluja</div>
+                <div id="val-pluja" class="sensor-valor">-- mm</div>
+                <canvas id="graficPluja" class="canvas-mini"></canvas>
+            </div>
         </div>
     </section>
 
@@ -147,13 +166,49 @@
 
         async function obrirCasa(id) {
             document.getElementById('titol-casa').innerText = "Dades " + id.toUpperCase();
+            // Netejar etiquetes d'hora d'errors previs
+            document.getElementById('hora-hum').innerText = "";
+            document.getElementById('hora-temp').innerText = "";
+            
             mostrarSeccio('seccio-detall-casa');
             try {
                 const res = await fetch(`https://api.thingspeak.com/channels/${CONFIG[id].id}/feeds.json?api_key=${CONFIG[id].key}&results=15`);
                 const data = await res.json();
+                
+                // Funció interna per trobar la darrera dada que no sigui -999
+                const obtenirDadaValida = (camp) => {
+                    for (let i = data.feeds.length - 1; i >= 0; i--) {
+                        let valor = data.feeds[i][camp];
+                        if (valor !== null && valor !== "-999") {
+                            return { 
+                                valor: valor, 
+                                data: data.feeds[i].created_at, 
+                                esAntiga: (i < data.feeds.length - 1) 
+                            };
+                        }
+                    }
+                    return { valor: 0, data: null, esAntiga: false };
+                };
+
+                const dadaHum = obtenirDadaValida('field1');
+                const dadaTemp = obtenirDadaValida('field2');
                 const ultim = data.feeds[data.feeds.length-1];
-                document.getElementById('val-hum').innerText = (ultim.field1 || 0) + " %";
-                document.getElementById('val-temp').innerText = (ultim.field2 || 0) + " °C";
+
+                // Assignació Humitat
+                document.getElementById('val-hum').innerText = dadaHum.valor + " %";
+                if(dadaHum.esAntiga) {
+                    const hora = new Date(dadaHum.data).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+                    document.getElementById('hora-hum').innerText = "Lectura del: " + hora;
+                }
+
+                // Assignació Temperatura
+                document.getElementById('val-temp').innerText = dadaTemp.valor + " °C";
+                if(dadaTemp.esAntiga) {
+                    const hora = new Date(dadaTemp.data).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+                    document.getElementById('hora-temp').innerText = "Lectura del: " + hora;
+                }
+
+                // Inclinació i Pluja (directe de l'últim)
                 document.getElementById('val-inc').innerText = (ultim.field3 || 0) + " °";
                 document.getElementById('val-pluja').innerText = (ultim.field4 || 0) + " mm";
                 
@@ -191,8 +246,6 @@
             try {
                 const res = await fetch(`https://api.thingspeak.com/channels/${CONFIG[k].v_id}/feeds.json?api_key=${CONFIG[k].key}&results=8`);
                 const data = await res.json();
-                
-                // Filtrem per mostrar només les entrades on field5 és igual a 1
                 const alarmesFiltrades = data.feeds.filter(f => String(f.field5) === "1");
 
                 if (alarmesFiltrades.length === 0) {
