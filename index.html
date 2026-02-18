@@ -12,88 +12,35 @@
         /* SPLASH SCREEN */
         #splash {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: #D2B48C;
-            display: flex; flex-direction: column;
+            background-color: #D2B48C; display: flex; flex-direction: column;
             justify-content: center; align-items: center; z-index: 10000; transition: opacity 1s ease;
         }
-        #splash img { 
-            width: 90%; 
-            max-width: 1000px;
-            height: auto;
-            max-height: 70vh; 
-            object-fit: contain; 
-            margin-bottom: 25px; 
-            border-radius: 10px;
-        }
+        #splash img { width: 90%; max-width: 1000px; height: auto; max-height: 70vh; object-fit: contain; margin-bottom: 25px; border-radius: 10px; }
         .loader { border: 5px solid #f3f3f3; border-top: 5px solid #5A453A; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         /* HEADER */
         header {
-            background-color: #EBC89C; 
-            color: #5A453A; 
-            padding: 25px 20px; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            position: sticky; 
-            top: 0; 
-            z-index: 1000; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            text-align: center;
+            background-color: #EBC89C; color: #5A453A; padding: 25px 20px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center;
         }
-        
-        .header-top-info {
-            position: absolute;
-            left: 35px; 
-            top: 70%; 
-            transform: translateY(-50%);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        #estat-text { 
-            font-size: 1.1rem; 
-            font-weight: 700; 
-            color: #8a766a; 
-        }
-
-        .home-btn {
-            position: absolute;
-            right: 35px; 
-            top: 70%; 
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            font-size: 3rem; 
-            cursor: pointer;
-            opacity: 0.8;
-        }
-
-        h1.titol-principal { 
-            margin: 0; 
-            font-size: 2.8rem; 
-            letter-spacing: 1px;
-            line-height: 1.1;
-            max-width: 85%;
-        }
-        h2.subtitol { 
-            margin: 5px 0 0 0; 
-            font-size: 2.6rem; 
-            font-weight: bold; 
-            color: #8a766a; 
-        }
-
+        .header-top-info { position: absolute; left: 35px; top: 70%; transform: translateY(-50%); display: flex; align-items: center; gap: 12px; }
+        #estat-text { font-size: 1.1rem; font-weight: 700; color: #8a766a; }
+        .home-btn { position: absolute; right: 35px; top: 70%; transform: translateY(-50%); background: none; border: none; font-size: 3rem; cursor: pointer; opacity: 0.8; }
+        h1.titol-principal { margin: 0; font-size: 2.8rem; letter-spacing: 1px; line-height: 1.1; max-width: 85%; }
+        h2.subtitol { margin: 5px 0 0 0; font-size: 2.6rem; font-weight: bold; color: #8a766a; }
         .icona-estat { width: 18px; height: 18px; border-radius: 50%; display: inline-block; background-color: #bbb; border: 2px solid #8a766a; }
         .estat-online { background-color: #2ecc71 !important; }
         .estat-offline { background-color: #e74c3c !important; }
 
-        /* CONTINGUT */
+        /* GRIDS I CONTINGUT */
         .quadre-container { padding: 20px; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; max-width: 1200px; margin: 0 auto; }
         .quadre { background-color: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); padding: 15px; text-align: center; flex: 1 1 280px; max-width: 350px; cursor: pointer; position: relative; }
         .menu-img { width: 100%; height: 180px; object-fit: contain; background-color: #fafafa; border-radius: 8px; margin-bottom: 10px; }
         .pilot-vigi { position: absolute; top: 10px; right: 10px; width: 15px; height: 15px; border-radius: 50%; border: 2px solid white; }
+        .vigi-vermell { background-color: #e74c3c; }
+        .vigi-verd { background-color: #2ecc71; }
         .alerta-casa { width: 15px; height: 15px; border-radius: 50%; position: absolute; top: 10px; right: 10px; border: 2px solid white; background-color: #bbb; }
         .boto-sensor { background: white; border-radius: 12px; padding: 15px; flex: 1 1 220px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); text-align: center; }
         .sensor-valor { font-size: 1.6rem; font-weight: bold; }
@@ -146,17 +93,39 @@
         </div>
     </section>
 
+    <section id="seccio-vigilancia" class="oculta" style="padding:20px;">
+        <button class="boto-tornar" onclick="mostrarSeccio('seccio-principal')">← Menú</button>
+        <div class="quadre-container">
+            <div class="quadre" onclick="obrirDetallVigi('ne')"><span>↗️</span> Nord-est <div id="pilot-ne" class="pilot-vigi"></div></div>
+            <div class="quadre" onclick="obrirDetallVigi('no')"><span>↖️</span> Nord-oest <div id="pilot-no" class="pilot-vigi"></div></div>
+            <div class="quadre" onclick="obrirDetallVigi('se')"><span>↘️</span> Sud-est <div id="pilot-se" class="pilot-vigi"></div></div>
+            <div class="quadre" onclick="obrirDetallVigi('so')"><span>↙️</span> Sud-oest <div id="pilot-so" class="pilot-vigi"></div></div>
+        </div>
+    </section>
+
+    <section id="detall-vigilancia" class="oculta" style="padding:20px;">
+        <button class="boto-tornar" onclick="mostrarSeccio('seccio-vigilancia')">← Tornar</button>
+        <h3 id="titol-vigi" style="text-align:center;">Historial Vigilància</h3>
+        <div id="llista-alarmes" style="background:white; padding:15px; border-radius:10px; max-width:500px; margin:0 auto;"></div>
+    </section>
+
+    <section id="seccio-mapa" class="oculta" style="padding:20px;">
+        <button class="boto-tornar" onclick="mostrarSeccio('seccio-principal')">← Menú</button>
+        <div style="width:100%; border-radius:15px; overflow:hidden;">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2999.643324546452!2d1.5794!3d41.1925!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12a38a3d548f06f7%3A0x608e9206d4e963b6!2sCiutadella%20Ib%C3%A8rica%20de%20Calafell!5e0!3m2!1sca!2ses!4v1700000000000" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </section>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         let charts = {};
         const CONFIG = {
-            'casa1': { key: 'READ_KEY_CASA1', id: '3200447', v_id: '3200447', punt: 'ne' },
-            'casa2': { key: 'I9QM383Z4L55KB0F', id: '3229918', v_id: '3229918', punt: 'no' },
-            'casa3': { key: 'ULWM1RF9EGBLJ3I5', id: '3229919', v_id: '3229919', punt: 'se' },
-            'casa4': { key: 'BZYJ00BYU6P4P48M', id: '3229920', v_id: '3229920', punt: 'so' }
+            'casa1': { key: 'READ_KEY_CASA1', id: '3200447', v_id: '3200447', punt: 'ne', titol: 'Nord-est' },
+            'casa2': { key: 'I9QM383Z4L55KB0F', id: '3229918', v_id: '3229918', punt: 'no', titol: 'Nord-oest' },
+            'casa3': { key: 'ULWM1RF9EGBLJ3I5', id: '3229919', v_id: '3229919', punt: 'se', titol: 'Sud-est' },
+            'casa4': { key: 'BZYJ00BYU6P4P48M', id: '3229920', v_id: '3229920', punt: 'so', titol: 'Sud-oest' }
         };
 
-        // FUNCIÓ PER FILTRAR VALORS ERRONS
         function filtrarValor(v) {
             let n = parseFloat(v);
             return (isNaN(n) || n === -999) ? null : n;
@@ -165,6 +134,7 @@
         window.addEventListener('load', () => {
             setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 3000);
             verificarEstatTotes();
+            verificarVigiTotes();
         });
 
         function mostrarSeccio(id) {
@@ -179,9 +149,7 @@
             try {
                 const res = await fetch(`https://api.thingspeak.com/channels/${CONFIG[id].id}/feeds.json?api_key=${CONFIG[id].key}&results=15`);
                 const data = await res.json();
-                
-                // Busquem l'últim valor que NO sigui -999
-                const ultimValids = data.feeds.filter(f => filtrarValor(f.field1) !== null || filtrarValor(f.field2) !== null);
+                const ultimValids = data.feeds.filter(f => filtrarValor(f.field1) !== null);
                 const ultim = ultimValids.length > 0 ? ultimValids[ultimValids.length - 1] : {field1: '--', field2: '--', field3: '--', field4: '--'};
 
                 document.getElementById('val-hum').innerText = (filtrarValor(ultim.field1) ?? '--') + " %";
@@ -190,18 +158,40 @@
                 document.getElementById('val-pluja').innerText = (filtrarValor(ultim.field4) ?? '--') + " mm";
                 
                 document.getElementById('estat-icona').className = "icona-estat estat-online";
-
                 const labels = data.feeds.map(f => new Date(f.created_at).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}));
-                
-                // Generem gràfics filtrant els -999 per a que no surtin pics cap avall
                 crearGrafic('graficHum', labels, data.feeds.map(f => filtrarValor(f.field1)), '#3498db');
                 crearGrafic('graficTemp', labels, data.feeds.map(f => filtrarValor(f.field2)), '#f39c12');
                 crearGrafic('graficInc', labels, data.feeds.map(f => filtrarValor(f.field3)), '#27ae60');
                 crearGrafic('graficPluja', labels, data.feeds.map(f => filtrarValor(f.field4)), '#16a085');
+            } catch(e) { document.getElementById('estat-icona').className = "icona-estat estat-offline"; }
+        }
 
-            } catch(e) { 
-                document.getElementById('estat-icona').className = "icona-estat estat-offline"; 
+        async function verificarVigiTotes() {
+            for (let k in CONFIG) {
+                const pilot = document.getElementById(`pilot-${CONFIG[k].punt}`);
+                try {
+                    const res = await fetch(`https://api.thingspeak.com/channels/${CONFIG[k].v_id}/feeds.json?api_key=${CONFIG[k].key}&results=1`);
+                    const data = await res.json();
+                    if(data.feeds && data.feeds[0]) {
+                        const hores = (new Date() - new Date(data.feeds[0].created_at)) / 3600000;
+                        pilot.className = "pilot-vigi " + (hores < 12 ? "vigi-vermell" : "vigi-verd");
+                    } else pilot.className = "pilot-vigi vigi-verd";
+                } catch(e) { pilot.className = "pilot-vigi vigi-verd"; }
             }
+        }
+
+        async function obrirDetallVigi(puntId) {
+            const k = Object.keys(CONFIG).find(x => CONFIG[x].punt === puntId);
+            document.getElementById('titol-vigi').innerText = "Historial - " + CONFIG[k].titol;
+            mostrarSeccio('detall-vigilancia');
+            const llista = document.getElementById('llista-alarmes');
+            llista.innerHTML = "Carregant...";
+            try {
+                const res = await fetch(`https://api.thingspeak.com/channels/${CONFIG[k].v_id}/feeds.json?api_key=${CONFIG[k].key}&results=10`);
+                const data = await res.json();
+                const alarmes = data.feeds.filter(f => String(f.field5) === "1");
+                llista.innerHTML = alarmes.length ? alarmes.reverse().map(f => `<div style="padding:10px; border-bottom:1px solid #eee;">⚠ INTRUSIÓ: ${new Date(f.created_at).toLocaleString()}</div>`).join('') : "Sense alertes recents.";
+            } catch(e) { llista.innerHTML = "Error de connexió."; }
         }
 
         function crearGrafic(id, labels, data, color) {
@@ -209,12 +199,7 @@
             charts[id] = new Chart(document.getElementById(id), {
                 type: 'line',
                 data: { labels, datasets: [{ data, borderColor: color, fill: false, tension: 0.3, pointRadius: 0, spanGaps: true }] },
-                options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    plugins: { legend: { display: false } }, 
-                    scales: { x: { display: false }, y: { display: false } } 
-                }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
             });
         }
 
