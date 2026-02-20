@@ -20,7 +20,7 @@
         .loader { border: 5px solid #f3f3f3; border-top: 5px solid #5A453A; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* HEADER DESKTOP */
+        /* HEADER */
         header {
             background-color: #EBC89C; color: #5A453A; padding: 25px 20px;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -33,16 +33,12 @@
         h1.titol-principal { margin: 0; font-size: 2.5rem; letter-spacing: 1px; line-height: 1.1; max-width: 80%; }
         h2.subtitol { margin: 5px 0 0 0; font-size: 2.3rem; font-weight: bold; color: #8a766a; }
 
-        /* AJUSTOS MÒBIL (PANTALLES < 768px) */
         @media (max-width: 768px) {
             header { padding: 10px 10px 45px 10px; min-height: 140px; }
             h1.titol-principal { font-size: 1.2rem; max-width: 95%; margin-bottom: 5px; padding-top: 10px; }
             h2.subtitol { font-size: 1.1rem; }
             .header-top-info { left: 20px; top: auto; bottom: 8px; transform: none; }
-            #estat-text { font-size: 0.8rem; }
             .home-btn { right: 20px; top: auto; bottom: 2px; transform: none; font-size: 2rem; }
-            .icona-estat { width: 10px; height: 10px; }
-            #splash h2 { font-size: 1.4rem; padding: 0 10px; }
         }
 
         .icona-estat { width: 18px; height: 18px; border-radius: 50%; display: inline-block; background-color: #bbb; border: 2px solid #8a766a; }
@@ -52,9 +48,11 @@
         .quadre-container { padding: 20px; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; max-width: 1200px; margin: 0 auto; }
         .quadre { background-color: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); padding: 15px; text-align: center; flex: 1 1 280px; max-width: 350px; cursor: pointer; position: relative; }
         .menu-img { width: 100%; height: 180px; object-fit: contain; background-color: #fafafa; border-radius: 8px; margin-bottom: 10px; }
-        .pilot-vigi { position: absolute; top: 10px; right: 10px; width: 15px; height: 15px; border-radius: 50%; border: 2px solid white; }
-        .vigi-vermell { background-color: #e74c3c; }
-        .vigi-verd { background-color: #2ecc71; }
+        
+        .pilot-vigi { position: absolute; top: 15px; right: 15px; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; }
+        .vigi-verd { background-color: #2ecc71; border-radius: 50%; border: 2px solid white; width: 15px; height: 15px; }
+        .vigi-perill { font-size: 1.5rem; color: #e74c3c; line-height: 1; }
+
         .alerta-casa { width: 15px; height: 15px; border-radius: 50%; position: absolute; top: 10px; right: 10px; border: 2px solid white; background-color: #bbb; }
         .boto-sensor { background: white; border-radius: 12px; padding: 15px; flex: 1 1 220px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); text-align: center; }
         .sensor-valor { font-size: 1.6rem; font-weight: bold; }
@@ -111,7 +109,7 @@
     <section id="seccio-mapa" class="oculta" style="padding:20px;">
         <button class="boto-tornar" onclick="mostrarSeccio('seccio-principal')">← Menú</button>
         <div style="width:100%; border-radius:15px; overflow:hidden;">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2999.645733575678!2d1.5833446765790473!3d41.1968134713247!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12a38a36c3a2779b%3A0x95996b79c6a1b52a!2sCiutadella%20Ib%C3%A8rica%20de%20Calafell!5e0!3m2!1sca!2ses!4v1700000000000!5m2!1sca!2ses" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2999.553251433013!2d1.5794770765955146!3d41.19120710834371!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12a3890987315555%3A0xc367677f52554625!2sCiutadella%20Ib%C3%A8rica%20de%20Calafell!5e0!3m2!1sca!2ses!4v1700000000000!5m2!1sca!2ses" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         </div>
     </section>
 
@@ -141,11 +139,12 @@
             'casa4': { key: 'BZYJ00BYU6P4P48M', id: '3229920', v_id: '3229920', punt: 'so', titol: 'Sud-oest' }
         };
 
-        const VALORS_DEFECTE = { h: "46,8", t: "17,3", i: "0", p: "0" };
+        // Valors per defecte numèrics per als gràfics
+        const VAL_DEF = { h: 46.8, t: 17.3, i: 0, p: 0 };
 
-        function filtrarValor(v) {
+        function filtrarValor(v, defecte) {
             let n = parseFloat(v);
-            return (isNaN(n) || n === -999) ? null : n;
+            return (isNaN(n) || n === -999) ? defecte : n;
         }
 
         window.addEventListener('load', () => {
@@ -166,36 +165,44 @@
             try {
                 const res = await fetch(`https://api.thingspeak.com/channels/${CONFIG[id].id}/feeds.json?api_key=${CONFIG[id].key}&results=50`);
                 const data = await res.json();
-                const ultimValids = data.feeds.filter(f => filtrarValor(f.field1) !== null);
-                const ultim = ultimValids.length > 0 ? ultimValids[ultimValids.length - 1] : {};
+                const ultim = data.feeds.length > 0 ? data.feeds[data.feeds.length - 1] : {};
 
-                document.getElementById('val-hum').innerText = (filtrarValor(ultim.field1) ?? VALORS_DEFECTE.h) + " %";
-                document.getElementById('val-temp').innerText = (filtrarValor(ultim.field2) ?? VALORS_DEFECTE.t).toString().replace('.', ',') + " °C";
-                document.getElementById('val-inc').innerText = (filtrarValor(ultim.field3) ?? VALORS_DEFECTE.i) + " °";
-                document.getElementById('val-pluja').innerText = (filtrarValor(ultim.field4) ?? VALORS_DEFECTE.p) + " mm";
+                // Actualització dels textos amb coma decimal
+                document.getElementById('val-hum').innerText = filtrarValor(ultim.field1, VAL_DEF.h).toString().replace('.', ',') + " %";
+                document.getElementById('val-temp').innerText = filtrarValor(ultim.field2, VAL_DEF.t).toString().replace('.', ',') + " °C";
+                document.getElementById('val-inc').innerText = filtrarValor(ultim.field3, VAL_DEF.i).toString().replace('.', ',') + " °";
+                document.getElementById('val-pluja').innerText = filtrarValor(ultim.field4, VAL_DEF.p).toString().replace('.', ',') + " mm";
                 
                 document.getElementById('estat-icona').className = "icona-estat estat-online";
+                
                 const labels = data.feeds.map(f => new Date(f.created_at).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}));
-                crearGrafic('graficHum', labels, data.feeds.map(f => filtrarValor(f.field1)), '#3498db');
-                crearGrafic('graficTemp', labels, data.feeds.map(f => filtrarValor(f.field2)), '#f39c12');
-                crearGrafic('graficInc', labels, data.feeds.map(f => filtrarValor(f.field3)), '#27ae60');
-                crearGrafic('graficPluja', labels, data.feeds.map(f => filtrarValor(f.field4)), '#16a085');
-            } catch(e) { 
-                document.getElementById('estat-icona').className = "icona-estat estat-offline";
-            }
+                
+                // Ara passem el valor per defecte a la gràfica perquè no quedi buida
+                crearGrafic('graficHum', labels, data.feeds.map(f => filtrarValor(f.field1, VAL_DEF.h)), '#3498db');
+                crearGrafic('graficTemp', labels, data.feeds.map(f => filtrarValor(f.field2, VAL_DEF.t)), '#f39c12');
+                crearGrafic('graficInc', labels, data.feeds.map(f => filtrarValor(f.field3, VAL_DEF.i)), '#27ae60');
+                crearGrafic('graficPluja', labels, data.feeds.map(f => filtrarValor(f.field4, VAL_DEF.p)), '#16a085');
+            } catch(e) { document.getElementById('estat-icona').className = "icona-estat estat-offline"; }
         }
 
         async function verificarVigiTotes() {
             for (let k in CONFIG) {
                 const pilot = document.getElementById(`pilot-${CONFIG[k].punt}`);
                 try {
-                    const res = await fetch(`https://api.thingspeak.com/channels/${CONFIG[k].v_id}/feeds.json?api_key=${CONFIG[k].key}&results=1`);
+                    const res = await fetch(`https://api.thingspeak.com/channels/${CONFIG[k].v_id}/feeds.json?api_key=${CONFIG[k].key}&results=20`);
                     const data = await res.json();
-                    if(data.feeds && data.feeds[0]) {
-                        const hores = (new Date() - new Date(data.feeds[0].created_at)) / 3600000;
-                        pilot.className = "pilot-vigi " + (hores < 12 ? "vigi-vermell" : "vigi-verd");
-                    } else pilot.className = "pilot-vigi vigi-verd";
-                } catch(e) { pilot.className = "pilot-vigi vigi-verd"; }
+                    const hiHaIntrusio = data.feeds.some(f => String(f.field5) === "1");
+                    if (hiHaIntrusio) {
+                        pilot.innerHTML = "⚠️";
+                        pilot.className = "pilot-vigi vigi-perill";
+                    } else {
+                        pilot.innerHTML = "";
+                        pilot.className = "pilot-vigi vigi-verd";
+                    }
+                } catch(e) { 
+                    pilot.innerHTML = "";
+                    pilot.className = "pilot-vigi vigi-verd"; 
+                }
             }
         }
 
@@ -222,8 +229,14 @@
             if(charts[id]) charts[id].destroy();
             charts[id] = new Chart(document.getElementById(id), {
                 type: 'line',
-                data: { labels, datasets: [{ data, borderColor: color, fill: false, tension: 0.3, pointRadius: 0, spanGaps: true }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
+                data: { labels, datasets: [{ data, borderColor: color, fill: false, tension: 0.3, pointRadius: 0 }] },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { display: false } }, 
+                    scales: { x: { display: false }, y: { display: false } },
+                    animation: false // Perquè carregui més ràpid
+                }
             });
         }
 
